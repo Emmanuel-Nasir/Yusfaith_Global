@@ -31,7 +31,7 @@ const businesses = [
     category: "TRANSPORTATION & DISTRIBUTION",
     description:
       "Supporting efficient movement of goods through dependable transportation and distribution services.",
-    image: "/images/logistics/logistics-fleet.jpg",
+    image: "/images/logistics/logistics-cement-haulage.jpg",
     href: "/logistics",
   },
   {

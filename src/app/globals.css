@@ -1,32 +1,41 @@
-
 @import "tailwindcss";
 
 /* ==========================================
    YUSFAITH GLOBAL ENTERPRISES
-   PREMIUM CORPORATE DESIGN SYSTEM
+   CORPORATE DESIGN SYSTEM
+   Logo colours: Navy #18265F · Blue #2263A3 · Orange #EF850F
+   (Variable names kept as --gold* so existing components still work;
+    the values are now the logo orange.)
 ========================================== */
 
-/* LIGHT THEME */
+/* LIGHT THEME (default) */
 
 :root {
-  --primary: #17243a;
-  --primary-hover: #243b59;
-  --secondary: #805511;
-  --accent: #a66b17;
+  --navy: #18265f;
+  --blue: #2263a3;
+  --orange: #ef850f;
 
-  --gold: #d9ad45;
-  --gold-bright: #f2c85b;
-  --gold-text: #805511;
+  --primary: #18265f;
+  --primary-hover: #22367f;
+  --secondary: #2263a3;
+  --accent: #ef850f;
+
+  /* Accent family (logo orange) */
+  --gold: #ef850f;          /* borders, lines, highlights */
+  --gold-bright: #f59a2e;   /* hover glow */
+  --gold-text: #a85a06;     /* orange TEXT on white — 5.1:1 contrast */
 
   --background: #ffffff;
-  --foreground: #17243a;
-  --surface: #f7f7f5;
-  --border: #ddd8cb;
-  --muted: #526072;
+  --foreground: #18265f;
+  --surface: #f5f7fb;
+  --border: #d9dfeb;
+  --muted: #4f5d75;
 
-  --button-bg: #17243a;
-  --button-text: #f2c85b;
-  --button-hover-bg: #243b59;
+  --button-bg: #18265f;
+  --button-text: #ffffff;
+  --button-hover-bg: #22367f;
+
+  --glow: 239, 133, 15;     /* orange as r,g,b for shadows */
 
   --font-body: "Inter", sans-serif;
   --font-heading: "Cormorant Garamond", serif;
@@ -35,77 +44,83 @@
 /* DARK THEME */
 
 :root[data-theme="dark"] {
-  --primary: #f2c85b;
-  --primary-hover: #ffdc83;
-  --secondary: #f2c85b;
-  --accent: #d9ad45;
+  --primary: #f59a2e;
+  --primary-hover: #ffb457;
+  --secondary: #7fb2e5;
+  --accent: #ef850f;
 
-  --gold: #d9ad45;
-  --gold-bright: #f2c85b;
-  --gold-text: #f2c85b;
+  --gold: #ef850f;
+  --gold-bright: #f5a33c;
+  --gold-text: #f5a33c;     /* orange TEXT on navy — 8.2:1 contrast */
 
-  --background: #101b30;
+  --background: #0f1a3d;
   --foreground: #f5f7fb;
-  --surface: #1a2940;
-  --border: #46506a;
+  --surface: #182a55;
+  --border: #34477a;
   --muted: #c8d2df;
 
-  --button-bg: #d9ad45;
-  --button-text: #101b30;
-  --button-hover-bg: #f2c85b;
+  --button-bg: #ef850f;
+  --button-text: #0f1a3d;
+  --button-hover-bg: #f5a33c;
+
+  --glow: 245, 163, 60;
 }
 
 /* ==========================================
    BASE STYLES
+   Wrapped in @layer base so Tailwind classes
+   (text-white, hover:text-..., etc.) can override them.
 ========================================== */
 
-* {
-  box-sizing: border-box;
-}
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
 
-html {
-  scroll-behavior: smooth;
-}
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
 
-  transition:
-    background-color 300ms ease,
-    color 300ms ease;
-}
+    transition:
+      background-color 300ms ease,
+      color 300ms ease;
+  }
 
-h1,
-h2,
-h3,
-h4 {
-  font-family: var(--font-heading);
-}
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+  }
 
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
 
-button {
-  cursor: pointer;
-}
+  button {
+    cursor: pointer;
+  }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 
-::selection {
-  background: var(--gold);
-  color: #101b30;
+  ::selection {
+    background: var(--gold);
+    color: #0f1a3d;
+  }
 }
 
 /* ==========================================
@@ -136,7 +151,7 @@ a {
 }
 
 /* ==========================================
-   PREMIUM GOLD BUTTONS
+   BUTTONS
 ========================================== */
 
 .btn-primary,
@@ -162,8 +177,7 @@ a {
 
   transform: translateY(0);
 
-  box-shadow:
-    0 4px 14px rgba(16, 27, 48, 0.12);
+  box-shadow: 0 4px 14px rgba(15, 26, 61, 0.12);
 
   transition:
     transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -192,16 +206,16 @@ a {
 .btn-secondary {
   background: transparent;
   color: var(--foreground);
-  border: 2px solid var(--gold-text);
+  border: 2px solid var(--gold);
 }
 
 .btn-secondary:hover {
   background: var(--surface);
   color: var(--foreground);
-  border-color: var(--gold-text);
+  border-color: var(--gold-bright);
 }
 
-/* Gold shimmer */
+/* Shimmer sweep on hover */
 
 .btn-primary::before,
 .btn-secondary::before {
@@ -218,9 +232,9 @@ a {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(229, 183, 46, 0.12),
-    rgba(255, 229, 130, 0.45),
-    rgba(229, 183, 46, 0.12),
+    rgba(var(--glow), 0.12),
+    rgba(var(--glow), 0.4),
+    rgba(var(--glow), 0.12),
     transparent
   );
 
@@ -233,16 +247,16 @@ a {
   left: 140%;
 }
 
-/* Lift and gold glow */
+/* Lift and orange glow */
 
 .btn-primary:hover,
 .btn-secondary:hover {
   transform: translateY(-5px) scale(1.035);
 
   box-shadow:
-    0 12px 28px rgba(16, 27, 48, 0.18),
-    0 0 0 2px rgba(229, 183, 46, 0.3),
-    0 0 26px rgba(229, 183, 46, 0.35);
+    0 12px 28px rgba(15, 26, 61, 0.18),
+    0 0 0 2px rgba(var(--glow), 0.3),
+    0 0 26px rgba(var(--glow), 0.35);
 }
 
 .btn-primary:active,
@@ -258,7 +272,7 @@ a {
 }
 
 /* ==========================================
-   GOLD NAVIGATION ANIMATIONS
+   NAVIGATION ANIMATIONS
 ========================================== */
 
 .nav-link {
@@ -284,11 +298,7 @@ a {
   height: 3px;
   border-radius: 999px;
 
-  background: linear-gradient(
-    90deg,
-    var(--gold-text),
-    var(--gold-bright)
-  );
+  background: linear-gradient(90deg, var(--gold), var(--gold-bright));
 
   transform: scaleX(0);
   transform-origin: left;
@@ -332,7 +342,7 @@ a {
 
   box-shadow:
     inset 4px 0 0 var(--gold),
-    0 5px 18px rgba(229, 183, 46, 0.12);
+    0 5px 18px rgba(var(--glow), 0.12);
 }
 
 /* ==========================================
