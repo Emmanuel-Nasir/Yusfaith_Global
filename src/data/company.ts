@@ -152,9 +152,9 @@ export function mapsLink(address: string) {
 }
 
 export function mapsEmbed(address: string) {
-  return `https://www.google.com/maps?q=${encodeURIComponent(
+  return `https://maps.google.com/maps?q=${encodeURIComponent(
     address
-  )}&output=embed`;
+  )}&z=15&output=embed`;
 }
 
 export function telLink(localNumber: string) {

@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
+import BakeryStore from "@/components/bakery/BakeryStore";
 
-import ComingSoon from "@/components/ui/ComingSoon";
+export const metadata: Metadata = {
+  title: "Yusfaith Bakery | Fresh Bread, Pastries & Cakes",
+  description:
+    "Order fresh bread, pastries, doughnuts and celebration cakes from Yusfaith Bakery for delivery or pickup in Abeokuta, Epe and Ibadan.",
+};
 
-export default function AboutPage() {
-  return <ComingSoon title="Bakery" />;
+export default function BakeryPage() {
+  return <BakeryStore />;
 }
