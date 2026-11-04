@@ -55,7 +55,7 @@ const slides = [
     highlight: "Shared With Joy.",
     description:
       "Discover our bakery business, focused on quality products and memorable customer experiences.",
-    image: "/images/bakery/bakery-hero.jpg",
+    image: "/images/bakery/product-bread-assortment.jpg",
     primaryText: "Explore Our Bakery",
     primaryHref: "/bakery",
     secondaryText: "Our Businesses",

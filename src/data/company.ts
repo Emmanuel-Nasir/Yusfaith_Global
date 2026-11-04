@@ -141,3 +141,23 @@ export const BUSINESSES = [
 export const AWARD_IMAGES = [1, 2, 3, 4, 9, 10, 12, 13, 14, 15, 17, 18].map(
   (n) => `/images/corporate/awards/award${n}.jpeg`
 );
+
+// TODO: confirm which number Yusfaith uses for WhatsApp (using the first phone for now)
+export const WHATSAPP_NUMBER = "2348066171815"; // international format, no "+" or leading 0
+
+export function mapsLink(address: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    address
+  )}`;
+}
+
+export function mapsEmbed(address: string) {
+  return `https://www.google.com/maps?q=${encodeURIComponent(
+    address
+  )}&output=embed`;
+}
+
+export function telLink(localNumber: string) {
+  // "08066171815" -> "tel:+2348066171815"
+  return `tel:+234${localNumber.replace(/^0/, "")}`;
+}

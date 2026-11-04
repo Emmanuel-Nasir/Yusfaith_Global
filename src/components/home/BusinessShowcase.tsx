@@ -22,7 +22,7 @@ const businesses = [
     category: "BAKERY & FOOD PRODUCTION",
     description:
       "Quality bakery products made with care, bringing freshness and convenience to the communities we serve.",
-    image: "/images/bakery/bakery-hero.jpg",
+    image: "/images/bakery/product-bread-assortment.jpg",
     href: "/bakery",
   },
   {

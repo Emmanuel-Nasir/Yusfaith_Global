@@ -31,7 +31,7 @@ const businesses = [
     href: "/bakery",
     description:
       "Freshly baked products and quality bakery services.",
-    image: "/images/bakery/bakery-hero.jpg",
+    image: "/images/bakery/product-bread-assortment.jpg",
   },
   {
     name: "Logistics",

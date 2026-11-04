@@ -32,7 +32,7 @@ const businesses = [
 const quickLinks = [
   { name: "Home", href: "/" },
   { name: "About Us", href: "/about" },
-  { name: "Our Businesses", href: "/#businesses" },
+  { name: "Our Businesses", href: "/businesses" },
   { name: "Projects", href: "/projects" },
   { name: "Contact", href: "/contact" },
 ];

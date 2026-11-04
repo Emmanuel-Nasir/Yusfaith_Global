@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
+import ContactContent from "@/components/contact/ContactContent";
 
-import ComingSoon from "@/components/ui/ComingSoon";
+export const metadata: Metadata = {
+  title: "Contact Us | Yusfaith Global Enterprises",
+  description:
+    "Contact Yusfaith Global Enterprises in Abeokuta, Epe or Ibadan. Call our office, chat on WhatsApp, email us or send an enquiry about cement, building materials, delivery and our other businesses.",
+};
 
-export default function AboutPage() {
-  return <ComingSoon title="Contact" />;
+export default function ContactPage() {
+  return <ContactContent />;
 }

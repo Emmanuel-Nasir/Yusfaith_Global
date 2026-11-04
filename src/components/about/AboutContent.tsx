@@ -336,11 +336,7 @@ export default function AboutContent() {
                   >
                     <div className="flex items-center justify-between">
                       <span
-                        className="flex h-12 w-12 items-center justify-center rounded-full transition-colors duration-300 group-hover:bg-[var(--gold)] group-hover:text-[#0f1a3d]"
-                        style={{
-                          backgroundColor: "var(--background)",
-                          color: "var(--gold-text)",
-                        }}
+                        className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--background)] text-[var(--gold-text)] transition-colors duration-300 group-hover:bg-[var(--gold)] group-hover:text-[#0f1a3d]"
                       >
                         <Icon size={22} />
                       </span>
@@ -531,11 +527,7 @@ export default function AboutContent() {
               <FadeUp key={business.href} delay={index * 0.06}>
                 <Link
                   href={business.href}
-                  className="group flex h-full flex-col rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--gold)] hover:shadow-lg"
-                  style={{
-                    backgroundColor: "var(--background)",
-                    borderColor: "var(--border)",
-                  }}
+                  className="group flex h-full flex-col rounded-2xl border border-[var(--border)] bg-[var(--background)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--gold)] hover:shadow-lg"
                 >
                   <h3
                     className="text-lg font-bold"
