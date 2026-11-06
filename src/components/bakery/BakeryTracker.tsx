@@ -21,6 +21,8 @@ import {
   type Order,
 } from "@/lib/orders";
 
+import { DEMO_MODE } from "@/lib/demo";
+
 const inputClass =
   "w-full rounded-full border border-[var(--border)] bg-[var(--background)] px-5 py-3.5 text-[15px] uppercase tracking-wider text-[var(--foreground)] outline-none transition focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/25";
 
@@ -236,9 +238,11 @@ export default function BakeryTracker() {
               </p>
             </div>
 
-            {/* Demo staff controls */}
+                      {/* Demo staff controls */}
+            {DEMO_MODE && (
             <div className="mt-8 rounded-2xl border-2 border-dashed border-[var(--border)] p-5">
-              <p className="text-xs font-bold uppercase tracking-[0.15em]" style={{ color: "var(--gold-text)" }}>
+          
+                        <p className="text-xs font-bold uppercase tracking-[0.15em]" style={{ color: "var(--gold-text)" }}>
                 Demo controls · what Yusfaith staff will do
               </p>
               <div className="mt-4 flex flex-wrap gap-3">
@@ -268,6 +272,7 @@ export default function BakeryTracker() {
                 </p>
               )}
             </div>
+            )}
           </section>
         )}
 
