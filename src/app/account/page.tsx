@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
+import AccountContent from "@/components/account/AccountContent";
 
-import ComingSoon from "@/components/ui/ComingSoon";
+export const metadata: Metadata = {
+  title: "My Account | Yusfaith Global Enterprises",
+  description:
+    "View your Yusfaith orders, saved delivery addresses and profile in one place.",
+};
 
-export default function AboutPage() {
-  return <ComingSoon title="Account" />;
+export default function AccountPage() {
+  return <AccountContent />;
 }

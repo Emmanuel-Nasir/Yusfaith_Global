@@ -1,5 +1,5 @@
-import {redirect} from "next/navigation";
+import { redirect } from "next/navigation";
 
-export default function CementOrdersPage() {
-    redirect("/cement/order");
+export default function BuildingMaterialsOrdersPage() {
+  redirect("/building-materials/track");
 }

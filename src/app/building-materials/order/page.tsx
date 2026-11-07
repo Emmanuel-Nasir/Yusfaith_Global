@@ -1,11 +1,10 @@
-
 import type { Metadata } from "next";
 import BuildingMaterialsStore from "@/components/building-materials/BuildingMaterialsStore";
 
 export const metadata: Metadata = {
-  title: "Order Building Materials | Yusfaith Global Enterprises",
+  title: "Order Building Materials | Yusfaith",
   description:
-    "Explore building materials and create a simulated order with Yusfaith Global Enterprises.",
+    "Order roofing, steel, blocks, plumbing, electrical, finishing and timber from Yusfaith Building Materials.",
 };
 
 export default function BuildingMaterialsOrderPage() {
