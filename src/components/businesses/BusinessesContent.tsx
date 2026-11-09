@@ -21,9 +21,9 @@ const BUSINESS_DETAILS = [
     Icon: Warehouse,
     tagline: "Strong foundations, reliable supply.",
     description:
-      "Our flagship business. Yusfaith is a distributor of Dangote and HBM cement, supplying contractors, retailers and individual builders, wholesale and retail.",
+      "Our flagship business. Yusfaith is a distributor of Dangote, HBM, BUA, Mangal and Purechem cement, supplying contractors, retailers and individual builders, wholesale and retail.",
     highlights: [
-      "Dangote and HBM cement",
+      "Dangote, HBM, BUA, Mangal and Purechem cement",
       "Wholesale and retail supply",
       "Bulk orders for contractors and retailers",
       "Serving customers from Abeokuta, Epe and Ibadan",

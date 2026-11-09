@@ -41,8 +41,8 @@ const slides = [
     title: "Strong Foundations.",
     highlight: "Reliable Supply.",
     description:
-      "Distributors of Dangote and HBM cement, wholesale and retail, serving customers through our depots in Abeokuta, Epe and Ibadan.",
-    image: "/images/cement/Epe warehouse2.jpeg",
+      "Distributors of Dangote, HBM, BUA, Mangal and Purechem cement, wholesale and retail, serving customers through our depots in Abeokuta, Epe and Ibadan.",
+    image: "/images/cement/cement-brands-dropdown.png",
     primaryText: "Explore Cement Depot",
     primaryHref: "/cement",
     secondaryText: "Contact Our Team",

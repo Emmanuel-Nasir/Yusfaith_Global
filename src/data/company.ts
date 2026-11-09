@@ -113,7 +113,7 @@ export const BUSINESSES = [
   {
     name: "Cement Depot",
     href: "/cement",
-    description: "Wholesale and retail distribution of Dangote and HBM cement.",
+    description: "Wholesale and retail distribution of Dangote, HBM, BUA, Mangal and Purechem cement.",
   },
   {
     name: "Building Materials",

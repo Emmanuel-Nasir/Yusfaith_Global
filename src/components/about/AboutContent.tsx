@@ -211,7 +211,7 @@ export default function AboutContent() {
             >
               <p>
                 Yusfaith Global Enterprises is a Nigerian business enterprise
-                and a distributor of HBM and Dangote cement, serving both
+                and a distributor of Dangote, HBM, BUA, Mangal and Purechem cement, serving both
                 wholesale and retail customers.
               </p>
               <p>
@@ -233,7 +233,7 @@ export default function AboutContent() {
               {[
                 { value: "5", label: "Businesses" },
                 { value: "3", label: "Locations" },
-                { value: "2", label: "Cement brands" },
+                { value: "5", label: "Cement brands" },
               ].map((stat) => (
                 <div key={stat.label}>
                   <p

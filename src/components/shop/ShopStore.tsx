@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
@@ -125,6 +125,34 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
   const [channel, setChannel] = useState<PaymentChannel>("Bank transfer");
   const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
+  const [savedAddresses, setSavedAddresses] = useState<
+    { id: string; label: string; address: string }[]
+  >([]);
+
+  // If a demo account is signed in, pre-fill checkout from it
+  useEffect(() => {
+    try {
+      const email = JSON.parse(
+        window.localStorage.getItem("yusfaith-demo-session") ?? "null"
+      ) as string | null;
+      if (!email) return;
+      const accounts = JSON.parse(
+        window.localStorage.getItem("yusfaith-demo-accounts") ?? "[]"
+      ) as { name: string; email: string; phone: string }[];
+      const found = accounts.find((a) => a.email === email);
+      if (found) {
+        setName(found.name);
+        setPhone(found.phone);
+      }
+      setSavedAddresses(
+        JSON.parse(
+          window.localStorage.getItem("yusfaith-demo-addresses:" + email) ?? "[]"
+        )
+      );
+    } catch {
+      // ignore
+    }
+  }, []);
 
   const products = useMemo(
     () =>
@@ -626,7 +654,8 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                       <span className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
                         Delivery address *
                       </span>
-                      <input className={inputClass} value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" />
+                      <input className={inputClass} value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" list="saved-addresses" />
+<datalist id="saved-addresses">{savedAddresses.map((a) => (<option key={a.id} value={a.address}>{a.label}</option>))}</datalist>
                     </label>
                   </>
                 ) : (

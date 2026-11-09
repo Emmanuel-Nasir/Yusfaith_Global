@@ -57,7 +57,7 @@ export default function Footer() {
                 />
               </div>
 
-              <span className="text-sm font-bold leading-5 tracking-wide text-[#f2c85b]">
+              <span className="text-sm font-bold leading-5 tracking-wide text-[#ff9a26]">
                 YUSFAITH GLOBAL
                 <br />
                 ENTERPRISES
@@ -70,14 +70,14 @@ export default function Footer() {
               real estate and building materials.
             </p>
 
-            <p className="mt-6 text-xs font-semibold uppercase tracking-widest text-[#f2c85b]">
+            <p className="mt-6 text-xs font-semibold uppercase tracking-widest text-[#ff9a26]">
               Building Trust. Creating Possibilities.
             </p>
           </div>
 
           {/* Business links */}
           <div>
-            <h3 className="mb-6 font-heading text-2xl font-semibold text-[#f2c85b]">
+            <h3 className="mb-6 font-heading text-2xl font-semibold text-[#ff9a26]">
               Our Businesses
             </h3>
 
@@ -86,7 +86,7 @@ export default function Footer() {
                 <li key={business.name}>
                   <Link
                     href={business.href}
-                    className="inline-flex items-center gap-2 text-sm text-white/75 transition hover:text-[#f2c85b]"
+                    className="inline-flex items-center gap-2 text-sm text-white/75 transition hover:text-[#ff9a26]"
                   >
                     {business.name}
                     <ArrowUpRight size={14} />
@@ -98,7 +98,7 @@ export default function Footer() {
 
           {/* Navigation */}
           <div>
-            <h3 className="mb-6 font-heading text-2xl font-semibold text-[#f2c85b]">
+            <h3 className="mb-6 font-heading text-2xl font-semibold text-[#ff9a26]">
               Quick Links
             </h3>
 
@@ -107,7 +107,7 @@ export default function Footer() {
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/75 transition hover:text-[#f2c85b]"
+                    className="text-sm text-white/75 transition hover:text-[#ff9a26]"
                   >
                     {link.name}
                   </Link>
@@ -118,7 +118,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="mb-6 font-heading text-2xl font-semibold text-[#f2c85b]">
+            <h3 className="mb-6 font-heading text-2xl font-semibold text-[#ff9a26]">
               Contact & Locations
             </h3>
 
@@ -126,7 +126,7 @@ export default function Footer() {
               <div className="flex items-start gap-3">
                 <MapPin
                   size={18}
-                  className="mt-1 shrink-0 text-[#f2c85b]"
+                  className="mt-1 shrink-0 text-[#ff9a26]"
                 />
                 <div>
                   <p className="font-semibold text-white">
@@ -160,7 +160,7 @@ export default function Footer() {
 
               <a
                 href="mailto:olasunkanmidepot1985@gmail.com"
-                className="inline-flex items-center gap-2 break-all text-[#f2c85b] hover:underline"
+                className="inline-flex items-center gap-2 break-all text-[#ff9a26] hover:underline"
               >
                 <Mail size={16} className="shrink-0" />
                 olasunkanmidepot1985@gmail.com
@@ -174,7 +174,7 @@ export default function Footer() {
         <div className="mt-14 border-t border-white/15 pt-10">
           <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
             <div>
-              <h3 className="font-heading text-2xl font-semibold text-[#f2c85b]">
+              <h3 className="font-heading text-2xl font-semibold text-[#ff9a26]">
                 Connect With Us
               </h3>
 
@@ -198,7 +198,7 @@ export default function Footer() {
       key={name}
       title={`${name} — official link coming soon`}
       aria-label={`${name} — official link coming soon`}
-      className="flex h-12 w-12 items-center justify-center rounded-full border border-[#d9ad45]/35 bg-white/5 text-[#f2c85b] transition-all duration-300 hover:-translate-y-1 hover:border-[#f2c85b] hover:bg-[#d9ad45]/15"
+      className="flex h-12 w-12 items-center justify-center rounded-full border border-[#ef850f]/35 bg-white/5 text-[#ff9a26] transition-all duration-300 hover:-translate-y-1 hover:border-[#ff9a26] hover:bg-[#ef850f]/15"
     >
       <Icon size={20} />
     </div>
