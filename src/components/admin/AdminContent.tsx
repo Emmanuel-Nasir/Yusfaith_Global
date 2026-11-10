@@ -14,10 +14,12 @@ import {
   Tag,
   Trash2,
   Truck,
+  Users,
   Wallet,
   type LucideIcon,
 } from "lucide-react";
 import { DEMO_MODE } from "@/lib/demo";
+import StaffGate, { AccessPanel, type StaffSession } from "@/components/admin/StaffGate";
 import { PRODUCTS as CEMENT_PRODUCTS } from "@/lib/cement/catalog";
 import { PRODUCTS as MATERIAL_PRODUCTS } from "@/lib/building-materials/catalog";
 import { BAKERY_PRODUCTS } from "@/lib/bakery/catalog";
@@ -50,7 +52,8 @@ type Section =
   | "payments"
   | "inventory"
   | "prices"
-  | "logistics";
+  | "logistics"
+  | "access";
 
 type Business = "Cement Depot" | "Building Materials" | "Bakery";
 
@@ -71,10 +74,11 @@ const SECTIONS: { id: Section; label: string; Icon: LucideIcon }[] = [
   { id: "inventory", label: "Inventory", Icon: Boxes },
   { id: "prices", label: "Prices", Icon: Tag },
   { id: "logistics", label: "Logistics", Icon: Truck },
+  { id: "access", label: "Staff & access", Icon: Users },
 ];
 
 const ACCESS: Record<Role, Section[]> = {
-  "Super Admin": ["overview", "orders", "payments", "inventory", "prices", "logistics"],
+  "Super Admin": ["overview", "orders", "payments", "inventory", "prices", "logistics", "access"],
   Management: ["overview", "orders", "payments", "inventory", "prices", "logistics"],
   "Sales Rep": ["orders", "prices"],
   "Finance Officer": ["overview", "orders", "payments"],
@@ -1010,8 +1014,8 @@ function LogisticsPanel({ orders, role }: { orders: Order[]; role: Role }) {
 
 /* ---------- the staff area ---------- */
 
-function DemoAdmin() {
-  const [role, setRole] = useState<Role>("Super Admin");
+function DemoAdmin({ session }: { session: StaffSession }) {
+  const role: Role = session.role;
   const [section, setSection] = useState<Section>("overview");
   const [orders, setOrders] = useState<Order[]>([]);
   const [state, setState] = useState<AdminState>(EMPTY_STATE);
@@ -1054,7 +1058,7 @@ function DemoAdmin() {
   const active: Section = allowed.includes(section) ? section : allowed[0];
 
   function changeRole(next: Role) {
-    setRole(next);
+    // the role now comes from the signed-in staff member
     setSection(ACCESS[next][0]);
   }
 
@@ -1086,23 +1090,33 @@ function DemoAdmin() {
               </p>
               <h1 className="mt-2 font-heading text-4xl font-semibold sm:text-5xl">Yusfaith operations</h1>
             </div>
-            <label className="block">
-              <span className="mb-1.5 block text-xs font-bold uppercase tracking-[0.15em] text-white/70">Viewing as</span>
-              <select
-                value={role}
-                onChange={(e) => changeRole(e.target.value as Role)}
-                className="rounded-xl border border-white/30 bg-white/10 px-4 py-2.5 text-[15px] font-semibold text-white outline-none"
+            <div className="flex flex-wrap items-end gap-4">
+              <label className="block">
+                <span className="mb-1.5 block text-xs font-bold uppercase tracking-[0.15em] text-white/70">Demo: switch user</span>
+                <select
+                  value={session.me.id}
+                  onChange={(e) => session.switchUser(e.target.value)}
+                  className="rounded-xl border border-white/30 bg-white/10 px-4 py-2.5 text-[15px] font-semibold text-white outline-none"
+                >
+                  {session.staff.filter((s) => s.active).map((s) => (
+                    <option key={s.id} value={s.id} className="text-black">
+                      {s.name} ({s.role})
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button
+                type="button"
+                onClick={session.signOut}
+                className="rounded-full border border-white/40 bg-white/10 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-white hover:text-[#0f1a3d]"
               >
-                {ROLES.map((r) => (
-                  <option key={r} value={r} className="text-black">
-                    {r}
-                  </option>
-                ))}
-              </select>
-            </label>
+                Sign out
+              </button>
+            </div>
           </div>
           <p className="mt-4 max-w-3xl text-sm leading-6 text-white/80">
-            <strong className="text-white">{role}:</strong> {ROLE_NOTE[role]}
+            Signed in as <strong className="text-white">{session.me.name}</strong> ·{" "}
+            <strong className="text-white">{role}</strong>. {ROLE_NOTE[role]}
           </p>
         </div>
       </section>
@@ -1156,7 +1170,7 @@ function DemoAdmin() {
               <OrdersPanel orders={orders} products={products} canCreate={CAN_CREATE_ORDER.includes(role)} onChange={reload} />
             )}
             {active === "payments" && (
-              <PaymentsPanel orders={orders} canConfirm={CAN_CONFIRM_PAYMENT.includes(role)} onChange={reload} />
+              <PaymentsPanel orders={orders} canConfirm={CAN_CONFIRM_PAYMENT.includes(role)} onChange={() => { reload(); session.log("Confirmed a payment"); }} />
             )}
             {active === "inventory" && (
               <InventoryPanel
@@ -1177,10 +1191,11 @@ function DemoAdmin() {
               <PricesPanel
                 products={products}
                 canEdit={CAN_EDIT_PRICES.includes(role)}
-                onSave={(id, price) => saveState({ ...state, prices: { ...state.prices, [id]: price } })}
+                onSave={(id, price) => { saveState({ ...state, prices: { ...state.prices, [id]: price } }); session.log("Changed a product price"); }}
               />
             )}
             {active === "logistics" && <LogisticsPanel orders={orders} role={role} />}
+            {active === "access" && <AccessPanel session={session} />}
           </section>
         </div>
       </div>
@@ -1218,5 +1233,5 @@ export default function AdminContent() {
 }
 
 function DemoAccessGate() {
-  return <DemoAdmin />;
+  return <StaffGate>{(session) => <DemoAdmin session={session} />}</StaffGate>;
 }

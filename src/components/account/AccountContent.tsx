@@ -1,15 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowLeft,
   ArrowRight,
-  Check,
   Clock,
-  Info,
-  Lock,
   LogOut,
   Mail,
   MapPin,
@@ -21,6 +17,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { DEMO_MODE } from "@/lib/demo";
+import AuthCard from "@/components/account/AuthCard";
 import { formatNaira, loadOrders, type Order } from "@/lib/orders";
 
 type Account = { name: string; email: string; phone: string };
@@ -350,181 +347,21 @@ function DemoAccount() {
 
   /* ================= SIGNED OUT ================= */
   if (!account) {
-    const benefits = [
-      "Follow orders from every Yusfaith business",
-      "Save your delivery addresses",
-      "One account for Cement, Building Materials and Bakery",
-    ];
-
     return (
-      <main className="grid min-h-[680px] lg:grid-cols-[5fr_6fr]">
-        {/* Left: brand panel */}
-        <section className="relative isolate flex min-h-[320px] flex-col justify-between overflow-hidden bg-[#0f1a3d] p-8 text-white sm:p-12">
-          <Image
-            src="/images/corporate/Headquarters.jpeg"
-            alt="Yusfaith Global Enterprises head office"
-            fill
-            sizes="(max-width: 1024px) 100vw, 45vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0a1230]/85 via-[#0a1230]/80 to-[#0a1230]/95" />
-
-          <div className="relative">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white hover:text-[#0f1a3d]"
-            >
-              <ArrowLeft size={16} />
-              Back to Yusfaith
-            </Link>
-          </div>
-
-          <div className="relative mt-10">
-            <h1 className="font-heading text-4xl font-semibold leading-tight sm:text-5xl">
-              One account for{" "}
-              <span className="bg-gradient-to-r from-[#ef850f] via-[#ff9a26] to-[#ffb347] bg-clip-text text-transparent">
-                every Yusfaith business.
-              </span>
-            </h1>
-            <ul className="mt-8 space-y-4">
-              {benefits.map((item) => (
-                <li key={item} className="flex items-start gap-3 text-[15px] text-white/90">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#ef850f] text-[#0f1a3d]">
-                    <Check size={14} strokeWidth={3} />
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* Right: form */}
-        <section className="flex items-center justify-center px-6 py-12 sm:px-12">
-          <div className="w-full max-w-md">
-            <div className="grid grid-cols-2 rounded-full border border-[var(--border)] bg-[var(--surface)] p-1">
-              {(
-                [
-                  { id: "signin", label: "Sign in" },
-                  { id: "signup", label: "Create account" },
-                ] as { id: AuthMode; label: string }[]
-              ).map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => switchMode(item.id)}
-                  aria-pressed={mode === item.id}
-                  className={`rounded-full px-4 py-2.5 text-sm font-bold transition ${
-                    mode === item.id
-                      ? "bg-[#ef850f] text-[#0f1a3d]"
-                      : "text-[var(--foreground)]"
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-
-            <h2 className="mt-8 font-heading text-4xl font-semibold" style={{ color: "var(--foreground)" }}>
-              {mode === "signin" ? "Welcome back" : "Create your account"}
-            </h2>
-            <p className="mt-2 text-sm leading-6" style={{ color: "var(--muted)" }}>
-              {mode === "signin"
-                ? "Sign in to see your orders. You never need an account to browse or to order."
-                : "It takes a minute. Use the phone number you give when you order, so your orders show up here."}
-            </p>
-
-            <form
-              onSubmit={mode === "signin" ? signIn : signUp}
-              noValidate
-              className="mt-7 space-y-4"
-            >
-              {mode === "signup" && (
-                <Field label="Full name" icon={User}>
-                  <input
-                    className={inputClass}
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                      setError("");
-                    }}
-                    autoComplete="name"
-                  />
-                </Field>
-              )}
-
-              <Field label="Email address" icon={Mail}>
-                <input
-                  className={inputClass}
-                  type="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setError("");
-                  }}
-                  autoComplete="email"
-                />
-              </Field>
-
-              {mode === "signup" && (
-                <Field label="Phone number" icon={Phone}>
-                  <input
-                    className={inputClass}
-                    type="tel"
-                    placeholder="08012345678"
-                    value={phone}
-                    onChange={(e) => {
-                      setPhone(e.target.value);
-                      setError("");
-                    }}
-                    autoComplete="tel"
-                  />
-                </Field>
-              )}
-
-              <Field label="Password" icon={Lock}>
-                <input
-                  className={inputClass}
-                  type="password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setError("");
-                  }}
-                  autoComplete={mode === "signin" ? "current-password" : "new-password"}
-                />
-              </Field>
-
-              {error && (
-                <p className="rounded-lg bg-red-50 px-4 py-2.5 text-sm font-medium text-red-700">
-                  {error}
-                </p>
-              )}
-
-              <button
-                type="submit"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#ef850f] px-6 py-4 font-bold text-[#0f1a3d] transition hover:-translate-y-0.5 hover:bg-[#ff9a26]"
-              >
-                {mode === "signin" ? "Sign in" : "Create account"}
-                <ArrowRight size={18} />
-              </button>
-            </form>
-
-            <p
-              className="mt-6 flex items-start gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 text-xs leading-5"
-              style={{ color: "var(--muted)" }}
-            >
-              <Info size={16} className="mt-0.5 shrink-0" style={{ color: "var(--gold-text)" }} />
-              <span>
-                <strong style={{ color: "var(--foreground)" }}>Demo only.</strong>{" "}
-                Passwords are not checked or stored, and nothing is sent
-                anywhere. Please do not enter a real password. The real website
-                will use a secure login.
-              </span>
-            </p>
-          </div>
-        </section>
-      </main>
+      <AuthCard
+        mode={mode}
+        onSwitch={switchMode}
+        values={{ name, email, phone, password }}
+        onChange={(field, value) => {
+          if (field === "name") setName(value);
+          if (field === "email") setEmail(value);
+          if (field === "phone") setPhone(value);
+          if (field === "password") setPassword(value);
+          setError("");
+        }}
+        error={error}
+        onSubmit={mode === "signin" ? signIn : signUp}
+      />
     );
   }
 
