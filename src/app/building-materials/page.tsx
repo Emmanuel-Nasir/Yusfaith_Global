@@ -7,7 +7,7 @@ import { PRODUCTS } from "@/lib/building-materials/catalog";
 export const metadata: Metadata = {
   title: "Yusfaith Building Materials | Roofing, Steel, Blocks & More",
   description:
-    "Order roofing, iron rods, blocks, plumbing, electrical, finishing and timber from Yusfaith Building Materials, with delivery by our own trucks in Abeokuta, Epe and Ibadan.",
+    "Order roofing, iron rods, blocks, plumbing, electrical, finishing and timber from Yusfaith Building Materials, with delivery by our own trucks across Ogun, Lagos, Oyo and Osun States.",
 };
 
 const CATEGORY_IMAGES: Record<string, string> = {

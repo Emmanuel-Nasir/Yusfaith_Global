@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title:
     "Yusfaith Global Enterprises | Cement, Building Materials, Logistics, Real Estate & Bakery",
   description:
-    "Yusfaith Global Enterprises is a Nigerian group of five businesses: Cement Depot, Building Materials, Logistics, Real Estate and Bakery, serving customers in Abeokuta, Epe and Ibadan.",
+    "Yusfaith Global Enterprises is a Nigerian group of five businesses: Cement Depot, Building Materials, Logistics, Real Estate and Bakery, serving customers across Ogun, Lagos, Oyo and Osun States.",
 };
 
 export default function HomePage() {

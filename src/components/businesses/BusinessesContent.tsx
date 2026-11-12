@@ -26,7 +26,7 @@ const BUSINESS_DETAILS = [
       "Dangote, HBM, BUA, Mangal and Purechem cement",
       "Wholesale and retail supply",
       "Bulk orders for contractors and retailers",
-      "Serving customers from Abeokuta, Epe and Ibadan",
+      "Serving customers across Ogun, Lagos, Oyo and Osun States",
     ],
     image: "/images/cement/Epe warehouse.jpeg",
     imageAlt: "the Yusfaith Epe store",

@@ -41,7 +41,7 @@ const slides = [
     title: "Strong Foundations.",
     highlight: "Reliable Supply.",
     description:
-      "Distributors of Dangote, HBM, BUA, Mangal and Purechem cement, wholesale and retail, serving customers through our depots in Abeokuta, Epe and Ibadan.",
+      "Distributors of Dangote, HBM, BUA, Mangal and Purechem cement, wholesale and retail, serving customers across Ogun, Lagos, Oyo and Osun States.",
     image: "/images/corporate/yusfaith-depot-truck.jpeg",
     primaryText: "Explore Cement Depot",
     primaryHref: "/cement",

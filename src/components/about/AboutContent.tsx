@@ -8,6 +8,8 @@ import {
   ArrowRight,
   ArrowUpRight,
   Briefcase,
+  Truck,
+  Check,
   ChevronLeft,
   ChevronRight,
   Eye,
@@ -26,13 +28,17 @@ import {
   BUSINESSES,
   COMPANY,
   CORE_VALUES,
-  LEADERSHIP,
   LOCATIONS,
+  FLEET_TEXT,
   MISSION,
+  PARTNERS,
+  SERVICES,
   VISION,
 } from "@/data/company";
+import LeadershipProfiles from "@/components/about/LeadershipProfiles";
 
-const VALUE_ICONS = [HeartHandshake, Briefcase, Scale, ShieldCheck, Users];
+// Integrity, Professionalism, Customer Focus, Accountability, Teamwork
+const VALUE_ICONS = [ShieldCheck, Briefcase, HeartHandshake, Scale, Users];
 
 /* Fade-up on scroll, shared by every section */
 function FadeUp({
@@ -90,8 +96,6 @@ function mapsLink(address: string) {
 }
 
 export default function AboutContent() {
-  const [ceo, ...team] = LEADERSHIP;
-
   // Award lightbox
   const [openAward, setOpenAward] = useState<number | null>(null);
 
@@ -186,8 +190,8 @@ export default function AboutContent() {
             >
               <div className="relative aspect-square">
                 <Image
-                  src="/images/corporate/Headquarters figurine.jpeg"
-                  alt="Model of the Yusfaith Cement head office"
+                  src="/images/cement/stock-dangote-3x.jpeg"
+                  alt="Dangote 3X cement stocked in the Yusfaith warehouse"
                   fill
                   sizes="(max-width: 1024px) 50vw, 25vw"
                   className="object-cover"
@@ -210,19 +214,26 @@ export default function AboutContent() {
               style={{ color: "var(--muted)" }}
             >
               <p>
-                Yusfaith Global Enterprises is a Nigerian business enterprise
-                and a distributor of Dangote, HBM, BUA, Mangal and Purechem cement, serving both
-                wholesale and retail customers.
+                Yusfaith Global Enterprises, also known to our Dangote Cement
+                customers as Olasunkanmi Global Enterprise, is a leading cement
+                distributor and building materials company, professionally
+                managed as an indigenous Nigerian enterprise.
               </p>
               <p>
-                From our corporate head office on the Lagos–Abeokuta
-                Expressway and our offices in Epe and Ibadan, we supply
-                building materials, deliver orders with our own logistics
-                team, and are growing into real estate and bakery.
+                We supply quality cement and building materials to the
+                construction and infrastructure sectors, delivered on time by
+                our own logistics team. Experienced management, skilled staff
+                and dependable processes let us serve contractors, developers,
+                retailers and families from our head office on the
+                Lagos–Abeokuta Expressway and our locations across Ogun,
+                Lagos, Oyo and Osun States.
               </p>
               <p>
-                Everything we do is guided by our core values: trust in God,
-                professionalism, prudency, integrity and teamwork.
+                Our consistency has earned several Best Distributor in Ogun
+                State awards, including recognition from Dangote Cement and
+                Lafarge Cement, built on long-standing partnerships with leading
+                cement manufacturers. Beyond cement, the group is growing into
+                real estate and bakery.
               </p>
             </div>
 
@@ -232,7 +243,7 @@ export default function AboutContent() {
             >
               {[
                 { value: "5", label: "Businesses" },
-                { value: "3", label: "Locations" },
+                { value: "4", label: "States" },
                 { value: "5", label: "Cement brands" },
               ].map((stat) => (
                 <div key={stat.label}>
@@ -250,6 +261,42 @@ export default function AboutContent() {
                   </p>
                 </div>
               ))}
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
+      {/* ================= SERVICES ================= */}
+      <section className="section-padding pt-0">
+        <div className="container-main">
+          <FadeUp className="rounded-3xl bg-[#0f1a3d] p-8 text-white sm:p-12">
+            <div className="grid gap-10 lg:grid-cols-[2fr_3fr] lg:items-center">
+              <div>
+                <p className="mb-4 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-[#ffb347] sm:text-sm">
+                  <span className="h-px w-8 bg-[#ef850f]" />
+                  What We Do
+                </p>
+                <h2 className="font-heading text-4xl font-semibold leading-[1.1] sm:text-5xl">
+                  Our services
+                </h2>
+                <p className="mt-4 text-base leading-8 text-white/80">
+                  Tailored to construction companies, contractors, developers
+                  and retailers.
+                </p>
+              </div>
+              <ul className="grid gap-3 sm:grid-cols-2">
+                {SERVICES.map((service) => (
+                  <li
+                    key={service}
+                    className="flex items-start gap-3 rounded-2xl border border-white/15 bg-white/5 p-4 text-[15px] font-medium"
+                  >
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#ef850f] text-[#0f1a3d]">
+                      <Check size={14} strokeWidth={3} />
+                    </span>
+                    {service}
+                  </li>
+                ))}
+              </ul>
             </div>
           </FadeUp>
         </div>
@@ -368,104 +415,7 @@ export default function AboutContent() {
       </section>
 
       {/* ================= LEADERSHIP ================= */}
-      <section
-        id="leadership"
-        className="section-padding"
-        style={{ backgroundColor: "var(--surface)" }}
-      >
-        <div className="container-main">
-          <FadeUp className="mb-12 max-w-2xl">
-            <Eyebrow>Our Leadership</Eyebrow>
-            <SectionTitle>The People Behind Yusfaith</SectionTitle>
-          </FadeUp>
-
-          {/* CEO feature */}
-          <FadeUp>
-            <article
-              className="grid overflow-hidden rounded-2xl border shadow-sm md:grid-cols-[2fr_3fr]"
-              style={{
-                backgroundColor: "var(--background)",
-                borderColor: "var(--border)",
-              }}
-            >
-              <div className="relative aspect-[4/5] md:aspect-auto md:min-h-[420px]">
-                <Image
-                  src={ceo.image}
-                  alt={`${ceo.name}, ${ceo.role}`}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 40vw"
-                  className="object-cover object-top"
-                />
-              </div>
-              <div className="flex flex-col justify-center p-8 sm:p-12">
-                <span
-                  className="w-fit rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em]"
-                  style={{
-                    backgroundColor: "var(--surface)",
-                    color: "var(--gold-text)",
-                  }}
-                >
-                  {ceo.role}
-                </span>
-                <h3
-                  className="mt-5 font-heading text-4xl font-semibold leading-tight sm:text-5xl"
-                  style={{ color: "var(--foreground)" }}
-                >
-                  {ceo.name}
-                </h3>
-                <p
-                  className="mt-5 max-w-lg text-base leading-8"
-                  style={{ color: "var(--muted)" }}
-                >
-                  Leads Yusfaith Global Enterprises across its cement
-                  distribution, building materials, logistics, real estate
-                  and bakery businesses.
-                </p>
-              </div>
-            </article>
-          </FadeUp>
-
-          {/* Management team */}
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {team.map((person, index) => (
-              <FadeUp key={person.name} delay={(index % 3) * 0.08}>
-                <article
-                  className="group overflow-hidden rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-                  style={{
-                    backgroundColor: "var(--background)",
-                    borderColor: "var(--border)",
-                  }}
-                >
-                  <div className="relative aspect-[4/5] overflow-hidden">
-                    <Image
-                      src={person.image}
-                      alt={`${person.name}, ${person.role}`}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent" />
-                  </div>
-                  <div className="p-6">
-                    <p
-                      className="text-xs font-bold uppercase tracking-[0.15em]"
-                      style={{ color: "var(--gold-text)" }}
-                    >
-                      {person.role}
-                    </p>
-                    <h3
-                      className="mt-2 text-xl font-bold"
-                      style={{ color: "var(--foreground)" }}
-                    >
-                      {person.name}
-                    </h3>
-                  </div>
-                </article>
-              </FadeUp>
-            ))}
-          </div>
-        </div>
-      </section>
+      <LeadershipProfiles />
 
       {/* ================= RECOGNITION ================= */}
       <section className="section-padding">
@@ -560,6 +510,84 @@ export default function AboutContent() {
         </div>
       </section>
 
+      {/* ================= FLEET ================= */}
+      <section className="section-padding" style={{ backgroundColor: "var(--surface)" }}>
+        <div className="container-main grid items-center gap-12 lg:grid-cols-2">
+          <FadeUp>
+            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl shadow-xl">
+              <Image
+                src="/images/logistics/yusfaith-truck-loaded.jpeg"
+                alt="A loaded Yusfaith truck leaving the depot"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </div>
+          </FadeUp>
+          <FadeUp delay={0.1}>
+            <Eyebrow>Our Fleet</Eyebrow>
+            <SectionTitle>
+              Our own trucks.{" "}
+              <span className="block" style={{ color: "var(--gold-text)" }}>
+                On-time delivery.
+              </span>
+            </SectionTitle>
+            <p className="mt-6 text-base leading-8" style={{ color: "var(--muted)" }}>
+              {FLEET_TEXT}
+            </p>
+            <p className="mt-4 flex items-center gap-3 font-semibold" style={{ color: "var(--foreground)" }}>
+              <Truck size={20} style={{ color: "var(--gold-text)" }} />
+              Customer satisfaction is our priority.
+            </p>
+            <Link
+              href="/logistics"
+              className="group mt-7 inline-flex items-center gap-2 text-sm font-bold"
+              style={{ color: "var(--gold-text)" }}
+            >
+              About Yusfaith Logistics
+              <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+          </FadeUp>
+        </div>
+      </section>
+
+      {/* ================= PARTNERS ================= */}
+      <section className="section-padding">
+        <div className="container-main">
+          <FadeUp className="mx-auto mb-10 max-w-2xl text-center">
+            <div className="flex justify-center">
+              <Eyebrow>Our Partners</Eyebrow>
+            </div>
+            <SectionTitle>Working with trusted names</SectionTitle>
+            <p className="mt-5 text-base leading-8" style={{ color: "var(--muted)" }}>
+              We collaborate with reputable cement manufacturers, financial
+              institutions, transport service providers and construction
+              stakeholders to improve service delivery and efficiency.
+            </p>
+          </FadeUp>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            {PARTNERS.map((partner, index) => (
+              <FadeUp key={partner.name} delay={index * 0.06}>
+                <figure className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[var(--gold)] hover:shadow-lg">
+                  <div className="relative aspect-[5/3]">
+                    <Image
+                      src={partner.logo}
+                      alt={`${partner.name} logo`}
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                      className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  <figcaption className="border-t border-slate-200 px-3 py-2.5 text-center text-xs font-bold text-[#18265f]">
+                    {partner.name}
+                  </figcaption>
+                </figure>
+              </FadeUp>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ================= LOCATIONS ================= */}
       <section className="section-padding">
         <div className="container-main">
@@ -568,7 +596,7 @@ export default function AboutContent() {
             <SectionTitle>Our Locations</SectionTitle>
           </FadeUp>
 
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {LOCATIONS.map((location, index) => (
               <FadeUp key={location.city} delay={index * 0.08}>
                 <article
@@ -591,16 +619,7 @@ export default function AboutContent() {
                     className="mt-5 font-heading text-3xl font-semibold"
                     style={{ color: "var(--foreground)" }}
                   >
-                    {location.city}
-                    <span
-                      className="ml-2 text-base font-medium"
-                      style={{
-                        color: "var(--muted)",
-                        fontFamily: "var(--font-body)",
-                      }}
-                    >
-                      {location.state}
-                    </span>
+                    {location.state}
                   </h3>
                   <p
                     className="mt-4 flex flex-1 gap-3 text-sm leading-6"

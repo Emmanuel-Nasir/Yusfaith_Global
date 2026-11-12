@@ -83,7 +83,10 @@ function Title({ children }: { children: React.ReactNode }) {
 }
 
 export default function HomeContent() {
-  const [ceo, ...team] = LEADERSHIP;
+  // Only people with a photo appear on the homepage
+  const [ceo, ...team] = LEADERSHIP.filter(
+    (p): p is typeof p & { image: string } => Boolean(p.image)
+  );
 
   return (
     <>
@@ -99,8 +102,8 @@ export default function HomeContent() {
             <p className="mt-7 text-base leading-8" style={{ color: "var(--muted)" }}>
               Yusfaith Global Enterprises is a group of five businesses:
               cement distribution, building materials, logistics, real estate
-              and a bakery. From our head office in Abeokuta and our offices
-              in Epe and Ibadan, we serve builders, retailers and families
+              and a bakery. From our head office in Abeokuta and our locations
+              across Ogun, Lagos, Oyo and Osun States, we serve builders, retailers and families
               with trusted products and our own delivery team.
             </p>
 
@@ -110,7 +113,7 @@ export default function HomeContent() {
             >
               {[
                 { value: "5", label: "Businesses" },
-                { value: "3", label: "Locations" },
+                { value: "4", label: "States" },
                 { value: "5", label: "Cement brands" },
               ].map((stat) => (
                 <div key={stat.label}>
@@ -405,7 +408,7 @@ export default function HomeContent() {
             <Title>Our locations</Title>
           </FadeUp>
 
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {LOCATIONS.map((location, index) => (
               <FadeUp key={location.city} delay={index * 0.08}>
                 <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-7">
@@ -413,7 +416,7 @@ export default function HomeContent() {
                     {location.label}
                   </span>
                   <h3 className="mt-3 font-heading text-3xl font-semibold" style={{ color: "var(--foreground)" }}>
-                    {location.city}
+                    {location.state}
                   </h3>
                   <p className="mt-3 flex gap-3 text-sm leading-6" style={{ color: "var(--muted)" }}>
                     <MapPin size={18} className="mt-0.5 shrink-0" style={{ color: "var(--gold-text)" }} />

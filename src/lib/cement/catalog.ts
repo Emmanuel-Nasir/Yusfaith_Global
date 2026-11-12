@@ -20,25 +20,26 @@ import type {
 export const PRODUCTS: CementProduct[] = [
   // ==========================================
   // DANGOTE CEMENT
+  // Photos marked "real-" are Yusfaith's own stock photos.
   // ==========================================
 
   {
     id: "dangote-3x",
-    name: "Dangote 3X",
+    name: "Dangote 3X 42.5N",
     brand: "Dangote",
-    image: "/images/cement/dangote-3x-large.png",
+    image: "/images/cement/real-dangote-3x.jpg",
     description:
-      "Dangote cement for residential, commercial and general construction projects.",
+      "Portland limestone cement made to be extra strong, with extra life and extra yield. A dependable 42.5N grade for general construction, concrete work and block making.",
     samplePrice: 10500,
   },
 
   {
     id: "dangote-blockmaster",
-    name: "Dangote BlockMaster",
+    name: "Dangote BlocMaster",
     brand: "Dangote",
     image: "/images/cement/dangote-blockmaster.png",
     description:
-      "Explore Dangote BlockMaster for building and construction requirements.",
+      "Dangote's premium high-strength 42.5R Portland limestone cement, made for block moulding and higher-strength concrete such as columns, beams and slabs.",
     samplePrice: 10200,
   },
 
@@ -46,15 +47,66 @@ export const PRODUCTS: CementProduct[] = [
     id: "dangote-falcon",
     name: "Dangote Falcon",
     brand: "Dangote",
-    image: "/images/cement/dangote-falcon.png",
+    image: "/images/cement/real-dangote-falcon.jpg",
     description:
-      "Explore Dangote Falcon cement for construction and bulk supply.",
+      "Portland limestone cement for plastering, rendering and screeding. Its binding power holds blocks firmly in walls and gives a smooth finish that needs less paint.",
     samplePrice: 10300,
   },
 
   // ==========================================
-  // HBM CEMENT
+  // HBM (formerly Lafarge Africa)
+  // Lafarge Africa Plc was renamed HBM Nigeria Plc in 2026; product brands kept their names.
   // ==========================================
+
+  {
+    id: "hbm-ecocem",
+    name: "HBM Ecocem Elephant",
+    brand: "HBM",
+    image: "/images/cement/real-hbm-ecocem.jpg",
+    description:
+      "A lower-carbon, multipurpose Portland limestone cement for concreting, plastering and block making. 50 kg bag.",
+    samplePrice: 10000,
+  },
+
+  {
+    id: "hbm-supaset",
+    name: "HBM Elephant Supaset",
+    brand: "HBM",
+    image: "/images/cement/real-hbm-supaset.jpg",
+    description:
+      "Portland limestone cement made for blocks and precast work, trusted by block makers for strong, consistent results.",
+    samplePrice: 10200,
+  },
+
+  {
+    id: "hbm-watershield",
+    name: "HBM WaterShield",
+    brand: "HBM",
+    image: "/images/cement/real-hbm-watershield.jpg",
+    description:
+      "Waterproof cement for work exposed to water and moisture, such as foundations and wet areas, helping to keep dampness out.",
+    samplePrice: 10600,
+  },
+
+  {
+    id: "hbm-supafix",
+    name: "HBM Supafix Tile Adhesive",
+    brand: "HBM",
+    image: "/images/cement/real-hbm-supafix.jpg",
+    description:
+      "Supafix Basic tile adhesive for fixing tiles on walls and floors, indoors and outdoors. 20 kg bag.",
+    samplePrice: 10100,
+  },
+
+  {
+    id: "hbm-supa-whyte",
+    name: "HBM Supa Whyte Plaster of Paris",
+    brand: "HBM",
+    image: "/images/cement/real-supa-whyte.jpg",
+    description:
+      "Plaster of Paris for smooth interior finishes, ceilings and decorative work.",
+    samplePrice: 9500,
+  },
 
   {
     id: "hbm-classic",
@@ -62,38 +114,8 @@ export const PRODUCTS: CementProduct[] = [
     brand: "HBM",
     image: "/images/cement/hbm-classic.png",
     description:
-      "HBM Classic cement for building and construction projects.",
+      "General-purpose HBM cement for everyday building and construction work.",
     samplePrice: 10000,
-  },
-
-  {
-    id: "hbm-supafix",
-    name: "HBM Supafix",
-    brand: "HBM",
-    image: "/images/cement/hbm-supafix.png",
-    description:
-      "Explore HBM Supafix cement and request supply for your project.",
-    samplePrice: 10100,
-  },
-
-  {
-    id: "hbm-supaset",
-    name: "HBM Supaset",
-    brand: "HBM",
-    image: "/images/cement/hbm-supaset.png",
-    description:
-      "HBM Supaset cement for construction and wholesale enquiries.",
-    samplePrice: 10200,
-  },
-
-  {
-    id: "hbm-watershield",
-    name: "HBM Watershield",
-    brand: "HBM",
-    image: "/images/cement/hbm-watershield.png",
-    description:
-      "Explore HBM Watershield cement and its supply options.",
-    samplePrice: 10600,
   },
 
   // ==========================================
@@ -106,7 +128,7 @@ export const PRODUCTS: CementProduct[] = [
     brand: "BUA",
     image: "/images/cement/bua-cement.png",
     description:
-      "BUA cement for residential, commercial, wholesale and retail supply.",
+      "Portland limestone cement from BUA, Nigeria's second-largest cement maker, for general building and construction. Check the bag for the grade supplied.",
     samplePrice: 9900,
   },
 
@@ -120,7 +142,7 @@ export const PRODUCTS: CementProduct[] = [
     brand: "Mangal",
     image: "/images/cement/mangal-cement.png",
     description:
-      "Mangal cement for building projects, wholesale and bulk supply.",
+      "Mangal cement for general building projects, available wholesale, retail and in bulk.",
     samplePrice: 9800,
   },
 
@@ -134,7 +156,7 @@ export const PRODUCTS: CementProduct[] = [
     brand: "Purechem",
     image: "/images/cement/purechem-cement.png",
     description:
-      "Purechem cement for general construction and building requirements.",
+      "Portland limestone cement made in Ogun State by PureChem, suited to plastering, rendering and general building work.",
     samplePrice: 9700,
   },
 
@@ -147,7 +169,7 @@ export const PRODUCTS: CementProduct[] = [
     id: "dangote-3x-bulk",
     name: "Dangote 3X — Bulk Order",
     brand: "Dangote",
-    image: "/images/cement/dangote-stacked.png",
+    image: "/images/cement/stock-dangote-3x.jpeg",
     description:
       "Bulk ordering option for Dangote 3X. Select your required quantity and review estimated costs.",
     samplePrice: 10500,

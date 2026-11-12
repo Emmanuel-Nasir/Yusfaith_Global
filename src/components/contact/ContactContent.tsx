@@ -551,7 +551,7 @@ export default function ContactContent() {
                       className="mt-2 block font-heading text-2xl font-semibold"
                       style={{ color: "var(--foreground)" }}
                     >
-                      {item.city}, {item.state}
+                      {item.state}
                     </span>
                     <span
                       className="mt-2 flex gap-2 text-sm leading-6"
@@ -576,7 +576,7 @@ export default function ContactContent() {
               >
                 <iframe
                   key={location.city}
-                  title={`Map of Yusfaith ${location.city}`}
+                  title={`Map of Yusfaith ${location.state}`}
                   src={mapsEmbed(location.address)}
                   className="h-[380px] w-full sm:h-[460px]"
                   loading="lazy"
@@ -590,7 +590,7 @@ export default function ContactContent() {
                     className="text-sm font-semibold"
                     style={{ color: "var(--foreground)" }}
                   >
-                    Yusfaith {location.city}
+                    Yusfaith {location.label}
                   </span>
                   <a
                     href={mapsLink(location.address)}

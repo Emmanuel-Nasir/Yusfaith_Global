@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 
 /* Real Yusfaith photographs only */
-const CATEGORIES = ["All", "Head Office", "Epe Depot", "Recognition"] as const;
+const CATEGORIES = ["All", "Head Office", "Fleet & Stock", "Epe Depot", "Recognition"] as const;
 type Category = (typeof CATEGORIES)[number];
 
 const PHOTOS: { src: string; title: string; category: Exclude<Category, "All"> }[] = [
@@ -38,9 +38,39 @@ const PHOTOS: { src: string; title: string; category: Exclude<Category, "All"> }
     category: "Head Office",
   },
   {
-    src: "/images/corporate/Headquarters figurine.jpeg",
-    title: "Model of the Yusfaith Cement head office",
+    src: "/images/corporate/yusfaith-depot-truck.jpeg",
+    title: "Head office and depot with a Yusfaith truck",
     category: "Head Office",
+  },
+  {
+    src: "/images/logistics/yusfaith-truck-loaded.jpeg",
+    title: "A loaded truck leaving the depot",
+    category: "Fleet & Stock",
+  },
+  {
+    src: "/images/logistics/yusfaith-truck-depot.jpeg",
+    title: "Yusfaith truck at the warehouse",
+    category: "Fleet & Stock",
+  },
+  {
+    src: "/images/logistics/yusfaith-truck-yard.jpeg",
+    title: "Truck loaded and covered in the depot yard",
+    category: "Fleet & Stock",
+  },
+  {
+    src: "/images/cement/stock-dangote-3x.jpeg",
+    title: "Dangote 3X cement in the warehouse",
+    category: "Fleet & Stock",
+  },
+  {
+    src: "/images/cement/stock-warehouse.jpeg",
+    title: "Cement stock ready for delivery",
+    category: "Fleet & Stock",
+  },
+  {
+    src: "/images/cement/stock-warehouse2.jpeg",
+    title: "Warehouse stock at the depot",
+    category: "Fleet & Stock",
   },
   {
     src: "/images/cement/Epe warehouse.jpeg",
@@ -69,7 +99,7 @@ const PHOTOS: { src: string; title: string; category: Exclude<Category, "All"> }
   },
   {
     src: "/images/corporate/awards/award15.jpeg",
-    title: "Recognition award to Alhaji Fatai Yusuf Olatunji",
+    title: "Recognition award to our Chairman / CEO",
     category: "Recognition",
   },
   {

@@ -348,7 +348,7 @@ export default function RealEstateContent() {
                 "Backed by a building materials distributor of Dangote and HBM cement",
                 "Inspections arranged with our team before you commit",
                 "Homes for sale and rent, land, and off-plan options",
-                "Presence in Abeokuta, Epe and Ibadan",
+                "Presence across Ogun, Lagos, Oyo and Osun States",
               ].map((point) => (
                 <li key={point} className="flex items-start gap-3 text-[15px] font-medium" style={{ color: "var(--foreground)" }}>
                   <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#ef850f] text-[#0f1a3d]">

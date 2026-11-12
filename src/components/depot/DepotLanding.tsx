@@ -340,7 +340,7 @@ export default function DepotLanding({ config }: { config: LandingConfig }) {
             </h2>
           </FadeUp>
 
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {LOCATIONS.map((location, index) => (
               <FadeUp key={location.city} delay={index * 0.08}>
                 <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--background)] p-7">
@@ -354,7 +354,7 @@ export default function DepotLanding({ config }: { config: LandingConfig }) {
                     className="mt-3 font-heading text-3xl font-semibold"
                     style={{ color: "var(--foreground)" }}
                   >
-                    {location.city}
+                    {location.state}
                   </h3>
                   <p
                     className="mt-3 flex gap-3 text-sm leading-6"
