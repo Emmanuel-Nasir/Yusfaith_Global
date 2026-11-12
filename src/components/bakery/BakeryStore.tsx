@@ -62,7 +62,12 @@ function FadeUp({
 const inputClass =
   "w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[15px] text-[var(--foreground)] outline-none transition focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/25";
 
-const PICKUP_BRANCHES = ["Abeokuta head office", "Epe office", "Ibadan office"];
+const PICKUP_BRANCHES = [
+  "Head office, Ogun State",
+  "Office & depot, Lagos State",
+  "Office, Oyo State",
+  "Depot, Osun State",
+];
 
 const TERMS_FOR: Record<Fulfillment, PaymentTerms[]> = {
   Delivery: ["Pay before dispatch", "Pay on arrival"],
@@ -269,7 +274,7 @@ export default function BakeryStore() {
           {[
             { Icon: Clock, title: "Baked fresh daily", text: "Every order is prepared fresh." },
             { Icon: Store, title: "Homes and retailers", text: "Single items or bulk orders." },
-            { Icon: Truck, title: "Delivery or pickup", text: "Abeokuta, Epe and Ibadan." },
+            { Icon: Truck, title: "Delivery or pickup", text: "Ogun, Lagos, Oyo and Osun States." },
           ].map(({ Icon, title, text }) => (
             <div key={title} className="flex items-center gap-4">
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#ef850f] text-[#1c0f05]">

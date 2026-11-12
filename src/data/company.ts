@@ -221,12 +221,12 @@ export const BUSINESSES = [
   {
     name: "Building Materials",
     href: "/building-materials",
-    description: "Blocks, rods, roofing, tiles and other construction supplies.",
+    description: "Blocks, rods, roofing, tiles, paints and other construction supplies.",
   },
   {
     name: "Logistics",
     href: "/logistics",
-    description: "Our own trucks and drivers deliver customer orders to site.",
+    description: "On-time delivery by our own trucks, plus truck spare parts for sale.",
   },
   {
     name: "Real Estate",
@@ -246,6 +246,9 @@ export const AWARD_IMAGES = [1, 2, 3, 4, 9, 10, 12, 13, 14, 15, 17, 18].map(
 );
 
 // TODO: confirm which number Yusfaith uses for WhatsApp (using the first phone for now)
+// Logistics line (meeting notes, Nov 2026): deliveries and truck spare parts
+export const LOGISTICS_PHONE = "08136979918";
+
 export const WHATSAPP_NUMBER = "2348066171815"; // international format, no "+" or leading 0
 
 export function mapsLink(address: string) {

@@ -36,9 +36,10 @@ const config: ShopConfig = {
   products,
   filters: BRANDS,
   zones: [
-    { name: "Abeokuta", fee: 25000 },
-    { name: "Epe", fee: 30000 },
-    { name: "Ibadan", fee: 35000 },
+    { name: "Ogun State", fee: 25000 },
+    { name: "Lagos State", fee: 30000 },
+    { name: "Oyo State", fee: 35000 },
+    { name: "Osun State", fee: 40000 },
   ],
   maxQuantity: 100000,
   imageFit: "contain",

@@ -19,10 +19,10 @@ export type Driver = {
 };
 
 export const TRUCKS: Truck[] = [
-  { id: "T1", plate: "ABK-101-XA", type: "Flatbed truck", capacity: "30 tonnes", branch: "Abeokuta" },
-  { id: "T2", plate: "ABK-102-XA", type: "Flatbed truck", capacity: "30 tonnes", branch: "Abeokuta" },
-  { id: "T3", plate: "EPE-201-XB", type: "Tipper truck", capacity: "20 tonnes", branch: "Epe" },
-  { id: "T4", plate: "IBD-301-XC", type: "Delivery van", capacity: "3 tonnes", branch: "Ibadan" },
+  { id: "T1", plate: "ABK-101-XA", type: "Flatbed truck", capacity: "30 tonnes", branch: "Ogun State" },
+  { id: "T2", plate: "ABK-102-XA", type: "Flatbed truck", capacity: "30 tonnes", branch: "Ogun State" },
+  { id: "T3", plate: "EPE-201-XB", type: "Tipper truck", capacity: "20 tonnes", branch: "Lagos State" },
+  { id: "T4", plate: "IBD-301-XC", type: "Delivery van", capacity: "3 tonnes", branch: "Oyo State" },
 ];
 
 export const DRIVERS: Driver[] = [

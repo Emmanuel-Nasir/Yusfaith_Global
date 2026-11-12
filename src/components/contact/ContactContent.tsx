@@ -448,7 +448,7 @@ export default function ContactContent() {
             <div>
               <Eyebrow>Direct Lines</Eyebrow>
               <ul className="space-y-3">
-                {[COMPANY.officeLine, ...COMPANY.phones].map((phone, index) => (
+                {[...COMPANY.phones, COMPANY.officeLine].map((phone) => (
                   <li key={phone}>
                     <a
                       href={telLink(phone)}
@@ -462,7 +462,7 @@ export default function ContactContent() {
                         {phone}
                       </span>
                       <span className="text-xs" style={{ color: "var(--muted)" }}>
-                        {index === 0 ? "Office line" : "Telephone"}
+                        {phone === COMPANY.officeLine ? "Office line" : "Telephone"}
                       </span>
                     </a>
                   </li>

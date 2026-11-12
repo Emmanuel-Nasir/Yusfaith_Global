@@ -27,18 +27,18 @@ const businesses = [
     image: "/images/cement/cement-brands-dropdown.png",
   },
   {
-    name: "Bakery",
-    href: "/bakery",
+    name: "Building Materials",
+    href: "/building-materials",
     description:
-      "Freshly baked products and quality bakery services.",
-    image: "/images/bakery/product-bread-assortment.jpg",
+      "Construction materials, paints and building supplies.",
+    image: "/images/building-materials/materials-hero.jpg",
   },
   {
     name: "Logistics",
     href: "/logistics",
     description:
-      "Reliable transportation, fleet operations and deliveries.",
-    image: "/images/logistics/logistics-fleet-operations.jpg",
+      "Our own fleet, on-time delivery and truck spare parts.",
+    image: "/images/logistics/yusfaith-truck-depot.jpeg",
   },
   {
     name: "Real Estate",
@@ -48,11 +48,11 @@ const businesses = [
     image: "/images/real-estate/real-estate-hero.jpg",
   },
   {
-    name: "Building Materials",
-    href: "/building-materials",
+    name: "Bakery",
+    href: "/bakery",
     description:
-      "Construction materials and building supplies.",
-    image: "/images/building-materials/materials-hero.jpg",
+      "Freshly baked products and quality bakery services.",
+    image: "/images/bakery/product-bread-assortment.jpg",
   },
 ];
 

@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 
 /* Real Yusfaith photographs only */
-const CATEGORIES = ["All", "Head Office", "Fleet & Stock", "Epe Depot", "Recognition"] as const;
+const CATEGORIES = ["All", "Head Office", "Fleet & Stock", "Lagos State Depot", "Recognition"] as const;
 type Category = (typeof CATEGORIES)[number];
 
 const PHOTOS: { src: string; title: string; category: Exclude<Category, "All"> }[] = [
@@ -75,22 +75,22 @@ const PHOTOS: { src: string; title: string; category: Exclude<Category, "All"> }
   {
     src: "/images/cement/Epe warehouse.jpeg",
     title: "Epe depot grounds",
-    category: "Epe Depot",
+    category: "Lagos State Depot",
   },
   {
     src: "/images/cement/Epe warehouse1.jpeg",
     title: "Epe depot building and gate",
-    category: "Epe Depot",
+    category: "Lagos State Depot",
   },
   {
     src: "/images/cement/Epe warehouse2.jpeg",
     title: "Cement stocked at the Epe store",
-    category: "Epe Depot",
+    category: "Lagos State Depot",
   },
   {
     src: "/images/cement/Epe warehouse3.jpeg",
     title: "Epe office with Yusfaith and Lafarge signage",
-    category: "Epe Depot",
+    category: "Lagos State Depot",
   },
   {
     src: "/images/corporate/awards/award12.jpeg",

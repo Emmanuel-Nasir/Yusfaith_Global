@@ -6,6 +6,7 @@ export type MaterialCategory =
   | "Plumbing"
   | "Electrical"
   | "Finishing"
+  | "Paints"
   | "Doors & Timber";
 
 export type MaterialProduct = {
@@ -158,6 +159,43 @@ export const PRODUCTS: MaterialProduct[] = [
     unit: "board",
     samplePrice: 9500,
   },
+  // Paints — images are illustrations until Yusfaith sends photos of its paint stock
+  {
+    id: "emulsion-paint",
+    name: "Emulsion Paint",
+    category: "Paints",
+    description: "Water-based paint for interior and exterior walls, in a wide range of colours. Smooth finish that is easy to clean.",
+    image: root + "materials-emulsion-paint.jpg",
+    unit: "bucket",
+    samplePrice: 38000,
+  },
+  {
+    id: "gloss-paint",
+    name: "Gloss Paint",
+    category: "Paints",
+    description: "Hard-wearing, shiny oil-based paint for doors, windows, metal and wood.",
+    image: root + "materials-gloss-paint.jpg",
+    unit: "tin",
+    samplePrice: 16000,
+  },
+  {
+    id: "textured-paint",
+    name: "Textured Paint",
+    category: "Paints",
+    description: "Thick, weather-resistant coating that gives exterior walls a durable textured finish.",
+    image: root + "materials-textured-paint.jpg",
+    unit: "bucket",
+    samplePrice: 42000,
+  },
+  {
+    id: "primer-undercoat",
+    name: "Primer and Undercoat",
+    category: "Paints",
+    description: "Prepares new plaster, wood and metal so the top coat sticks better and lasts longer.",
+    image: root + "materials-primer-undercoat.jpg",
+    unit: "tin",
+    samplePrice: 14000,
+  },
   {
     id: "doors-frames",
     name: "Doors and Frames",
@@ -195,6 +233,7 @@ export const CATEGORIES = [
   "Plumbing",
   "Electrical",
   "Finishing",
+  "Paints",
   "Doors & Timber",
 ] as const;
 

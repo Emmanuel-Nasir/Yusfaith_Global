@@ -119,7 +119,8 @@ export const BAKERY_PRODUCTS: BakeryProduct[] = [
 
 /* Delivery zones and demo delivery fees (charged separately) */
 export const BAKERY_ZONES = [
-  { name: "Abeokuta", fee: 1500 },
-  { name: "Epe", fee: 2000 },
-  { name: "Ibadan", fee: 2000 },
+  { name: "Ogun State", fee: 1500 },
+  { name: "Lagos State", fee: 2000 },
+  { name: "Oyo State", fee: 2000 },
+  { name: "Osun State", fee: 2500 },
 ];

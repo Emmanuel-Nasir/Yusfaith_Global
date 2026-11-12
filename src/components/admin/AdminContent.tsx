@@ -167,19 +167,22 @@ const PREFIX: Record<Business, string> = {
 
 const ZONES: Record<Business, { name: string; fee: number }[]> = {
   "Cement Depot": [
-    { name: "Abeokuta", fee: 25000 },
-    { name: "Epe", fee: 30000 },
-    { name: "Ibadan", fee: 35000 },
+    { name: "Ogun State", fee: 25000 },
+    { name: "Lagos State", fee: 30000 },
+    { name: "Oyo State", fee: 35000 },
+    { name: "Osun State", fee: 40000 },
   ],
   "Building Materials": [
-    { name: "Abeokuta", fee: 25000 },
-    { name: "Epe", fee: 30000 },
-    { name: "Ibadan", fee: 35000 },
+    { name: "Ogun State", fee: 25000 },
+    { name: "Lagos State", fee: 30000 },
+    { name: "Oyo State", fee: 35000 },
+    { name: "Osun State", fee: 40000 },
   ],
   Bakery: [
-    { name: "Abeokuta", fee: 1500 },
-    { name: "Epe", fee: 2000 },
-    { name: "Ibadan", fee: 2000 },
+    { name: "Ogun State", fee: 1500 },
+    { name: "Lagos State", fee: 2000 },
+    { name: "Oyo State", fee: 2000 },
+    { name: "Osun State", fee: 2500 },
   ],
 };
 
@@ -414,7 +417,7 @@ function NewOrderForm({
         address: fulfillment === "Delivery" ? address.trim() : "",
         notes: `Taken by Sales (phone/WhatsApp). ${notes.trim()}`.trim(),
       },
-      location: fulfillment === "Delivery" ? zone : "Abeokuta head office",
+      location: fulfillment === "Delivery" ? zone : "Head office, Ogun State",
       fulfillment,
       paymentTerms: terms,
       paymentChannel: channel,

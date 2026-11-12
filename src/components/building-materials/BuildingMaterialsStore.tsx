@@ -29,7 +29,7 @@ const config: ShopConfig = {
   headline: "Everything you need",
   highlight: "to build better.",
   intro:
-    "Roofing, steel, blocks, plumbing, electrical, finishing and timber. Order for delivery by our own trucks or pickup from our depots.",
+    "Roofing, steel, blocks, plumbing, electrical, paints, finishing and timber. Order for delivery by our own trucks or pickup from our depots.",
   heroImage: "/images/building-materials/materials-warehouse.jpg",
   heroAlt: "Building materials stacked in a warehouse",
   menuEyebrow: "Our Materials",
@@ -39,14 +39,15 @@ const config: ShopConfig = {
   products,
   filters: FILTERS,
   zones: [
-    { name: "Abeokuta", fee: 25000 },
-    { name: "Epe", fee: 30000 },
-    { name: "Ibadan", fee: 35000 },
+    { name: "Ogun State", fee: 25000 },
+    { name: "Lagos State", fee: 30000 },
+    { name: "Oyo State", fee: 35000 },
+    { name: "Osun State", fee: 40000 },
   ],
   maxQuantity: MAX_QUANTITY_PER_PRODUCT,
   imageFit: "cover",
   highlights: [
-    { title: "Seven product groups", text: "From roofing to doors and timber." },
+    { title: "Eight product groups", text: "From roofing and paints to doors and timber." },
     { title: "Bulk quantities", text: "Type any quantity for large orders." },
     { title: "Our own trucks", text: "Delivered by the Yusfaith logistics team." },
   ],

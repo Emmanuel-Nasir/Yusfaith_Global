@@ -93,7 +93,12 @@ function FadeUp({
 const inputClass =
   "w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[15px] text-[var(--foreground)] outline-none transition focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/25";
 
-const PICKUP_BRANCHES = ["Abeokuta head office", "Epe office", "Ibadan office"];
+const PICKUP_BRANCHES = [
+  "Head office, Ogun State",
+  "Office & depot, Lagos State",
+  "Office, Oyo State",
+  "Depot, Osun State",
+];
 
 const TERMS_FOR: Record<Fulfillment, PaymentTerms[]> = {
   Delivery: ["Pay before dispatch", "Pay on arrival"],

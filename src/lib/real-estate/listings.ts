@@ -18,7 +18,7 @@ export type Listing = {
   title: string;
   type: PropertyType;
   status: ListingStatus;
-  city: "Abeokuta" | "Epe" | "Ibadan";
+  city: "Ogun State" | "Lagos State" | "Oyo State";
   price: number;
   priceNote?: string; // e.g. "per year", "per plot"
   bedrooms?: number;
@@ -39,7 +39,7 @@ export const PROPERTY_TYPES: PropertyType[] = [
   "Land",
 ];
 
-export const CITIES = ["Abeokuta", "Epe", "Ibadan"] as const;
+export const CITIES = ["Ogun State", "Lagos State", "Oyo State"] as const;
 
 export const LISTINGS: Listing[] = [
   {
@@ -47,7 +47,7 @@ export const LISTINGS: Listing[] = [
     title: "4-Bedroom Detached Duplex",
     type: "Detached House",
     status: "For Sale",
-    city: "Abeokuta",
+    city: "Ogun State",
     price: 85_000_000,
     bedrooms: 4,
     bathrooms: 5,
@@ -62,7 +62,7 @@ export const LISTINGS: Listing[] = [
     title: "3-Bedroom Bungalow",
     type: "Bungalow",
     status: "For Sale",
-    city: "Abeokuta",
+    city: "Ogun State",
     price: 45_000_000,
     bedrooms: 3,
     bathrooms: 3,
@@ -76,7 +76,7 @@ export const LISTINGS: Listing[] = [
     title: "2-Bedroom Apartment",
     type: "Apartment",
     status: "For Rent",
-    city: "Ibadan",
+    city: "Oyo State",
     price: 2_500_000,
     priceNote: "per year",
     bedrooms: 2,
@@ -91,7 +91,7 @@ export const LISTINGS: Listing[] = [
     title: "3-Bedroom Terrace Homes",
     type: "Terrace",
     status: "Off-plan",
-    city: "Epe",
+    city: "Lagos State",
     price: 38_000_000,
     bedrooms: 3,
     bathrooms: 4,
@@ -106,7 +106,7 @@ export const LISTINGS: Listing[] = [
     title: "Residential Estate Plots",
     type: "Land",
     status: "For Sale",
-    city: "Epe",
+    city: "Lagos State",
     price: 12_000_000,
     priceNote: "per plot",
     size: "600 sqm per plot",
@@ -119,7 +119,7 @@ export const LISTINGS: Listing[] = [
     title: "Off-plan Duplex Development",
     type: "Detached House",
     status: "Off-plan",
-    city: "Abeokuta",
+    city: "Ogun State",
     price: 30_000_000,
     priceNote: "starting price",
     bedrooms: 4,

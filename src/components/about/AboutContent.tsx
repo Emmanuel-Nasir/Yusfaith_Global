@@ -164,8 +164,8 @@ export default function AboutContent() {
             </h1>
 
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/90 sm:text-lg">
-              {COMPANY.tagline}. A Nigerian enterprise with a corporate head
-              office in Abeokuta and offices in Epe and Ibadan.
+              {COMPANY.tagline}. A Nigerian enterprise serving customers
+              across Ogun, Lagos, Oyo and Osun States.
             </p>
           </FadeUp>
         </div>
@@ -659,13 +659,6 @@ export default function AboutContent() {
                 <Mail size={17} style={{ color: "var(--gold-text)" }} />
                 {COMPANY.email}
               </a>
-              <a
-                href={`tel:+234${COMPANY.officeLine.slice(1)}`}
-                className="inline-flex items-center gap-2 font-medium transition hover:text-[var(--gold-text)]"
-              >
-                <Phone size={17} style={{ color: "var(--gold-text)" }} />
-                Office: {COMPANY.officeLine}
-              </a>
               {COMPANY.phones.map((phone) => (
                 <a
                   key={phone}
@@ -676,6 +669,13 @@ export default function AboutContent() {
                   {phone}
                 </a>
               ))}
+              <a
+                href={`tel:+234${COMPANY.officeLine.slice(1)}`}
+                className="inline-flex items-center gap-2 font-medium transition hover:text-[var(--gold-text)]"
+              >
+                <Phone size={17} style={{ color: "var(--gold-text)" }} />
+                Office: {COMPANY.officeLine}
+              </a>
             </div>
           </FadeUp>
         </div>

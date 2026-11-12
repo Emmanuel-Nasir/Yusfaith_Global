@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowLeft,
+  Check,
   CheckCircle2,
   CircleAlert,
   MapPin,
@@ -37,6 +38,7 @@ import {
 } from "@/lib/orders";
 
 import { DEMO_MODE } from "@/lib/demo";
+import SpareParts from "@/components/logistics/SpareParts";
 
 /* ---------- helpers ---------- */
 
@@ -494,7 +496,7 @@ export default function LogisticsContent() {
 
             <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em] text-[#ffb347]">
               <Truck size={18} />
-              Yusfaith Logistics
+              Yusfaith Logistics &amp; Truck Spare Parts
             </p>
 
             <h1 className="mt-5 max-w-3xl font-heading text-5xl font-semibold leading-[1.05] sm:text-6xl lg:text-7xl">
@@ -506,8 +508,20 @@ export default function LogisticsContent() {
 
             <p className="mt-6 max-w-xl text-base leading-8 text-white/90 sm:text-lg">
               Every Yusfaith delivery is made by our own logistics team, from
-              the depot to your location, once your order is confirmed.
+              the depot to your location, once your order is confirmed. We also
+              sell spare parts for heavy-duty trucks.
             </p>
+
+            <ul className="mt-7 grid max-w-xl gap-3 sm:grid-cols-3">
+              {["On-time delivery", "Customer satisfaction is our priority", "Truck spare parts"].map((item) => (
+                <li key={item} className="flex items-start gap-2.5 text-sm font-semibold text-white">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#ef850f] text-[#0f1a3d]">
+                    <Check size={12} strokeWidth={3} />
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
 
             <div className="mt-9 flex flex-wrap gap-4">
               {DEMO_MODE && (
@@ -524,6 +538,12 @@ export default function LogisticsContent() {
               >
                 Ask About Delivery
               </Link>
+              <a
+                href="#spare-parts"
+                className="inline-flex items-center gap-2.5 rounded-full border border-white/40 bg-white/10 px-8 py-4 text-[15px] font-semibold text-white backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-[#0f1a3d]"
+              >
+                Truck Spare Parts
+              </a>
             </div>
           </FadeUp>
         </div>
@@ -554,6 +574,9 @@ export default function LogisticsContent() {
           ))}
         </div>
       </section>
+
+      {/* ================= SPARE PARTS ================= */}
+      <SpareParts />
 
       {/* ================= DISPATCH CENTRE ================= */}
      

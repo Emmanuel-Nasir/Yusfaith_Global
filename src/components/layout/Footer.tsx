@@ -20,13 +20,10 @@ import {
 
 const businesses = [
   { name: "Cement Depot", href: "/cement" },
-  { name: "Bakery", href: "/bakery" },
+  { name: "Building Materials", href: "/building-materials" },
   { name: "Logistics", href: "/logistics" },
   { name: "Real Estate", href: "/real-estate" },
-  {
-    name: "Building Materials",
-    href: "/building-materials",
-  },
+  { name: "Bakery", href: "/bakery" },
 ];
 
 const quickLinks = [
@@ -65,9 +62,9 @@ export default function Footer() {
             </Link>
 
             <p className="max-w-xs text-sm leading-7 text-white/70">
-              Connecting businesses and communities through
-              cement distribution, bakery, logistics,
-              real estate and building materials.
+              Building solutions through cement distribution and
+              building materials, logistics and real estate, to
+              our bakery.
             </p>
 
             <p className="mt-6 text-xs font-semibold uppercase tracking-widest text-[#ff9a26]">
@@ -130,7 +127,7 @@ export default function Footer() {
                 />
                 <div>
                   <p className="font-semibold text-white">
-                    Corporate Head Office
+                    Ogun State (Head Office)
                   </p>
                   <p>
                     KM 6, Lagos–Abeokuta Expressway,
@@ -143,7 +140,7 @@ export default function Footer() {
 
               <div>
                 <p className="font-semibold text-white">
-                  Epe, Lagos
+                  Lagos State (Epe)
                 </p>
                 <p>
                   No. 33/34 Lagos Road, beside
@@ -153,9 +150,16 @@ export default function Footer() {
 
               <div>
                 <p className="font-semibold text-white">
-                  Ibadan, Oyo
+                  Oyo State (Ibadan)
                 </p>
                 <p>Adeoyo, off Ring Road, Ibadan.</p>
+              </div>
+
+              <div>
+                <p className="font-semibold text-white">
+                  Osun State
+                </p>
+                <p>Osun Depot</p>
               </div>
 
               <a

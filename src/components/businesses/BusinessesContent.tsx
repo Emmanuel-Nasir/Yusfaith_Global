@@ -42,7 +42,7 @@ const BUSINESS_DETAILS = [
       "Beyond cement, we supply the materials that take a project from foundation to roof, so customers can source more of their build in one place.",
     highlights: [
       "Blocks, iron rods and roofing sheets",
-      "Tiles, pipes and plumbing fittings",
+      "Tiles, paints, pipes and plumbing fittings",
       "Timber, ceiling boards and doors",
       "Order alongside your cement",
     ],
@@ -57,12 +57,12 @@ const BUSINESS_DETAILS = [
     Icon: Truck,
     tagline: "Moving goods, delivering on time.",
     description:
-      "Our own logistics team, trucks and drivers deliver customer orders from our depots to their sites, so purchases arrive where they are needed.",
+      "Our own logistics team, trucks and drivers deliver customer orders from our depots to their sites, and we sell spare parts for heavy-duty trucks.",
     highlights: [
+      "On-time delivery",
+      "Customer satisfaction is our priority",
       "Yusfaith's own trucks and drivers",
-      "Delivery from depot to site",
-      "Dispatch once payment is confirmed",
-      "Order status you can follow",
+      "Truck spare parts for sale",
     ],
     image: "/images/logistics/yusfaith-truck-depot.jpeg",
     imageAlt: "Delivery truck loading at a warehouse",

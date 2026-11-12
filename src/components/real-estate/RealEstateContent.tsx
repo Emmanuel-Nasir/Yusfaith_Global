@@ -140,7 +140,7 @@ export default function RealEstateContent() {
             </h1>
 
             <p className="mt-6 max-w-xl text-base leading-8 text-white/90 sm:text-lg">
-              Homes, apartments and land in Abeokuta, Epe and Ibadan. Find a
+              Homes, apartments and land across Ogun, Lagos and Oyo States. Find a
               property and book an inspection with our team.
             </p>
 

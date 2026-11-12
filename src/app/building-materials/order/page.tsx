@@ -4,7 +4,7 @@ import BuildingMaterialsStore from "@/components/building-materials/BuildingMate
 export const metadata: Metadata = {
   title: "Order Building Materials | Yusfaith",
   description:
-    "Order roofing, steel, blocks, plumbing, electrical, finishing and timber from Yusfaith Building Materials.",
+    "Order roofing, steel, blocks, plumbing, electrical, paints, finishing and timber from Yusfaith Building Materials.",
 };
 
 export default function BuildingMaterialsOrderPage() {
