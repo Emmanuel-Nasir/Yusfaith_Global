@@ -62,9 +62,8 @@ export default function Footer() {
             </Link>
 
             <p className="max-w-xs text-sm leading-7 text-white/70">
-              Building solutions through cement distribution and
-              building materials, logistics and real estate, to
-              our bakery.
+              From building solutions to bakery: cement, building
+              materials, logistics, real estate and fresh bakes.
             </p>
 
             <p className="mt-6 text-xs font-semibold uppercase tracking-widest text-[#ff9a26]">

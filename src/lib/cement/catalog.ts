@@ -160,32 +160,6 @@ export const PRODUCTS: CementProduct[] = [
     samplePrice: 9700,
   },
 
-  // ==========================================
-  // BULK ORDER CONFIGURATIONS
-  // These are not additional cement brands.
-  // ==========================================
-
-  {
-    id: "dangote-3x-bulk",
-    name: "Dangote 3X — Bulk Order",
-    brand: "Dangote",
-    image: "/images/cement/stock-dangote-3x.jpeg",
-    description:
-      "Bulk ordering option for Dangote 3X. Select your required quantity and review estimated costs.",
-    samplePrice: 10500,
-    bulkOption: true,
-  },
-
-  {
-    id: "hbm-classic-bulk",
-    name: "HBM Classic — Bulk Order",
-    brand: "HBM",
-    image: "/images/cement/hbm-classic.png",
-    description:
-      "Bulk ordering option for HBM Classic. Select your required quantity and review estimated costs.",
-    samplePrice: 10000,
-    bulkOption: true,
-  },
 ];
 
 /**

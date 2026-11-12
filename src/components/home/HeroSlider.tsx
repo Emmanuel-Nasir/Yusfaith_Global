@@ -28,7 +28,7 @@ const slides = [
     title: "Building Trust.",
     highlight: "Creating Possibilities.",
     description:
-      "From building solutions, with cement distribution and building materials, through logistics and real estate to our bakery, we serve people, businesses and communities across Ogun, Lagos, Oyo and Osun States.",
+      "One trusted Nigerian group, from building solutions to bakery. We supply cement and building materials, deliver with our own trucks, develop real estate and bake fresh bread for homes and businesses across Ogun, Lagos, Oyo and Osun States.",
     image: "/images/corporate/Headquarters.jpeg",
     primaryText: "Explore Our Businesses",
     primaryHref: "/#businesses",

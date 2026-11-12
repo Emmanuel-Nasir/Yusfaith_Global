@@ -22,8 +22,8 @@ const BUSINESS_IMAGES: Record<string, string> = {
 };
 
 const BRANDS = [
-  { name: "Dangote", image: "/images/cement/dangote-3x-large.png" },
-  { name: "HBM", image: "/images/cement/hbm-classic.png" },
+  { name: "Dangote", image: "/images/cement/real-dangote-3x.jpg" },
+  { name: "HBM", image: "/images/cement/real-hbm-ecocem.jpg" },
   { name: "BUA", image: "/images/cement/bua-cement.png" },
   { name: "Mangal", image: "/images/cement/mangal-cement.png" },
   { name: "Purechem", image: "/images/cement/purechem-cement.png" },
