@@ -64,7 +64,7 @@ const BUSINESS_DETAILS = [
       "Dispatch once payment is confirmed",
       "Order status you can follow",
     ],
-    image: "/images/logistics/logistics-hero.jpg",
+    image: "/images/logistics/yusfaith-truck-depot.jpeg",
     imageAlt: "Delivery truck loading at a warehouse",
     href: "/logistics",
     cta: "Visit Logistics",

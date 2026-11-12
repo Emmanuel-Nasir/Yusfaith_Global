@@ -477,8 +477,10 @@ export default function AboutContent() {
               className="mt-5 text-base leading-8"
               style={{ color: "var(--muted)" }}
             >
-              Awards presented to Yusfaith Global Enterprises and its
-              leadership. Select any award to view it larger.
+              Awards presented to Yusfaith Global Enterprises / Olasunkanmi
+              Global Enterprise and its leadership, including Best Distributor
+              in Ogun State recognitions from Dangote Cement and Lafarge Cement.
+              Select any award to view it larger.
             </p>
           </FadeUp>
 

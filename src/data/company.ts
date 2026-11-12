@@ -6,6 +6,10 @@
 
 export const COMPANY = {
   name: "Yusfaith Global Enterprises",
+  // Name used with Dangote Cement customers (the Lafarge business uses Yusfaith)
+  tradingAs: "Olasunkanmi Global Enterprise",
+  // Both names together, for cement and legal lines
+  fullName: "Yusfaith Global Enterprises / Olasunkanmi Global Enterprise",
   tagline: "Distributors of HBM and Dangote Cement — Wholesale & Retail",
   email: "olasunkanmidepot1985@gmail.com",
   officeLine: "07055540994",
@@ -94,12 +98,12 @@ export const LEADERSHIP = [
   },
   {
     name: "Mrs Bello Morenikeji",
-    role: "Accountant",
+    role: "Assistant HR",
     image: "/images/leadership/Bello Morenikeji.jpeg",
   },
   {
     name: "Oduwole Yusuf Olayemi",
-    role: "Auditor",
+    role: "HR",
     image: "/images/leadership/Oduwole Yusuf Olayemi.jpeg",
   },
   {

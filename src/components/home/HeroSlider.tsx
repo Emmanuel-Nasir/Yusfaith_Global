@@ -37,12 +37,12 @@ const slides = [
   },
   {
     id: 2,
-    eyebrow: "Cement Distribution",
+    eyebrow: "Yusfaith / Olasunkanmi · Cement Distribution",
     title: "Strong Foundations.",
     highlight: "Reliable Supply.",
     description:
       "Distributors of Dangote, HBM, BUA, Mangal and Purechem cement, wholesale and retail, serving customers through our depots in Abeokuta, Epe and Ibadan.",
-    image: "/images/cement/cement-brands-dropdown.png",
+    image: "/images/corporate/yusfaith-depot-truck.jpeg",
     primaryText: "Explore Cement Depot",
     primaryHref: "/cement",
     secondaryText: "Contact Our Team",
@@ -68,7 +68,7 @@ const slides = [
     highlight: "Delivering on Time.",
     description:
       "Our own logistics team, trucks and drivers deliver customer orders from our depots to their sites.",
-    image: "/images/logistics/logistics-hero.jpg",
+    image: "/images/logistics/yusfaith-truck-depot.jpeg",
     primaryText: "Explore Logistics",
     primaryHref: "/logistics",
     secondaryText: "Get in Touch",

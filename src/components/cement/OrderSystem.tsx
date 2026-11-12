@@ -22,13 +22,13 @@ const products: ShopProduct[] = PRODUCTS.map((p) => ({
 const config: ShopConfig = {
   subsidiary: "Cement Depot",
   idPrefix: "YC",
-  eyebrow: "Yusfaith Cement Depot",
+  eyebrow: "Yusfaith / Olasunkanmi Cement Depot",
   headline: "Strong foundations.",
   highlight: "Reliable supply.",
   intro:
     "Order Dangote, HBM, BUA, Mangal and Purechem cement, wholesale or retail, for delivery by our own trucks or pickup from our depots.",
-  heroImage: "/images/cement/Epe warehouse2.jpeg",
-  heroAlt: "Cement stocked at the Yusfaith Epe store",
+  heroImage: "/images/corporate/yusfaith-depot-truck.jpeg",
+  heroAlt: "Yusfaith Global Enterprises office and depot with a delivery truck",
   menuEyebrow: "Our Cement",
   menuTitle: "Choose your cement",
   priceNote:

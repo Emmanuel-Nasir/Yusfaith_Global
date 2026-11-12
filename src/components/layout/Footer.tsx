@@ -211,7 +211,7 @@ export default function Footer() {
         {/* Copyright Bar */}
         <div className="mt-12 flex flex-col justify-between gap-4 border-t border-white/20 pt-7 text-xs text-white/60 sm:flex-row sm:items-center">
           <p>
-            © 2026 Yusfaith Global Enterprises.
+            © 2026 Yusfaith Global Enterprises / Olasunkanmi Global Enterprise.
             All rights reserved.
           </p>
 

@@ -473,7 +473,7 @@ export default function LogisticsContent() {
       {/* ================= HERO ================= */}
       <section className="relative isolate flex min-h-[520px] items-center overflow-hidden bg-[#0f1a3d] text-white">
         <Image
-          src="/images/logistics/logistics-hero.jpg"
+          src="/images/logistics/yusfaith-truck-depot.jpeg"
           alt="Yusfaith delivery truck at a warehouse"
           fill
           priority

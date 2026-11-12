@@ -16,7 +16,7 @@ import {
 const BUSINESS_IMAGES: Record<string, string> = {
   "/cement": "/images/cement/Epe warehouse.jpeg",
   "/building-materials": "/images/building-materials/materials-warehouse.jpg",
-  "/logistics": "/images/logistics/logistics-hero.jpg",
+  "/logistics": "/images/logistics/yusfaith-truck-depot.jpeg",
   "/real-estate": "/images/real-estate/real-estate-hero.jpg",
   "/bakery": "/images/bakery/product-bread-assortment.jpg",
 };
