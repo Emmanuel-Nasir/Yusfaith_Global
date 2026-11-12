@@ -33,6 +33,7 @@ const TRACK_PATH: Record<string, string> = {
   "Cement Depot": "/cement/track",
   "Building Materials": "/building-materials/track",
   Bakery: "/bakery/track",
+  "Truck Spare Parts": "/logistics/spare-parts/track",
 };
 
 const inputClass =

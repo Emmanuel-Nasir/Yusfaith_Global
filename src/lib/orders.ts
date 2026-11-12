@@ -9,6 +9,7 @@ export type Subsidiary =
   | "Cement Depot"
   | "Building Materials"
   | "Bakery"
+  | "Truck Spare Parts"
   | "Real Estate";
 
 /* WHEN the customer pays (agreed with Yusfaith) */

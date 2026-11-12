@@ -23,6 +23,7 @@ import StaffGate, { AccessPanel, type StaffSession } from "@/components/admin/St
 import { PRODUCTS as CEMENT_PRODUCTS } from "@/lib/cement/catalog";
 import { PRODUCTS as MATERIAL_PRODUCTS } from "@/lib/building-materials/catalog";
 import { BAKERY_PRODUCTS } from "@/lib/bakery/catalog";
+import { CATEGORY_IMAGES, SPARE_PARTS } from "@/lib/logistics/spare-parts";
 import {
   addOrder,
   createOrderId,
@@ -55,7 +56,7 @@ type Section =
   | "logistics"
   | "access";
 
-type Business = "Cement Depot" | "Building Materials" | "Bakery";
+type Business = "Cement Depot" | "Building Materials" | "Truck Spare Parts" | "Bakery";
 
 const ROLES: Role[] = [
   "Super Admin",
@@ -146,6 +147,15 @@ const BASE_PRODUCTS: AdminProduct[] = [
     price: p.samplePrice,
     image: p.image,
   })),
+  ...SPARE_PARTS.map((p) => ({
+    id: `parts:${p.id}`,
+    business: "Truck Spare Parts" as Business,
+    name: p.name,
+    category: p.category,
+    unit: p.unit,
+    price: p.price,
+    image: CATEGORY_IMAGES[p.category],
+  })),
   ...BAKERY_PRODUCTS.map((p) => ({
     id: `bakery:${p.id}`,
     business: "Bakery" as Business,
@@ -157,11 +167,12 @@ const BASE_PRODUCTS: AdminProduct[] = [
   })),
 ];
 
-const BUSINESS_LIST: Business[] = ["Cement Depot", "Building Materials", "Bakery"];
+const BUSINESS_LIST: Business[] = ["Cement Depot", "Building Materials", "Truck Spare Parts", "Bakery"];
 
 const PREFIX: Record<Business, string> = {
   "Cement Depot": "YC",
   "Building Materials": "YM",
+  "Truck Spare Parts": "YP",
   Bakery: "YB",
 };
 
@@ -178,6 +189,12 @@ const ZONES: Record<Business, { name: string; fee: number }[]> = {
     { name: "Oyo State", fee: 35000 },
     { name: "Osun State", fee: 40000 },
   ],
+  "Truck Spare Parts": [
+    { name: "Ogun State", fee: 5000 },
+    { name: "Lagos State", fee: 8000 },
+    { name: "Oyo State", fee: 8000 },
+    { name: "Osun State", fee: 10000 },
+  ],
   Bakery: [
     { name: "Ogun State", fee: 1500 },
     { name: "Lagos State", fee: 2000 },
@@ -190,6 +207,7 @@ const TRACK_PATH: Record<string, string> = {
   "Cement Depot": "/cement/track",
   "Building Materials": "/building-materials/track",
   Bakery: "/bakery/track",
+  "Truck Spare Parts": "/logistics/spare-parts/track",
 };
 
 const TERMS_FOR: Record<Fulfillment, PaymentTerms[]> = {
