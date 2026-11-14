@@ -3,6 +3,8 @@
   Prices are editable demo estimates, not confirmed Yusfaith prices.
 */
 
+import { DEFAULT_DELIVERY_FEES } from "@/lib/delivery-fees";
+
 export type BakeryCategory = "Bread" | "Pastries" | "Doughnuts" | "Cakes";
 
 export type BakeryProduct = {
@@ -118,9 +120,4 @@ export const BAKERY_PRODUCTS: BakeryProduct[] = [
 ];
 
 /* Delivery zones and demo delivery fees (charged separately) */
-export const BAKERY_ZONES = [
-  { name: "Ogun State", fee: 1500 },
-  { name: "Lagos State", fee: 2000 },
-  { name: "Oyo State", fee: 2000 },
-  { name: "Osun State", fee: 2500 },
-];
+export const BAKERY_ZONES = DEFAULT_DELIVERY_FEES.Bakery; // live fees are edited in Admin → Prices

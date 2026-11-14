@@ -9,6 +9,7 @@ import BankDetails from "@/components/orders/BankDetails";
 import HelpContacts from "@/components/orders/HelpContacts";
 import ReceiptUpload from "@/components/orders/ReceiptUpload";
 import { formatNaira, removeOrder, type Order } from "@/lib/orders";
+import { logActivity } from "@/lib/activity-log";
 
 /*
   ORDER PLACED → PAY → UPLOAD RECEIPT
@@ -58,6 +59,13 @@ export default function OrderPlaced({ order, trackHref, onChange, onClose, dark 
   const receiptDone = Boolean(order.receipt);
 
   function cancelOrder() {
+    logActivity({
+      actor: order.customer.name || "Customer",
+      actorType: "Customer",
+      category: "Order",
+      action: `Cancelled order ${order.id} before paying`,
+      detail: `${order.subsidiary} · ${formatNaira(order.total)}`,
+    });
     removeOrder(order.id);
     onClose();
   }

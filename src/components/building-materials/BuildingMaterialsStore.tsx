@@ -1,5 +1,6 @@
 "use client";
 
+import { DEFAULT_DELIVERY_FEES } from "@/lib/delivery-fees";
 import ShopStore, {
   type ShopConfig,
   type ShopProduct,
@@ -39,12 +40,7 @@ const config: ShopConfig = {
     "Demo prices: sample estimates, not confirmed Yusfaith prices.",
   products,
   filters: FILTERS,
-  zones: [
-    { name: "Ogun State", fee: 25000 },
-    { name: "Lagos State", fee: 30000 },
-    { name: "Oyo State", fee: 35000 },
-    { name: "Osun State", fee: 40000 },
-  ],
+  zones: DEFAULT_DELIVERY_FEES["Building Materials"], // live fees are edited in Admin → Prices
   maxQuantity: MAX_QUANTITY_PER_PRODUCT,
   imageFit: "cover",
   highlights: [

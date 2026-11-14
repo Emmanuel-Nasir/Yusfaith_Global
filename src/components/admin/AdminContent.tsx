@@ -7,6 +7,7 @@ import {
   Boxes,
   ClipboardList,
   Eye,
+  History,
   Info,
   LayoutDashboard,
   Plus,
@@ -19,6 +20,9 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { DEMO_MODE } from "@/lib/demo";
+import ActivityPanel from "@/components/admin/ActivityPanel";
+import DeliveryFeesPanel from "@/components/admin/DeliveryFeesPanel";
+import { useDeliveryFees } from "@/lib/delivery-fees";
 import StaffGate, { AccessPanel, type StaffSession } from "@/components/admin/StaffGate";
 import { PRODUCTS as CEMENT_PRODUCTS } from "@/lib/cement/catalog";
 import { PRODUCTS as MATERIAL_PRODUCTS } from "@/lib/building-materials/catalog";
@@ -54,7 +58,8 @@ type Section =
   | "inventory"
   | "prices"
   | "logistics"
-  | "access";
+  | "access"
+  | "activity";
 
 type Business = "Cement Depot" | "Building Materials" | "Truck Spare Parts" | "Bakery";
 
@@ -76,10 +81,11 @@ const SECTIONS: { id: Section; label: string; Icon: LucideIcon }[] = [
   { id: "prices", label: "Prices", Icon: Tag },
   { id: "logistics", label: "Logistics", Icon: Truck },
   { id: "access", label: "Staff & access", Icon: Users },
+  { id: "activity", label: "Activity log", Icon: History },
 ];
 
 const ACCESS: Record<Role, Section[]> = {
-  "Super Admin": ["overview", "orders", "payments", "inventory", "prices", "logistics", "access"],
+  "Super Admin": ["overview", "orders", "payments", "inventory", "prices", "logistics", "access", "activity"],
   Management: ["overview", "orders", "payments", "inventory", "prices", "logistics"],
   "Sales Rep": ["orders", "prices"],
   "Finance Officer": ["overview", "orders", "payments"],
@@ -89,7 +95,7 @@ const ACCESS: Record<Role, Section[]> = {
 };
 
 const ROLE_NOTE: Record<Role, string> = {
-  "Super Admin": "Full access to every part of the system.",
+  "Super Admin": "Full access to every part of the system, including the activity log.",
   Management: "Sees everything and sets product prices. Cannot take orders or confirm payments.",
   "Sales Rep": "Takes phone and WhatsApp orders. Can see prices but cannot change them.",
   "Finance Officer": "Confirms payments. Cannot change prices, stock or deliveries.",
@@ -176,32 +182,7 @@ const PREFIX: Record<Business, string> = {
   Bakery: "YB",
 };
 
-const ZONES: Record<Business, { name: string; fee: number }[]> = {
-  "Cement Depot": [
-    { name: "Ogun State", fee: 25000 },
-    { name: "Lagos State", fee: 30000 },
-    { name: "Oyo State", fee: 35000 },
-    { name: "Osun State", fee: 40000 },
-  ],
-  "Building Materials": [
-    { name: "Ogun State", fee: 25000 },
-    { name: "Lagos State", fee: 30000 },
-    { name: "Oyo State", fee: 35000 },
-    { name: "Osun State", fee: 40000 },
-  ],
-  "Truck Spare Parts": [
-    { name: "Ogun State", fee: 5000 },
-    { name: "Lagos State", fee: 8000 },
-    { name: "Oyo State", fee: 8000 },
-    { name: "Osun State", fee: 10000 },
-  ],
-  Bakery: [
-    { name: "Ogun State", fee: 1500 },
-    { name: "Lagos State", fee: 2000 },
-    { name: "Oyo State", fee: 2000 },
-    { name: "Osun State", fee: 2500 },
-  ],
-};
+// Delivery fees come from src/lib/delivery-fees.ts (editable in Prices)
 
 const TRACK_PATH: Record<string, string> = {
   "Cement Depot": "/cement/track",
@@ -376,7 +357,7 @@ function NewOrderForm({
   onClose,
 }: {
   products: DisplayProduct[];
-  onCreated: () => void;
+  onCreated: (order: Order) => void;
   onClose: () => void;
 }) {
   const [business, setBusiness] = useState<Business>("Cement Depot");
@@ -385,7 +366,8 @@ function NewOrderForm({
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [fulfillment, setFulfillment] = useState<Fulfillment>("Delivery");
-  const [zone, setZone] = useState(ZONES["Cement Depot"][0].name);
+  const fees = useDeliveryFees();
+  const [zone, setZone] = useState(fees["Cement Depot"][0].name);
   const [address, setAddress] = useState("");
   const [terms, setTerms] = useState<PaymentTerms>("Pay before dispatch");
   const [channel, setChannel] = useState<PaymentChannel>("Bank transfer");
@@ -395,7 +377,7 @@ function NewOrderForm({
   const list = products.filter((p) => p.business === business);
   const selected = list.find((p) => p.id === productId) ?? list[0];
   const qty = Math.max(0, Math.floor(Number(quantity)) || 0);
-  const zones = ZONES[business];
+  const zones = fees[business];
   const fee =
     fulfillment === "Delivery"
       ? zones.find((z) => z.name === zone)?.fee ?? zones[0].fee
@@ -405,7 +387,7 @@ function NewOrderForm({
   function chooseBusiness(next: Business) {
     setBusiness(next);
     setProductId("");
-    setZone(ZONES[next][0].name);
+    setZone(fees[next][0].name);
   }
 
   function chooseFulfillment(next: Fulfillment) {
@@ -459,7 +441,7 @@ function NewOrderForm({
     };
 
     addOrder(order);
-    onCreated();
+    onCreated(order);
     onClose();
   }
 
@@ -582,7 +564,7 @@ function OrdersPanel({
   orders: Order[];
   products: DisplayProduct[];
   canCreate: boolean;
-  onChange: () => void;
+  onChange: (logText?: string) => void;
 }) {
   const [businessFilter, setBusinessFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -626,7 +608,7 @@ function OrdersPanel({
       </div>
 
       {formOpen && canCreate && (
-        <NewOrderForm products={products} onCreated={onChange} onClose={() => setFormOpen(false)} />
+        <NewOrderForm products={products} onCreated={(created) => onChange(`Created order ${created.id} for ${created.customer.name} (${formatNaira(created.total)})`)} onClose={() => setFormOpen(false)} />
       )}
 
       {visible.length === 0 ? (
@@ -651,7 +633,7 @@ function PaymentsPanel({
 }: {
   orders: Order[];
   canConfirm: boolean;
-  onChange: () => void;
+  onChange: (order: Order) => void;
 }) {
   const awaiting = orders.filter((o) => o.paymentStatus === "Awaiting payment");
   const confirmed = orders.filter((o) => o.paymentStatus === "Payment confirmed").slice(0, 8);
@@ -662,7 +644,7 @@ function PaymentsPanel({
       paymentStatus: "Payment confirmed",
       history: [...order.history, { status: "Payment confirmed", at: now }],
     });
-    onChange();
+    onChange(order);
   }
 
   return (
@@ -988,8 +970,8 @@ function PricesPanel({
       <p className="mb-6 flex items-start gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 text-sm leading-6" style={{ color: "var(--muted)" }}>
         <Info size={18} className="mt-0.5 shrink-0" style={{ color: "var(--gold-text)" }} />
         Product prices are set only by authorised staff. Customers and sales
-        staff cannot negotiate prices inside the system. Demo: price changes
-        here do not change the public stores yet.
+        staff cannot negotiate prices inside the system. Demo: product price changes
+        here do not change the public stores yet. Delivery fees (below) do.
       </p>
 
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
@@ -1205,35 +1187,57 @@ function DemoAdmin({ session }: { session: StaffSession }) {
 
             {active === "overview" && <OverviewPanel orders={orders} />}
             {active === "orders" && (
-              <OrdersPanel orders={orders} products={products} canCreate={CAN_CREATE_ORDER.includes(role)} onChange={reload} />
+              <OrdersPanel
+                orders={orders}
+                products={products}
+                canCreate={CAN_CREATE_ORDER.includes(role)}
+                onChange={(text) => { reload(); if (text) session.log(text); }}
+              />
             )}
             {active === "payments" && (
-              <PaymentsPanel orders={orders} canConfirm={CAN_CONFIRM_PAYMENT.includes(role)} onChange={() => { reload(); session.log("Confirmed a payment"); }} />
+              <PaymentsPanel orders={orders} canConfirm={CAN_CONFIRM_PAYMENT.includes(role)} onChange={(paid) => { reload(); session.log(`Confirmed payment for ${paid.id} (${formatNaira(paid.total)})`); }} />
             )}
             {active === "inventory" && (
               <InventoryPanel
                 products={products}
                 canEdit={CAN_EDIT_INVENTORY.includes(role)}
-                onStock={(id, value) => saveState({ ...state, stock: { ...state.stock, [id]: value } })}
-                onRemove={(id) => saveState({ ...state, removed: [...state.removed, id] })}
-                onAdd={(product, stock) =>
+                onStock={(id, value) => {
+                  saveState({ ...state, stock: { ...state.stock, [id]: value } });
+                  session.log(`Changed stock of ${products.find((p) => p.id === id)?.name ?? id} to ${value}`);
+                }}
+                onRemove={(id) => {
+                  saveState({ ...state, removed: [...state.removed, id] });
+                  session.log(`Removed product ${products.find((p) => p.id === id)?.name ?? id}`);
+                }}
+                onAdd={(product, stock) => {
                   saveState({
                     ...state,
                     added: [...state.added, product],
                     stock: { ...state.stock, [product.id]: stock },
-                  })
-                }
+                  });
+                  session.log(`Added product ${product.name} (${product.business}) at ${formatNaira(product.price)}`);
+                }}
               />
             )}
             {active === "prices" && (
-              <PricesPanel
-                products={products}
-                canEdit={CAN_EDIT_PRICES.includes(role)}
-                onSave={(id, price) => { saveState({ ...state, prices: { ...state.prices, [id]: price } }); session.log("Changed a product price"); }}
-              />
+              <>
+                <PricesPanel
+                  products={products}
+                  canEdit={CAN_EDIT_PRICES.includes(role)}
+                  onSave={(id, price) => {
+                    const product = products.find((p) => p.id === id);
+                    saveState({ ...state, prices: { ...state.prices, [id]: price } });
+                    session.log(
+                      `Changed price of ${product?.name ?? id} from ${formatNaira(product?.price ?? 0)} to ${formatNaira(price)}`
+                    );
+                  }}
+                />
+                <DeliveryFeesPanel canEdit={CAN_EDIT_PRICES.includes(role)} onChanged={session.log} />
+              </>
             )}
             {active === "logistics" && <LogisticsPanel orders={orders} role={role} />}
             {active === "access" && <AccessPanel session={session} />}
+            {active === "activity" && role === "Super Admin" && <ActivityPanel />}
           </section>
         </div>
       </div>

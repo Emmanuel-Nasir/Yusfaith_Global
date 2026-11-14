@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { categoryFor, logActivity } from "@/lib/activity-log";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -147,8 +148,18 @@ export default function StaffGate({
   }, []);
 
   const me = staff.find((s) => s.id === meId && s.active) ?? null;
+  const staffRef = useRef(staff);
+  staffRef.current = staff;
 
   const addAudit = useCallback((actor: string, text: string) => {
+    // Full site activity log (Super Admin only)
+    logActivity({
+      actor,
+      actorType: "Staff",
+      role: staffRef.current.find((s) => s.name === actor)?.role,
+      category: categoryFor(text),
+      action: text,
+    });
     setAudit((current) => {
       const next: AuditEntry[] = [
         {
@@ -185,6 +196,15 @@ export default function StaffGate({
     if (password.length === 0) return setError("Enter your password.");
 
     const found = staff.find((s) => s.email === cleanEmail);
+    if (!found || !found.active) {
+      logActivity({
+        actor: cleanEmail,
+        actorType: "Staff",
+        role: found?.role,
+        category: "Sign-in",
+        action: found ? "Failed sign-in: account deactivated" : "Failed sign-in: unknown email",
+      });
+    }
     if (!found)
       return setError("No staff account with that email. Ask your Super Admin to invite you.");
     if (!found.active)

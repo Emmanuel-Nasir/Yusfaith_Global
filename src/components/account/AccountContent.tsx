@@ -17,6 +17,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { DEMO_MODE } from "@/lib/demo";
+import { logActivity } from "@/lib/activity-log";
 import AuthCard from "@/components/account/AuthCard";
 import { formatNaira, loadOrders, type Order } from "@/lib/orders";
 
@@ -255,6 +256,7 @@ function DemoAccount() {
     setSessionEmail(created.email);
     setPassword("");
     setError("");
+    logActivity({ actor: created.name, actorType: "Customer", category: "Account", action: "Created a customer account", detail: created.email });
   }
 
   function signIn(event: React.FormEvent) {
@@ -265,9 +267,12 @@ function DemoAccount() {
     if (password.length === 0) return setError("Enter your password.");
 
     const found = accounts.find((a) => a.email === cleanEmail);
-    if (!found)
+    if (!found) {
+      logActivity({ actor: cleanEmail, actorType: "Customer", category: "Sign-in", action: "Failed sign-in: unknown email" });
       return setError("No account found with that email. Create an account first.");
+    }
 
+    logActivity({ actor: found.name, actorType: "Customer", category: "Sign-in", action: "Signed in", detail: found.email });
     write(SESSION_KEY, found.email);
     setSessionEmail(found.email);
     setPassword("");
@@ -275,6 +280,8 @@ function DemoAccount() {
   }
 
   function signOut() {
+    const current = accounts.find((acc) => acc.email === sessionEmail);
+    logActivity({ actor: current?.name ?? "Customer", actorType: "Customer", category: "Sign-out", action: "Signed out", detail: current?.email });
     remove(SESSION_KEY);
     setSessionEmail(null);
     setPassword("");

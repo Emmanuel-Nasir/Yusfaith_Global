@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import HelpContacts from "@/components/orders/HelpContacts";
 import OrderPlaced from "@/components/orders/OrderPlaced";
+import { logActivity } from "@/lib/activity-log";
+import { useDeliveryZones } from "@/lib/delivery-fees";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowLeft,
@@ -90,6 +92,7 @@ export default function BakeryStore() {
   const [phone, setPhone] = useState("");
   const [fulfillment, setFulfillment] = useState<Fulfillment>("Delivery");
   const [zone, setZone] = useState(BAKERY_ZONES[0].name);
+  const zones = useDeliveryZones("Bakery", BAKERY_ZONES); // staff can change fees in Admin
   const [branch, setBranch] = useState(PICKUP_BRANCHES[0]);
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
@@ -138,7 +141,7 @@ export default function BakeryStore() {
   const subtotal = lines.reduce((n, l) => n + l.quantity * l.product.price, 0);
   const deliveryFee =
     fulfillment === "Delivery"
-      ? BAKERY_ZONES.find((z) => z.name === zone)?.fee ?? 0
+      ? zones.find((z) => z.name === zone)?.fee ?? 0
       : 0;
   const total = subtotal + deliveryFee;
 
@@ -195,6 +198,13 @@ export default function BakeryStore() {
     };
 
     addOrder(order);
+    logActivity({
+      actor: order.customer.name,
+      actorType: "Customer",
+      category: "Order",
+      action: `Placed order ${order.id}`,
+      detail: `${order.subsidiary} · ${formatNaira(order.total)} · ${order.fulfillment}${order.fulfillment === "Delivery" ? ` to ${order.location}` : ""}`,
+    });
     setPlacedOrder(order);
     setCheckoutOpen(false);
     setBasket({});
@@ -594,7 +604,7 @@ export default function BakeryStore() {
                         Delivery area
                       </span>
                       <select className={inputClass} value={zone} onChange={(e) => setZone(e.target.value)}>
-                        {BAKERY_ZONES.map((z) => (
+                        {zones.map((z) => (
                           <option key={z.name} value={z.name}>
                             {z.name} (delivery {formatNaira(z.fee)})
                           </option>

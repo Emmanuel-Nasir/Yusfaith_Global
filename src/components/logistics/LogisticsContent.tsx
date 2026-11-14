@@ -38,6 +38,7 @@ import {
 } from "@/lib/orders";
 
 import { DEMO_MODE } from "@/lib/demo";
+import { logActivity } from "@/lib/activity-log";
 import SpareParts from "@/components/logistics/SpareParts";
 
 /* ---------- helpers ---------- */
@@ -128,6 +129,7 @@ function OrderCard({
       paymentStatus: "Payment confirmed",
       history: [...order.history, { status: "Payment confirmed", at: now }],
     });
+    logActivity({ actor: "Logistics staff", actorType: "Staff", role: "Dispatch Centre", category: "Payment", action: `Confirmed payment for ${order.id}` });
     setMessage("");
     onChange();
   }
@@ -148,6 +150,14 @@ function OrderCard({
       truckId,
       driverId,
       assignedAt: new Date().toISOString(),
+    });
+    logActivity({
+      actor: "Logistics staff",
+      actorType: "Staff",
+      role: "Dispatch Centre",
+      category: "Delivery",
+      action: `Assigned ${order.id} to a truck and driver`,
+      detail: `${TRUCKS.find((t) => t.id === truckId)?.plate ?? truckId} · ${DRIVERS.find((d) => d.id === driverId)?.name ?? driverId}`,
     });
     setMessage("");
     onChange();
@@ -199,6 +209,14 @@ function OrderCard({
     updateOrder(order.id, {
       status,
       history: [...order.history, { status, at: now }],
+    });
+    logActivity({
+      actor: mode === "driver" ? "Driver" : "Logistics staff",
+      actorType: "Staff",
+      role: mode === "driver" ? "Driver view" : "Dispatch Centre",
+      category: "Delivery",
+      action: `Moved order ${order.id} to "${status}"`,
+      detail: status === "Delivered" ? `Received by ${receiver.trim()}` : undefined,
     });
     setMessage("");
     onChange();

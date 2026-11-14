@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { CheckCircle2, FileText, Info, Upload, X } from "lucide-react";
 import { updateOrder, type Order, type Receipt } from "@/lib/orders";
+import { logActivity } from "@/lib/activity-log";
 
 /*
   RECEIPT UPLOAD (placeholder)
@@ -115,6 +116,13 @@ export default function ReceiptUpload({
     });
     setSaving(false);
     clear();
+    logActivity({
+      actor: order.customer.name || "Customer",
+      actorType: "Customer",
+      category: "Payment",
+      action: `${receipt ? "Replaced" : "Uploaded"} payment receipt for ${order.id}`,
+      detail: `${saved.name} · ${order.subsidiary}`,
+    });
     if (updated) onUpdated(updated);
   }
 

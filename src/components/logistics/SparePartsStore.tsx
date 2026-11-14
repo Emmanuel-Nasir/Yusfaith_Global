@@ -1,5 +1,6 @@
 "use client";
 
+import { DEFAULT_DELIVERY_FEES } from "@/lib/delivery-fees";
 import ShopStore, {
   type ShopConfig,
   type ShopProduct,
@@ -37,12 +38,7 @@ const config: ShopConfig = {
     "Prices are rough estimates. Our team confirms the exact price and fit for your truck make and model before you pay.",
   products,
   filters: PART_CATEGORIES,
-  zones: [
-    { name: "Ogun State", fee: 5000 },
-    { name: "Lagos State", fee: 8000 },
-    { name: "Oyo State", fee: 8000 },
-    { name: "Osun State", fee: 10000 },
-  ],
+  zones: DEFAULT_DELIVERY_FEES["Truck Spare Parts"], // live fees are edited in Admin → Prices
   maxQuantity: 500,
   imageFit: "cover",
   highlights: [

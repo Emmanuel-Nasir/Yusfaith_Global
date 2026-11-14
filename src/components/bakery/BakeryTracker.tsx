@@ -22,6 +22,7 @@ import {
 } from "@/lib/orders";
 
 import { DEMO_MODE } from "@/lib/demo";
+import { logActivity } from "@/lib/activity-log";
 import ReceiptUpload from "@/components/orders/ReceiptUpload";
 import HelpContacts from "@/components/orders/HelpContacts";
 import BankDetails from "@/components/orders/BankDetails";
@@ -79,6 +80,7 @@ export default function BakeryTracker() {
         history: [...order.history, { status: "Payment confirmed", at: now }],
       })
     );
+    logActivity({ actor: "Staff (tracking page)", actorType: "Staff", role: "Demo staff controls", category: "Payment", action: `Confirmed payment for ${order.id}` });
     setMessage("");
   }
 
@@ -94,6 +96,7 @@ export default function BakeryTracker() {
         history: [...order.history, { status, at: now }],
       })
     );
+    logActivity({ actor: "Staff (tracking page)", actorType: "Staff", role: "Demo staff controls", category: "Order", action: `Moved order ${order.id} to "${status}"` });
     setMessage("");
   }
 
