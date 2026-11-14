@@ -9,6 +9,7 @@ import {
   MAX_QUANTITY_PER_PRODUCT,
   PRODUCTS,
 } from "@/lib/building-materials/catalog";
+import { SALES_CONTACTS } from "@/data/company";
 
 const FILTERS: string[] = CATEGORIES.filter((c) => c !== "All");
 
@@ -53,6 +54,7 @@ const config: ShopConfig = {
   ],
   notesPlaceholder: "e.g. Deliver to the back gate of the site",
   trackHref: "/building-materials/track",
+  salesContacts: [SALES_CONTACTS.generalManager],
 };
 
 export default function BuildingMaterialsStore() {

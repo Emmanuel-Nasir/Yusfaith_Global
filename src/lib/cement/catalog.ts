@@ -27,17 +27,27 @@ export const PRODUCTS: CementProduct[] = [
     id: "dangote-3x",
     name: "Dangote 3X 42.5N",
     brand: "Dangote",
-    image: "/images/cement/real-dangote-3x.jpg",
+    image: "/images/cement/official-dangote-3x.jpg",
     description:
       "Portland limestone cement made to be extra strong, with extra life and extra yield. A dependable 42.5N grade for general construction, concrete work and block making.",
     samplePrice: 10500,
   },
 
   {
+    id: "dangote-3x-425r",
+    name: "Dangote 3X 42.5R",
+    brand: "Dangote",
+    image: "/images/cement/official-dangote-3x-425r.jpg",
+    description:
+      "The rapid-strength 42.5R version of Dangote 3X. Gains strength faster, for structural concrete such as columns, beams, slabs and foundations.",
+    samplePrice: 11000,
+  },
+
+  {
     id: "dangote-blockmaster",
     name: "Dangote BlocMaster",
     brand: "Dangote",
-    image: "/images/cement/dangote-blockmaster.png",
+    image: "/images/cement/official-dangote-blocmaster.jpg",
     description:
       "Dangote's premium high-strength 42.5R Portland limestone cement, made for block moulding and higher-strength concrete such as columns, beams and slabs.",
     samplePrice: 10200,
@@ -47,7 +57,7 @@ export const PRODUCTS: CementProduct[] = [
     id: "dangote-falcon",
     name: "Dangote Falcon",
     brand: "Dangote",
-    image: "/images/cement/real-dangote-falcon.jpg",
+    image: "/images/cement/official-dangote-falcon.jpg",
     description:
       "Portland limestone cement for plastering, rendering and screeding. Its binding power holds blocks firmly in walls and gives a smooth finish that needs less paint.",
     samplePrice: 10300,
@@ -62,9 +72,9 @@ export const PRODUCTS: CementProduct[] = [
     id: "hbm-ecocem",
     name: "HBM Ecocem Elephant",
     brand: "HBM",
-    image: "/images/cement/real-hbm-ecocem.jpg",
+    image: "/images/cement/official-hbm-ecocem.jpg",
     description:
-      "A lower-carbon, multipurpose Portland limestone cement for concreting, plastering and block making. 50 kg bag.",
+      "Nigeria's first multipurpose low-carbon cement: full performance with at least 30% lower carbon footprint than traditional cement. For concreting, plastering and on-site block making, from homes to large infrastructure.",
     samplePrice: 10000,
   },
 
@@ -72,19 +82,39 @@ export const PRODUCTS: CementProduct[] = [
     id: "hbm-supaset",
     name: "HBM Elephant Supaset",
     brand: "HBM",
-    image: "/images/cement/real-hbm-supaset.jpg",
+    image: "/images/cement/official-hbm-supaset.jpg",
     description:
-      "Portland limestone cement made for blocks and precast work, trusted by block makers for strong, consistent results.",
+      "Portland limestone cement made for sandcrete blocks and precast concrete: block making, poles, spun concrete pipes, culverts, interlocking tiles and bricks, and well rings. Meets NIS 444-1 and EN 197-1.",
     samplePrice: 10200,
+  },
+
+  {
+    id: "hbm-powermax",
+    name: "HBM Powermax",
+    brand: "HBM",
+    image: "/images/cement/official-hbm-powermax.jpg",
+    description:
+      "Premium technical cement (CEM II/A-L 42.5N), certified to BS EN 197-1 and NIS 444-1. Strong at all ages and durable, designed for high-performance concrete.",
+    samplePrice: 10800,
+  },
+
+  {
+    id: "hbm-ashakacem",
+    name: "HBM AshakaCem",
+    brand: "HBM",
+    image: "/images/cement/official-hbm-ashakacem.jpg",
+    description:
+      "The 'Star of the North', made at HBM's Ashaka plant in North-East Nigeria. Strong at all ages, durable and easy to work, for general-purpose and structural concrete.",
+    samplePrice: 10100,
   },
 
   {
     id: "hbm-watershield",
     name: "HBM WaterShield",
     brand: "HBM",
-    image: "/images/cement/real-hbm-watershield.jpg",
+    image: "/images/cement/official-hbm-watershield.jpg",
     description:
-      "Waterproof cement for work exposed to water and moisture, such as foundations and wet areas, helping to keep dampness out.",
+      "Waterproof cement that blends Portland cement with waterproofing admixtures to stop water seepage, dampness and water getting into walls and floors. The first of its kind in Nigeria.",
     samplePrice: 10600,
   },
 
@@ -94,7 +124,7 @@ export const PRODUCTS: CementProduct[] = [
     brand: "HBM",
     image: "/images/cement/real-hbm-supafix.jpg",
     description:
-      "Supafix Basic tile adhesive for fixing tiles on walls and floors, indoors and outdoors. 20 kg bag.",
+      "Supafix tile adhesive for fixing tiles on walls and floors, indoors and outdoors. 20 kg bag.",
     samplePrice: 10100,
   },
 
@@ -106,16 +136,6 @@ export const PRODUCTS: CementProduct[] = [
     description:
       "Plaster of Paris for smooth interior finishes, ceilings and decorative work.",
     samplePrice: 9500,
-  },
-
-  {
-    id: "hbm-classic",
-    name: "HBM Classic",
-    brand: "HBM",
-    image: "/images/cement/hbm-classic.png",
-    description:
-      "General-purpose HBM cement for everyday building and construction work.",
-    samplePrice: 10000,
   },
 
   // ==========================================

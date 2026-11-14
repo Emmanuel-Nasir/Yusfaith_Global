@@ -3,11 +3,12 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import HelpContacts from "@/components/orders/HelpContacts";
+import OrderPlaced from "@/components/orders/OrderPlaced";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
-  CheckCircle2,
   Clock,
   Minus,
   Plus,
@@ -30,7 +31,6 @@ import {
   formatNaira,
   type Fulfillment,
   type Order,
-  type PaymentChannel,
   type PaymentTerms,
 } from "@/lib/orders";
 
@@ -69,12 +69,11 @@ const PICKUP_BRANCHES = [
   "Depot, Osun State",
 ];
 
-const TERMS_FOR: Record<Fulfillment, PaymentTerms[]> = {
-  Delivery: ["Pay before dispatch", "Pay on arrival"],
-  Pickup: ["Cash & Carry (pickup)"],
+// Website orders are paid by bank transfer only, before dispatch or pickup
+const TERMS_FOR: Record<Fulfillment, PaymentTerms> = {
+  Delivery: "Pay before dispatch",
+  Pickup: "Pay before pickup",
 };
-
-const CHANNELS: PaymentChannel[] = ["Bank transfer", "POS", "Cash", "Online"];
 
 type Basket = Record<string, number>; // productId -> quantity
 
@@ -93,8 +92,6 @@ export default function BakeryStore() {
   const [zone, setZone] = useState(BAKERY_ZONES[0].name);
   const [branch, setBranch] = useState(PICKUP_BRANCHES[0]);
   const [address, setAddress] = useState("");
-  const [terms, setTerms] = useState<PaymentTerms>("Pay before dispatch");
-  const [channel, setChannel] = useState<PaymentChannel>("Bank transfer");
   const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
   const [savedAddresses, setSavedAddresses] = useState<
@@ -152,8 +149,6 @@ export default function BakeryStore() {
 
   function chooseFulfillment(value: Fulfillment) {
     setFulfillment(value);
-    setTerms(TERMS_FOR[value][0]);
-    if (value === "Pickup") setChannel("Cash");
   }
 
   function placeOrder(event: React.FormEvent) {
@@ -180,8 +175,8 @@ export default function BakeryStore() {
       },
       location: fulfillment === "Delivery" ? zone : branch,
       fulfillment,
-      paymentTerms: terms,
-      paymentChannel: channel,
+      paymentTerms: TERMS_FOR[fulfillment],
+      paymentChannel: "Bank transfer",
       paymentStatus: "Awaiting payment",
       status: "Received",
       items: lines.map(({ product, quantity }) => ({
@@ -627,26 +622,11 @@ export default function BakeryStore() {
                   </label>
                 )}
 
-                <label className="block">
-                  <span className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
-                    When will you pay?
-                  </span>
-                  <select className={inputClass} value={terms} onChange={(e) => setTerms(e.target.value as PaymentTerms)}>
-                    {TERMS_FOR[fulfillment].map((t) => (
-                      <option key={t}>{t}</option>
-                    ))}
-                  </select>
-                </label>
-                <label className="block">
-                  <span className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
-                    How will you pay?
-                  </span>
-                  <select className={inputClass} value={channel} onChange={(e) => setChannel(e.target.value as PaymentChannel)}>
-                    {CHANNELS.map((c) => (
-                      <option key={c}>{c}</option>
-                    ))}
-                  </select>
-                </label>
+                <div className="rounded-xl border border-[#ef850f]/40 bg-[#ef850f]/5 px-4 py-3 text-sm leading-6 sm:col-span-2" style={{ color: "var(--muted)" }}>
+                  <span className="font-bold" style={{ color: "var(--foreground)" }}>Payment: bank transfer only.</span>{" "}
+                  Pay before {fulfillment === "Delivery" ? "dispatch" : "pickup"}. After you place your order
+                  you&apos;ll see our account details and upload your transfer receipt. No payment on delivery.
+                </div>
 
                 <label className="block sm:col-span-2">
                   <span className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
@@ -678,6 +658,12 @@ export default function BakeryStore() {
                 </div>
               </div>
 
+              <HelpContacts
+                compact
+                subsidiary={"Bakery"}
+                productIds={Object.keys(basket).filter((id) => (basket[id] ?? 0) > 0)}
+              />
+
               {error && (
                 <p className="mt-4 rounded-lg bg-red-50 px-4 py-2.5 text-sm font-medium text-red-700">
                   {error}
@@ -688,7 +674,7 @@ export default function BakeryStore() {
                 type="submit"
                 className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#ef850f] px-6 py-4 text-base font-bold text-[#1c0f05] transition hover:-translate-y-0.5 hover:bg-[#ff9a26]"
               >
-                Place Demo Order · {formatNaira(total)}
+                Place order & pay · {formatNaira(total)}
               </button>
             </motion.form>
           </motion.div>
@@ -698,50 +684,13 @@ export default function BakeryStore() {
       {/* ================= CONFIRMATION ================= */}
       <AnimatePresence>
         {placedOrder && (
-          <motion.div
-            className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="w-full max-w-md rounded-3xl bg-[var(--background)] p-8 text-center"
-            >
-              <CheckCircle2 size={56} className="mx-auto text-[#ef850f]" />
-              <h2 className="mt-4 font-heading text-3xl font-semibold" style={{ color: "var(--foreground)" }}>
-                Order placed!
-              </h2>
-              <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
-                Your order reference is
-              </p>
-              <p className="mt-1 text-2xl font-bold tracking-wider" style={{ color: "var(--gold-text)" }}>
-                {placedOrder.id}
-              </p>
-              <p className="mt-4 text-sm leading-6" style={{ color: "var(--muted)" }}>
-                Total {formatNaira(placedOrder.total)} · {placedOrder.paymentTerms}.
-                This is a demo: no payment has been taken and Yusfaith has not
-                been notified.
-              </p>
-              <div className="mt-6 flex flex-col gap-3">
-                <Link
-                  href={`/bakery/track?id=${placedOrder.id}`}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ef850f] px-6 py-3.5 font-bold text-[#1c0f05] transition hover:bg-[#ff9a26]"
-                >
-                  Track this order
-                  <ArrowRight size={18} />
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => setPlacedOrder(null)}
-                  className="rounded-full border border-[var(--border)] px-6 py-3.5 font-semibold text-[var(--foreground)]"
-                >
-                  Continue shopping
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
+          <OrderPlaced
+            order={placedOrder}
+            trackHref={"/bakery/track"}
+            dark="#1c0f05"
+            onChange={setPlacedOrder}
+            onClose={() => setPlacedOrder(null)}
+          />
         )}
       </AnimatePresence>
     </main>

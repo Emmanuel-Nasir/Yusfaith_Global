@@ -9,6 +9,7 @@ import {
   PART_CATEGORIES,
   SPARE_PARTS,
 } from "@/lib/logistics/spare-parts";
+import { LOGISTICS_PHONE, SALES_CONTACTS } from "@/data/company";
 
 const products: ShopProduct[] = SPARE_PARTS.map((part) => ({
   id: part.id,
@@ -51,6 +52,10 @@ const config: ShopConfig = {
   ],
   notesPlaceholder: "Truck make and model, e.g. Sinotruk HOWO 2019, and any part numbers",
   trackHref: "/logistics/spare-parts/track",
+  salesContacts: [
+    { label: "Logistics & Spare Parts", name: "Logistics team", role: "Logistics line", phone: LOGISTICS_PHONE },
+    SALES_CONTACTS.generalManager,
+  ],
 };
 
 export default function SparePartsStore() {

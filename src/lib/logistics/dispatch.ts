@@ -139,9 +139,9 @@ export function seedSampleOrders() {
       status: "Preparing",
       items: [
         {
-          productId: "hbm-classic",
-          name: "HBM Classic Cement",
-          image: "/images/cement/hbm-classic.png",
+          productId: "hbm-supaset",
+          name: "HBM Elephant Supaset",
+          image: "/images/cement/official-hbm-supaset.jpg",
           unit: "bag",
           quantity: 150,
           unitPrice: 9000,

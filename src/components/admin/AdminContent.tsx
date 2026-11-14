@@ -685,6 +685,23 @@ function PaymentsPanel({
                 <span className="block text-xs" style={{ color: "var(--muted)" }}>
                   {o.subsidiary} · {o.customer.name} · {o.paymentTerms} · {o.paymentChannel}
                 </span>
+                {o.receipt ? (
+                  <span className="mt-2 flex items-center gap-3">
+                    {o.receipt.preview ? (
+                      <a href={o.receipt.preview} target="_blank" rel="noopener noreferrer" title="Open receipt">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={o.receipt.preview} alt={`Receipt for ${o.id}`} className="h-14 w-14 rounded-lg border border-[var(--border)] object-cover" />
+                      </a>
+                    ) : null}
+                    <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-800">
+                      Receipt uploaded · {o.receipt.name}
+                    </span>
+                  </span>
+                ) : (
+                  <span className="mt-2 inline-block rounded-full bg-[var(--surface)] px-3 py-1 text-xs font-semibold" style={{ color: "var(--muted)" }}>
+                    No receipt yet
+                  </span>
+                )}
               </span>
               <span className="flex items-center gap-4">
                 <span className="font-bold" style={{ color: "var(--foreground)" }}>{formatNaira(o.total)}</span>

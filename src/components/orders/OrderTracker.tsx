@@ -12,6 +12,9 @@ import {
   Wallet,
 } from "lucide-react";
 import { DEMO_MODE } from "@/lib/demo";
+import ReceiptUpload from "@/components/orders/ReceiptUpload";
+import HelpContacts from "@/components/orders/HelpContacts";
+import BankDetails from "@/components/orders/BankDetails";
 import {
   findOrder,
   formatNaira,
@@ -246,6 +249,18 @@ export default function OrderTracker({
                 {order.paymentTerms} · {order.paymentChannel}
               </p>
             </div>
+
+            {order.paymentChannel === "Bank transfer" &&
+              order.paymentStatus !== "Payment confirmed" &&
+              !order.receipt && <BankDetails orderId={order.id} />}
+
+            <ReceiptUpload order={order} onUpdated={(updated) => refresh(updated)} allowReplace={false} />
+
+            <HelpContacts
+              subsidiary={order.subsidiary}
+              productIds={order.items.map((item) => item.productId)}
+              orderId={order.id}
+            />
 
             {/* Demo staff controls: only visible in demo mode */}
             {DEMO_MODE && (

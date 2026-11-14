@@ -553,7 +553,7 @@ export default function LogisticsContent() {
       <section style={{ backgroundColor: "var(--surface)" }}>
         <div className="container-main grid gap-6 py-10 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { Icon: Wallet, title: "Payment confirmed", text: "Accounts confirms payment according to your terms." },
+            { Icon: Wallet, title: "Payment confirmed", text: "Accounts confirms your bank transfer and receipt." },
             { Icon: Warehouse, title: "Loaded at the depot", text: "Your order is prepared and loaded." },
             { Icon: Truck, title: "Our truck and driver", text: "A Yusfaith truck and driver are assigned to you." },
             { Icon: ShieldCheck, title: "Proof of delivery", text: "The receiver's name is recorded on arrival." },

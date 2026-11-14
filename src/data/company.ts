@@ -192,14 +192,14 @@ export const LEADERSHIP: Person[] = [
   },
   {
     name: "Oduwole Yusuf Olayemi",
-    role: "HR",
+    role: "Human Resources",
     image: "/images/leadership/Oduwole Yusuf Olayemi.jpeg",
     summary: "Leads human resources across the company's businesses and locations.",
     // Meeting notes: show HR's email, not a phone number
   },
   {
     name: "Mrs Bello Morenikeji",
-    role: "Assistant HR",
+    role: "Assistant Human Resources",
     image: "/images/leadership/Bello Morenikeji.jpeg",
     summary: "Supports the HR team in looking after staff across the company.",
   },
@@ -246,6 +246,24 @@ export const AWARD_IMAGES = [1, 2, 3, 4, 9, 10, 12, 13, 14, 15, 17, 18].map(
 );
 
 // TODO: confirm which number Yusfaith uses for WhatsApp (using the first phone for now)
+// Sales contacts shown on the stores (from LEADERSHIP, so numbers stay in one place)
+function personByRole(role: string) {
+  const person = LEADERSHIP.find((p) => p.role === role);
+  return { name: person?.name ?? "", role, phone: person?.phone ?? "" };
+}
+export const SALES_CONTACTS = {
+  dangote: { label: "Dangote Cement", ...personByRole("Head of Sales, Dangote Cement"), role: "Head of Sales" },
+  hbm: { label: "HBM (Lafarge) Cement", ...personByRole("Head of Sales, Lafarge Cement"), role: "Head of Sales" },
+  generalManager: { label: "General Manager", ...personByRole("General Manager") },
+};
+
+// Company bank account(s) customers pay into by transfer.
+// TODO: fill in from Yusfaith (get it in writing from the MD/GM). While this list is
+// empty the site shows "call us for account details" instead of a number.
+// Example: { bank: "First Bank", accountName: "Yusfaith Global Enterprises", accountNumber: "0123456789" }
+export type BankAccount = { bank: string; accountName: string; accountNumber: string };
+export const BANK_ACCOUNTS: BankAccount[] = [];
+
 // Logistics line (meeting notes, Nov 2026): deliveries and truck spare parts
 export const LOGISTICS_PHONE = "08136979918";
 

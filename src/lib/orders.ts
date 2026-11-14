@@ -15,7 +15,8 @@ export type Subsidiary =
 /* WHEN the customer pays (agreed with Yusfaith) */
 export type PaymentTerms =
   | "Pay before dispatch"
-  | "Pay on arrival"
+  | "Pay before pickup"
+  | "Pay on arrival" // staff-entered orders only; the website takes transfers only
   | "Cash & Carry (pickup)";
 
 /* HOW the customer pays */
@@ -42,6 +43,14 @@ export type OrderItem = {
   unitPrice: number; // price at the moment of ordering
 };
 
+export type Receipt = {
+  name: string;
+  type: string;
+  size: number;
+  preview?: string; // small image preview (demo only)
+  uploadedAt: string;
+};
+
 export type Order = {
   id: string;
   subsidiary: Subsidiary;
@@ -63,6 +72,7 @@ export type Order = {
   deliveryFee: number; // always separate from the product total
   total: number;
   history: { status: string; at: string }[];
+  receipt?: Receipt; // payment receipt uploaded by the customer
   demo: true;
 };
 
@@ -103,6 +113,10 @@ export function createOrderId(prefix: string) {
 
 export function addOrder(order: Order) {
   saveOrders([order, ...loadOrders()]);
+}
+
+export function removeOrder(id: string) {
+  saveOrders(loadOrders().filter((order) => order.id !== id));
 }
 
 export function updateOrder(id: string, changes: Partial<Order>) {

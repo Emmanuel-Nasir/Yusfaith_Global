@@ -42,12 +42,12 @@ const STEPS = [
   {
     Icon: Wallet,
     title: "Check out",
-    text: "Choose delivery or pickup, and your payment terms.",
+    text: "Choose delivery or pickup, pay by bank transfer and upload your receipt.",
   },
   {
     Icon: PackageCheck,
     title: "We confirm and prepare",
-    text: "Our accounts team confirms payment according to your terms, and your order is prepared.",
+    text: "Our accounts team confirms your transfer, and your order is prepared.",
   },
   {
     Icon: Truck,
@@ -58,16 +58,16 @@ const STEPS = [
 
 const PAYMENT_TERMS = [
   {
-    title: "Pay before dispatch",
-    text: "Pay first. Your order leaves the depot once payment is confirmed.",
+    title: "1. Transfer",
+    text: "Place your order and pay the total by bank transfer, using your order reference as the narration.",
   },
   {
-    title: "Pay on arrival",
-    text: "Pay when the delivery arrives. Goods are offloaded once payment is confirmed.",
+    title: "2. Upload your receipt",
+    text: "Upload your transfer receipt straight after paying. It is required before we process your order.",
   },
   {
-    title: "Cash & Carry",
-    text: "Pay at the depot and collect your order yourself.",
+    title: "3. We confirm and deliver",
+    text: "Our accounts team confirms the payment, then your order is dispatched or made ready for pickup.",
   },
 ];
 
@@ -293,11 +293,12 @@ export default function DepotLanding({ config }: { config: LandingConfig }) {
               className="font-heading text-4xl font-semibold sm:text-5xl"
               style={{ color: "var(--foreground)" }}
             >
-              Flexible payment terms
+              How payment works
             </h2>
             <p className="mt-4 leading-8" style={{ color: "var(--muted)" }}>
-              Pay by bank transfer, POS, cash or online. Prices are set by
-              Yusfaith staff, and delivery is charged separately.
+              Online orders are paid by bank transfer before dispatch or pickup.
+              There is no payment on delivery. Prices are set by Yusfaith staff,
+              and delivery is charged separately.
             </p>
           </FadeUp>
 

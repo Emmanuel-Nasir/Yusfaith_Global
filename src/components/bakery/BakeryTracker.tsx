@@ -22,6 +22,9 @@ import {
 } from "@/lib/orders";
 
 import { DEMO_MODE } from "@/lib/demo";
+import ReceiptUpload from "@/components/orders/ReceiptUpload";
+import HelpContacts from "@/components/orders/HelpContacts";
+import BankDetails from "@/components/orders/BankDetails";
 
 const inputClass =
   "w-full rounded-full border border-[var(--border)] bg-[var(--background)] px-5 py-3.5 text-[15px] uppercase tracking-wider text-[var(--foreground)] outline-none transition focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/25";
@@ -237,6 +240,18 @@ export default function BakeryTracker() {
                 {order.paymentTerms} · {order.paymentChannel}
               </p>
             </div>
+
+            {order.paymentChannel === "Bank transfer" &&
+              order.paymentStatus !== "Payment confirmed" &&
+              !order.receipt && <BankDetails orderId={order.id} />}
+
+            <ReceiptUpload order={order} onUpdated={(updated) => refresh(updated)} allowReplace={false} />
+
+            <HelpContacts
+              subsidiary={order.subsidiary}
+              productIds={order.items.map((item) => item.productId)}
+              orderId={order.id}
+            />
 
                       {/* Demo staff controls */}
             {DEMO_MODE && (

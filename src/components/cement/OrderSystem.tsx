@@ -5,6 +5,13 @@ import ShopStore, {
   type ShopProduct,
 } from "@/components/shop/ShopStore";
 import { PRODUCTS } from "@/lib/cement/catalog";
+import { SALES_CONTACTS } from "@/data/company";
+
+// Who customers call about each brand
+const CONTACT_FOR: Record<string, string> = {
+  Dangote: SALES_CONTACTS.dangote.label,
+  HBM: SALES_CONTACTS.hbm.label,
+};
 
 const BRANDS: string[] = ["Dangote", "HBM", "BUA", "Mangal", "Purechem"];
 
@@ -17,6 +24,7 @@ const products: ShopProduct[] = PRODUCTS.map((p) => ({
   unit: "bag",
   price: p.samplePrice,
   badge: p.bulkOption ? "Bulk option" : undefined,
+  contact: CONTACT_FOR[p.brand] ?? SALES_CONTACTS.generalManager.label,
 }));
 
 const config: ShopConfig = {
@@ -50,6 +58,7 @@ const config: ShopConfig = {
   ],
   notesPlaceholder: "e.g. Call before arriving at the site",
   trackHref: "/cement/track",
+  salesContacts: [SALES_CONTACTS.dangote, SALES_CONTACTS.hbm, SALES_CONTACTS.generalManager],
 };
 
 export default function OrderSystem() {
