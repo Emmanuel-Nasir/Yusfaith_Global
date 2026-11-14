@@ -124,7 +124,7 @@ export const LEADERSHIP: Person[] = [
   {
     name: "Mr Abdulrahman Adebayo Obawunmi",
     role: "General Manager",
-    image: "/images/leadership/Abdulrahman Adebayo Obawunmi.jpeg",
+    image: "/images/leadership/Abdulrahman Adebayo Obawunmi 2026.jpeg",
     credentials: "MCIB, FCIHRM",
     summary:
       "An experienced finance and operations professional with a background in banking, risk management, operations and marketing.",
@@ -144,7 +144,7 @@ export const LEADERSHIP: Person[] = [
   {
     name: "Mr Nurudeen Olatunji Lawal",
     role: "Logistics Manager",
-    image: "/images/leadership/Nurudeen Olatunji Lawal.jpeg",
+    image: "/images/leadership/Nurudeen Olatunji Lawal 2026.jpeg",
     credentials: "B.Sc. Computer Science",
     summary:
       "Oversees logistics coordination, fleet management and delivery operations for every Yusfaith business.",
@@ -178,7 +178,7 @@ export const LEADERSHIP: Person[] = [
   {
     name: "Okuewu Adewale",
     role: "Head of Sales, Lafarge Cement",
-    // TODO: photo to be supplied
+    image: "/images/leadership/Okuewu Adewale.jpeg",
     credentials: "HND Marketing",
     summary:
       "Leads sales strategy and distribution for the Lafarge Cement portfolio, with over eleven years of sales experience.",
