@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, MessageCircle, PackageSearch } from "lucide-react";
 import { WHATSAPP_NUMBER } from "@/data/company";
-import { formatNaira } from "@/lib/orders";
 import {
   CATEGORY_IMAGES,
   PART_CATEGORIES,
@@ -67,7 +66,6 @@ export default function SpareParts() {
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {PART_CATEGORIES.map((category, index) => {
             const parts = SPARE_PARTS.filter((p) => p.category === category);
-            const from = Math.min(...parts.map((p) => p.price));
             return (
               <motion.div
                 key={category}
@@ -94,7 +92,7 @@ export default function SpareParts() {
                       {parts.map((p) => p.name).join(", ")}
                     </p>
                     <p className="mt-4 text-sm font-bold" style={{ color: "var(--gold-text)" }}>
-                      {parts.length} parts · from {formatNaira(from)}
+                      {parts.length} parts · price on request
                     </p>
                   </div>
                 </Link>

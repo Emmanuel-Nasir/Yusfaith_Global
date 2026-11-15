@@ -522,7 +522,7 @@ function DemoAccount() {
                         <span className="text-right text-sm font-semibold" style={{ color: "var(--gold-text)" }}>
                           {order.status}
                           <span className="block" style={{ color: "var(--foreground)" }}>
-                            {formatNaira(order.total)}
+                            {order.paymentStatus === "Awaiting quote" ? "Awaiting price" : formatNaira(order.total)}
                           </span>
                         </span>
                         {track && (

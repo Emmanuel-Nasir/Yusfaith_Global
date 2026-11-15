@@ -29,13 +29,13 @@ const config: ShopConfig = {
   headline: "The parts that",
   highlight: "keep trucks moving.",
   intro:
-    "We run our own fleet, so we know what keeps a truck on the road. Order spare parts for heavy-duty trucks for delivery by our team, or pick up from our depots.",
+    "We run our own fleet, so we know what keeps a truck on the road. Request spare parts for heavy-duty trucks and our team will confirm the price and fit for your truck.",
   heroImage: "/images/logistics/yusfaith-truck-front.jpeg",
   heroAlt: "A Yusfaith truck at the depot",
   menuEyebrow: "Spare Parts",
   menuTitle: "Choose your parts",
   priceNote:
-    "Prices are rough estimates. Our team confirms the exact price and fit for your truck make and model before you pay.",
+    "Prices depend on the part and your truck. Add what you need and send a request: our team confirms the fit and calls you with the price, including delivery.",
   products,
   filters: PART_CATEGORIES,
   zones: DEFAULT_DELIVERY_FEES["Truck Spare Parts"], // live fees are edited in Admin → Prices
@@ -43,7 +43,7 @@ const config: ShopConfig = {
   imageFit: "cover",
   highlights: [
     { title: "36 common parts", text: "Engine, brakes, clutch, tyres, oils and more." },
-    { title: "Checked for your truck", text: "Tell us the make and model at checkout." },
+    { title: "Checked for your truck", text: "Tell us the make and model in your request." },
     { title: "On-time delivery", text: "Delivered by the Yusfaith logistics team." },
   ],
   notesPlaceholder: "Truck make and model, e.g. Sinotruk HOWO 2019, and any part numbers",

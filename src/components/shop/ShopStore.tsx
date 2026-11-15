@@ -4,9 +4,9 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import HelpContacts from "@/components/orders/HelpContacts";
-import OrderPlaced from "@/components/orders/OrderPlaced";
+import RequestSent from "@/components/orders/RequestSent";
 import { logActivity } from "@/lib/activity-log";
-import { useDeliveryZones } from "@/lib/delivery-fees";
+import { recipientsFor } from "@/lib/order-contacts";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowLeft,
@@ -24,7 +24,6 @@ import {
 import {
   addOrder,
   createOrderId,
-  formatNaira,
   type Fulfillment,
   type Order,
   type PaymentTerms,
@@ -40,7 +39,7 @@ export type ShopProduct = {
   description: string;
   image: string;
   unit: string;
-  price: number;
+  price: number; // reference only: not shown, prices are quoted by staff
   badge?: string;
   contact?: string; // label of the sales contact for this product
 };
@@ -112,7 +111,13 @@ const PICKUP_BRANCHES = [
   "Depot, Osun State",
 ];
 
-// Website orders are paid by bank transfer only, before dispatch or pickup
+/*
+  PRICE REQUESTS
+  Cement, building materials and spare parts have no fixed prices. Customers
+  send a request; the branch manager, Head of Sales, GM and CEO are told, and
+  staff send the price. The customer then pays by bank transfer (before
+  dispatch or pickup) and uploads the receipt on the tracking page.
+*/
 const TERMS_FOR: Record<Fulfillment, PaymentTerms> = {
   Delivery: "Pay before dispatch",
   Pickup: "Pay before pickup",
@@ -135,7 +140,6 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
   const [phone, setPhone] = useState("");
   const [fulfillment, setFulfillment] = useState<Fulfillment>("Delivery");
   const [zone, setZone] = useState(config.zones[0].name);
-  const zones = useDeliveryZones(config.subsidiary, config.zones); // staff can change fees in Admin
   const [branch, setBranch] = useState(PICKUP_BRANCHES[0]);
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
@@ -181,12 +185,6 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
     .filter((p) => (basket[p.id] ?? 0) > 0)
     .map((p) => ({ product: p, quantity: basket[p.id] }));
   const itemCount = lines.reduce((n, l) => n + l.quantity, 0);
-  const subtotal = lines.reduce((n, l) => n + l.quantity * l.product.price, 0);
-  const deliveryFee =
-    fulfillment === "Delivery"
-      ? zones.find((z) => z.name === zone)?.fee ?? 0
-      : 0;
-  const total = subtotal + deliveryFee;
 
   function setQuantity(id: string, quantity: number) {
     const safe = Math.max(
@@ -209,9 +207,10 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
       return setError("Enter a valid Nigerian phone number, e.g. 08012345678.");
     if (fulfillment === "Delivery" && address.trim().length < 5)
       return setError("Please enter your delivery address.");
-    if (lines.length === 0) return setError("Your basket is empty.");
+    if (lines.length === 0) return setError("Your list is empty.");
 
     const now = new Date().toISOString();
+    const location = fulfillment === "Delivery" ? zone : branch;
     const order: Order = {
       id: createOrderId(config.idPrefix),
       subsidiary: config.subsidiary,
@@ -222,11 +221,11 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
         address: fulfillment === "Delivery" ? address.trim() : "",
         notes: notes.trim(),
       },
-      location: fulfillment === "Delivery" ? zone : branch,
+      location,
       fulfillment,
       paymentTerms: TERMS_FOR[fulfillment],
       paymentChannel: "Bank transfer",
-      paymentStatus: "Awaiting payment",
+      paymentStatus: "Awaiting quote",
       status: "Received",
       items: lines.map(({ product, quantity }) => ({
         productId: product.id,
@@ -234,12 +233,18 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
         image: product.image,
         unit: product.unit,
         quantity,
-        unitPrice: product.price,
+        unitPrice: 0, // set by staff when they send the price
       })),
-      subtotal,
-      deliveryFee,
-      total,
-      history: [{ status: "Received", at: now }],
+      subtotal: 0,
+      deliveryFee: 0,
+      total: 0,
+      history: [{ status: "Price request received", at: now }],
+      pricing: "quote",
+      notified: recipientsFor(
+        config.subsidiary,
+        lines.map((l) => l.product.id),
+        location
+      ),
       demo: true,
     };
 
@@ -248,8 +253,8 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
       actor: order.customer.name,
       actorType: "Customer",
       category: "Order",
-      action: `Placed order ${order.id}`,
-      detail: `${order.subsidiary} · ${formatNaira(order.total)} · ${order.fulfillment}${order.fulfillment === "Delivery" ? ` to ${order.location}` : ""}`,
+      action: `Sent price request ${order.id}`,
+      detail: `${order.subsidiary} · ${itemCount.toLocaleString()} item(s) · ${order.fulfillment} · ${order.location}`,
     });
     setPlacedOrder(order);
     setCheckoutOpen(false);
@@ -308,7 +313,7 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                 href="#menu"
                 className="group inline-flex items-center gap-2.5 rounded-full bg-[#ef850f] px-8 py-4 text-[15px] font-bold text-[#0f1a3d] shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#ff9a26]"
               >
-                Order Now
+                Request a Price
                 <ArrowRight
                   size={18}
                   className="transition-transform duration-300 group-hover:translate-x-1"
@@ -318,7 +323,7 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                 href={config.trackHref}
                 className="inline-flex items-center gap-2.5 rounded-full border border-white/40 bg-white/10 px-8 py-4 text-[15px] font-semibold text-white backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-[#0f1a3d]"
               >
-                Track an Order
+                Track a Request
               </Link>
             </div>
           </FadeUp>
@@ -452,10 +457,10 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                         <p className="mt-1 flex-1 text-sm leading-6" style={{ color: "var(--muted)" }}>
                           {product.description}
                         </p>
-                        <p className="mt-3 text-xl font-bold" style={{ color: "var(--gold-text)" }}>
-                          {formatNaira(product.price)}
-                          <span className="ml-1 text-sm font-medium" style={{ color: "var(--muted)" }}>
-                            / {product.unit}
+                        <p className="mt-3 text-sm font-bold" style={{ color: "var(--gold-text)" }}>
+                          Price on request
+                          <span className="ml-1 font-medium" style={{ color: "var(--muted)" }}>
+                            · sold per {product.unit}
                           </span>
                         </p>
                         {(() => {
@@ -479,7 +484,7 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                             className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--button-bg)] px-5 py-3 text-sm font-bold text-[var(--button-text)] transition hover:-translate-y-0.5 hover:bg-[var(--button-hover-bg)]"
                           >
                             <Plus size={16} />
-                            Add to basket
+                            Add to request
                           </button>
                         ) : (
                           <div className="mt-4 flex items-center justify-between rounded-full border border-[var(--gold)] p-1">
@@ -528,7 +533,7 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                   style={{ color: "var(--foreground)" }}
                 >
                   <ShoppingBasket size={22} style={{ color: "var(--gold-text)" }} />
-                  Your basket
+                  Your request
                   {itemCount > 0 && (
                     <span className="ml-auto rounded-full bg-[#ef850f] px-2.5 py-0.5 text-sm text-[#0f1a3d]">
                       {itemCount.toLocaleString()}
@@ -538,7 +543,8 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
 
                 {lines.length === 0 ? (
                   <p className="mt-6 text-sm leading-6" style={{ color: "var(--muted)" }}>
-                    Your basket is empty. Add products from the list.
+                    Add the products you need and how many. We&apos;ll send you
+                    the price.
                   </p>
                 ) : (
                   <>
@@ -559,11 +565,9 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                               {product.name}
                             </span>
                             <span className="block text-xs" style={{ color: "var(--muted)" }}>
-                              {quantity.toLocaleString()} × {formatNaira(product.price)}
+                              {quantity.toLocaleString()} {product.unit}
+                              {quantity === 1 ? "" : "s"}
                             </span>
-                          </span>
-                          <span className="text-sm font-bold" style={{ color: "var(--foreground)" }}>
-                            {formatNaira(quantity * product.price)}
                           </span>
                           <button
                             type="button"
@@ -577,12 +581,9 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                       ))}
                     </ul>
 
-                    <div className="mt-5 flex justify-between border-t border-[var(--border)] pt-4 font-bold" style={{ color: "var(--foreground)" }}>
-                      <span>Subtotal</span>
-                      <span>{formatNaira(subtotal)}</span>
-                    </div>
-                    <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
-                      Delivery fee is added at checkout.
+                    <p className="mt-5 border-t border-[var(--border)] pt-4 text-xs leading-5" style={{ color: "var(--muted)" }}>
+                      No payment now. Our team will call you with the price,
+                      including delivery.
                     </p>
 
                     <button
@@ -590,7 +591,7 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                       onClick={() => setCheckoutOpen(true)}
                       className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#ef850f] px-6 py-3.5 font-bold text-[#0f1a3d] transition hover:-translate-y-0.5 hover:bg-[#ff9a26]"
                     >
-                      Checkout
+                      Request a price
                       <ArrowRight size={18} />
                     </button>
                   </>
@@ -602,7 +603,7 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                 className="mt-4 block text-center text-sm font-semibold underline-offset-4 hover:underline"
                 style={{ color: "var(--gold-text)" }}
               >
-                Track an existing order
+                Track an existing request
               </Link>
             </aside>
           </div>
@@ -619,7 +620,7 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
             <ShoppingBasket size={20} />
             {itemCount.toLocaleString()} item{itemCount === 1 ? "" : "s"}
           </span>
-          <span>{formatNaira(subtotal)}</span>
+          <span>Request a price</span>
         </a>
       )}
 
@@ -645,15 +646,15 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
               <div className="flex items-start justify-between">
                 <div>
                   <h2 className="font-heading text-3xl font-semibold" style={{ color: "var(--foreground)" }}>
-                    Checkout
+                    Request a price
                   </h2>
                   <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
-                    Demo order: saved on this device, nothing is charged.
+                    No payment now. Tell us where you need it and we&apos;ll call you with the price.
                   </p>
                 </div>
                 <button
                   type="button"
-                  aria-label="Close checkout"
+                  aria-label="Close"
                   onClick={() => setCheckoutOpen(false)}
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--surface)] text-[var(--foreground)]"
                 >
@@ -700,12 +701,12 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                   <>
                     <label className="block">
                       <span className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
-                        Delivery area
+                        Delivery state
                       </span>
                       <select className={inputClass} value={zone} onChange={(e) => setZone(e.target.value)}>
-                        {zones.map((z) => (
+                        {config.zones.map((z) => (
                           <option key={z.name} value={z.name}>
-                            {z.name} (delivery {formatNaira(z.fee)})
+                            {z.name}
                           </option>
                         ))}
                       </select>
@@ -732,9 +733,11 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                 )}
 
                 <div className="rounded-xl border border-[#ef850f]/40 bg-[#ef850f]/5 px-4 py-3 text-sm leading-6 sm:col-span-2" style={{ color: "var(--muted)" }}>
-                  <span className="font-bold" style={{ color: "var(--foreground)" }}>Payment: bank transfer only.</span>{" "}
-                  Pay before {fulfillment === "Delivery" ? "dispatch" : "pickup"}. After you place your order
-                  you&apos;ll see our account details and upload your transfer receipt. No payment on delivery.
+                  <span className="font-bold" style={{ color: "var(--foreground)" }}>How it works:</span>{" "}
+                  your request goes to our branch manager, Head of Sales, General Manager and CEO.
+                  One of them will call you with the price, including delivery. You then pay by
+                  bank transfer before {fulfillment === "Delivery" ? "dispatch" : "pickup"} and upload
+                  your receipt on the tracking page. No payment on delivery.
                 </div>
 
                 <label className="block sm:col-span-2">
@@ -752,29 +755,26 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
               </div>
 
               {/* Summary */}
-              <div className="mt-6 space-y-2 rounded-2xl bg-[var(--surface)] p-5 text-sm" style={{ color: "var(--foreground)" }}>
-                <div className="flex justify-between">
-                  <span>Products ({itemCount.toLocaleString()})</span>
-                  <span>{formatNaira(subtotal)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>{fulfillment === "Delivery" ? `Delivery to ${zone} (estimate)` : "Pickup"}</span>
-                  <span>{deliveryFee ? formatNaira(deliveryFee) : "Free"}</span>
-                </div>
-                <div className="flex justify-between border-t border-[var(--border)] pt-3 text-lg font-bold">
-                  <span>Estimated total</span>
-                  <span style={{ color: "var(--gold-text)" }}>{formatNaira(total)}</span>
-                </div>
-                <p className="text-xs" style={{ color: "var(--muted)" }}>
-                  Prices and delivery charges are demo estimates. Yusfaith
-                  confirms the final amount.
-                </p>
+              <div className="mt-6 rounded-2xl bg-[var(--surface)] p-5 text-sm" style={{ color: "var(--foreground)" }}>
+                <p className="font-bold">Your request ({itemCount.toLocaleString()} item{itemCount === 1 ? "" : "s"})</p>
+                <ul className="mt-2 space-y-1" style={{ color: "var(--muted)" }}>
+                  {lines.map(({ product, quantity }) => (
+                    <li key={product.id} className="flex justify-between gap-3">
+                      <span>{product.name}</span>
+                      <span className="shrink-0">
+                        {quantity.toLocaleString()} {product.unit}
+                        {quantity === 1 ? "" : "s"}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
 
               <HelpContacts
                 compact
                 subsidiary={config.subsidiary}
                 productIds={Object.keys(basket).filter((id) => (basket[id] ?? 0) > 0)}
+                location={fulfillment === "Delivery" ? zone : branch}
               />
 
               {error && (
@@ -787,7 +787,7 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                 type="submit"
                 className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#ef850f] px-6 py-4 text-base font-bold text-[#0f1a3d] transition hover:-translate-y-0.5 hover:bg-[#ff9a26]"
               >
-                Place order & pay · {formatNaira(total)}
+                Send request
               </button>
             </motion.form>
           </motion.div>
@@ -797,11 +797,9 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
       {/* ================= CONFIRMATION ================= */}
       <AnimatePresence>
         {placedOrder && (
-          <OrderPlaced
+          <RequestSent
             order={placedOrder}
             trackHref={config.trackHref}
-            dark="#0f1a3d"
-            onChange={setPlacedOrder}
             onClose={() => setPlacedOrder(null)}
           />
         )}

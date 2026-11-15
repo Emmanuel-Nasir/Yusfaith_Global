@@ -58,16 +58,16 @@ const STEPS = [
 
 const PAYMENT_TERMS = [
   {
-    title: "1. Transfer",
-    text: "Place your order and pay the total by bank transfer, using your order reference as the narration.",
+    title: "1. Request a price",
+    text: "Add what you need and send a request. Our branch manager, Head of Sales, GM and CEO are told straight away.",
   },
   {
-    title: "2. Upload your receipt",
-    text: "Upload your transfer receipt straight after paying. It is required before we process your order.",
+    title: "2. Pay by transfer",
+    text: "We call you with the price, including delivery. Pay by bank transfer using your reference as the narration, then upload the receipt.",
   },
   {
     title: "3. We confirm and deliver",
-    text: "Our accounts team confirms the payment, then your order is dispatched or made ready for pickup.",
+    text: "Once your payment is confirmed, your order is dispatched by our own trucks or made ready for pickup.",
   },
 ];
 
@@ -296,9 +296,9 @@ export default function DepotLanding({ config }: { config: LandingConfig }) {
               How payment works
             </h2>
             <p className="mt-4 leading-8" style={{ color: "var(--muted)" }}>
-              Online orders are paid by bank transfer before dispatch or pickup.
-              There is no payment on delivery. Prices are set by Yusfaith staff,
-              and delivery is charged separately.
+              Prices change with the market, so our team quotes every order,
+              with delivery shown separately. Payment is by bank transfer before
+              dispatch or pickup. There is no payment on delivery.
             </p>
           </FadeUp>
 

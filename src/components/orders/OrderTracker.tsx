@@ -7,6 +7,7 @@ import {
   ArrowLeft,
   Check,
   CircleAlert,
+  Clock3,
   PackageSearch,
   Search,
   Wallet,
@@ -111,6 +112,7 @@ export default function OrderTracker({
   }
 
   const steps = order ? statusSteps(order.fulfillment) : [];
+  const awaitingQuote = order?.paymentStatus === "Awaiting quote";
   const currentIndex = order ? steps.indexOf(order.status) : -1;
   const finished = order ? currentIndex === steps.length - 1 : false;
 
@@ -130,7 +132,7 @@ export default function OrderTracker({
           className="mt-6 font-heading text-5xl font-semibold"
           style={{ color: "var(--foreground)" }}
         >
-          Track your order
+          Track your order or request
         </h1>
         <p className="mt-3" style={{ color: "var(--muted)" }}>
           Enter the reference you received, for example {idPrefix}-4K2P9Q.
@@ -182,7 +184,7 @@ export default function OrderTracker({
                     : "bg-amber-100 text-amber-800"
                 }`}
               >
-                {order.paymentStatus}
+                {awaitingQuote ? "Waiting for price" : order.paymentStatus}
               </span>
             </div>
 
@@ -225,44 +227,81 @@ export default function OrderTracker({
                   <span className="flex-1 text-sm" style={{ color: "var(--foreground)" }}>
                     <span className="font-semibold">{item.name}</span>
                     <span className="block" style={{ color: "var(--muted)" }}>
-                      {item.quantity.toLocaleString()} × {formatNaira(item.unitPrice)} / {item.unit}
+                      {awaitingQuote
+                        ? `${item.quantity.toLocaleString()} ${item.unit}${item.quantity === 1 ? "" : "s"}`
+                        : `${item.quantity.toLocaleString()} × ${formatNaira(item.unitPrice)} / ${item.unit}`}
                     </span>
                   </span>
-                  <span className="text-sm font-bold" style={{ color: "var(--foreground)" }}>
-                    {formatNaira(item.quantity * item.unitPrice)}
-                  </span>
+                  {!awaitingQuote && (
+                    <span className="text-sm font-bold" style={{ color: "var(--foreground)" }}>
+                      {formatNaira(item.quantity * item.unitPrice)}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
 
-            <div className="mt-5 space-y-1.5 text-sm" style={{ color: "var(--foreground)" }}>
-              <div className="flex justify-between">
-                <span>Products</span>
-                <span>{formatNaira(order.subtotal)}</span>
+            {awaitingQuote ? (
+              <div className="mt-6 rounded-2xl border border-[#ef850f]/40 bg-[#ef850f]/5 p-5 text-sm leading-6" style={{ color: "var(--muted)" }}>
+                <p className="flex items-center gap-2 text-base font-bold" style={{ color: "var(--foreground)" }}>
+                  <Clock3 size={18} style={{ color: "var(--gold-text)" }} />
+                  We&apos;re preparing your price
+                </p>
+                <p className="mt-1">
+                  Your request has gone to{" "}
+                  {(order.notified ?? []).map((r) => r.name).join(", ") || "our sales team"}.
+                  One of them will call you with the price, including delivery. The price
+                  and our account details will also appear here.
+                </p>
               </div>
-              <div className="flex justify-between">
-                <span>Delivery fee</span>
-                <span>{order.deliveryFee ? formatNaira(order.deliveryFee) : "Free"}</span>
+            ) : (
+              <div className="mt-5 space-y-1.5 text-sm" style={{ color: "var(--foreground)" }}>
+                {order.quote && (
+                  <p className="mb-3 rounded-xl bg-green-50 px-4 py-3 text-green-900">
+                    <span className="font-bold">Your price is ready.</span> Sent by {order.quote.by} on{" "}
+                    {formatDate(order.quote.at)}.
+                    {order.quote.note ? <span className="mt-1 block">“{order.quote.note}”</span> : null}
+                  </p>
+                )}
+                <div className="flex justify-between">
+                  <span>Products</span>
+                  <span>{formatNaira(order.subtotal)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Delivery fee</span>
+                  <span>{order.deliveryFee ? formatNaira(order.deliveryFee) : "Free"}</span>
+                </div>
+                <div className="flex justify-between pt-2 text-lg font-bold">
+                  <span>{order.paymentStatus === "Payment confirmed" ? "Total" : "Total to pay"}</span>
+                  <span style={{ color: "var(--gold-text)" }}>{formatNaira(order.total)}</span>
+                </div>
+                <p className="pt-1 text-xs" style={{ color: "var(--muted)" }}>
+                  {order.paymentTerms} · {order.paymentChannel} only
+                </p>
               </div>
-              <div className="flex justify-between pt-2 text-lg font-bold">
-                <span>Total</span>
-                <span style={{ color: "var(--gold-text)" }}>{formatNaira(order.total)}</span>
-              </div>
-              <p className="pt-1 text-xs" style={{ color: "var(--muted)" }}>
-                {order.paymentTerms} · {order.paymentChannel}
-              </p>
-            </div>
+            )}
 
-            {order.paymentChannel === "Bank transfer" &&
+            {!awaitingQuote &&
+              order.paymentChannel === "Bank transfer" &&
               order.paymentStatus !== "Payment confirmed" &&
               !order.receipt && <BankDetails orderId={order.id} />}
 
-            <ReceiptUpload order={order} onUpdated={(updated) => refresh(updated)} allowReplace={false} />
+            {!awaitingQuote && (
+              <div className="mt-6">
+                <ReceiptUpload
+                  order={order}
+                  onUpdated={(updated) => refresh(updated)}
+                  required={order.pricing === "quote" && !order.receipt}
+                  allowReplace={false}
+                />
+              </div>
+            )}
 
             <HelpContacts
               subsidiary={order.subsidiary}
               productIds={order.items.map((item) => item.productId)}
               orderId={order.id}
+              location={order.location}
             />
 
             {/* Demo staff controls: only visible in demo mode */}
@@ -272,10 +311,18 @@ export default function OrderTracker({
                   Demo controls · what Yusfaith staff will do
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
+                  {awaitingQuote && (
+                    <Link
+                      href="/admin"
+                      className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-5 py-2.5 text-sm font-bold text-[var(--foreground)] transition hover:border-[var(--gold)]"
+                    >
+                      Sales: send the price (Admin → Requests)
+                    </Link>
+                  )}
                   <button
                     type="button"
                     onClick={confirmPayment}
-                    disabled={order.paymentStatus === "Payment confirmed"}
+                    disabled={order.paymentStatus !== "Awaiting payment"}
                     className="inline-flex items-center gap-2 rounded-full bg-[var(--button-bg)] px-5 py-2.5 text-sm font-bold text-[var(--button-text)] transition hover:bg-[var(--button-hover-bg)] disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <Wallet size={16} />
@@ -332,7 +379,7 @@ export default function OrderTracker({
                       </span>
                     </span>
                     <span className="text-sm font-semibold" style={{ color: "var(--gold-text)" }}>
-                      {o.status} · {formatNaira(o.total)}
+                      {o.paymentStatus === "Awaiting quote" ? "Waiting for price" : `${o.status} · ${formatNaira(o.total)}`}
                     </span>
                   </button>
                 </li>

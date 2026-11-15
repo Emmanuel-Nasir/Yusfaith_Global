@@ -22,7 +22,7 @@ export type StaffRole =
   | "Management"
   | "Sales Rep"
   | "Finance Officer"
-  | "Inventory Officer"
+  | "Branch Manager"
   | "Logistics Officer"
   | "Driver";
 
@@ -55,7 +55,7 @@ export const STAFF_ROLES: StaffRole[] = [
   "Management",
   "Sales Rep",
   "Finance Officer",
-  "Inventory Officer",
+  "Branch Manager",
   "Logistics Officer",
   "Driver",
 ];
@@ -67,7 +67,7 @@ const SEED_STAFF: StaffMember[] = [
   { id: "S-2", name: "Sample Manager", email: "manager@yusfaith.demo", role: "Management", active: true, invitedAt: "2026-01-01T00:00:00.000Z" },
   { id: "S-3", name: "Sample Sales Rep", email: "sales@yusfaith.demo", role: "Sales Rep", active: true, invitedAt: "2026-01-01T00:00:00.000Z" },
   { id: "S-4", name: "Sample Finance Officer", email: "finance@yusfaith.demo", role: "Finance Officer", active: true, invitedAt: "2026-01-01T00:00:00.000Z" },
-  { id: "S-5", name: "Sample Inventory Officer", email: "inventory@yusfaith.demo", role: "Inventory Officer", active: true, invitedAt: "2026-01-01T00:00:00.000Z" },
+  { id: "S-5", name: "Sample Branch Manager", email: "branch@yusfaith.demo", role: "Branch Manager", active: true, invitedAt: "2026-01-01T00:00:00.000Z" },
   { id: "S-6", name: "Sample Logistics Officer", email: "logistics@yusfaith.demo", role: "Logistics Officer", active: true, invitedAt: "2026-01-01T00:00:00.000Z" },
   { id: "S-7", name: "Sample Driver", email: "driver@yusfaith.demo", role: "Driver", active: true, invitedAt: "2026-01-01T00:00:00.000Z" },
 ];
@@ -134,9 +134,17 @@ export default function StaffGate({
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fromStorage = read<StaffMember[]>(STAFF_KEY, []);
+    // Older demo data used an "Inventory Officer" role: stock now lives in
+    // Yusfaith's bookkeeping app, so that role became "Branch Manager".
+    const fromStorage = read<StaffMember[]>(STAFF_KEY, []).map((s) =>
+      (s.role as string) === "Inventory Officer"
+        ? s.id === "S-5"
+          ? { ...s, role: "Branch Manager" as StaffRole, name: "Sample Branch Manager", email: "branch@yusfaith.demo" }
+          : { ...s, role: "Branch Manager" as StaffRole }
+        : s
+    );
     const initial = fromStorage.length > 0 ? fromStorage : SEED_STAFF;
-    if (fromStorage.length === 0) write(STAFF_KEY, SEED_STAFF);
+    write(STAFF_KEY, initial);
     setStaff(initial);
     setAudit(read<AuditEntry[]>(AUDIT_KEY, []));
 
@@ -440,20 +448,20 @@ export default function StaffGate({
 /* ---------- the Staff & access panel (Super Admin) ---------- */
 
 const CAPABILITIES = [
-  "Take orders",
+  "Send prices",
+  "Take phone orders",
   "Confirm payments",
-  "Set prices",
-  "Manage stock",
+  "Set delivery fees",
   "Run deliveries",
   "Manage staff",
 ];
 
 const MATRIX: { role: StaffRole; can: boolean[] }[] = [
   { role: "Super Admin", can: [true, true, true, true, true, true] },
-  { role: "Management", can: [false, false, true, false, false, false] },
-  { role: "Sales Rep", can: [true, false, false, false, false, false] },
-  { role: "Finance Officer", can: [false, true, false, false, false, false] },
-  { role: "Inventory Officer", can: [false, false, false, true, false, false] },
+  { role: "Management", can: [true, false, false, true, false, false] },
+  { role: "Sales Rep", can: [true, true, false, false, false, false] },
+  { role: "Finance Officer", can: [false, false, true, false, false, false] },
+  { role: "Branch Manager", can: [true, true, false, false, false, false] },
   { role: "Logistics Officer", can: [false, false, false, false, true, false] },
   { role: "Driver", can: [false, false, false, false, true, false] },
 ];

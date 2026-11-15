@@ -42,7 +42,7 @@ const config: LandingConfig = {
   listEyebrow: "Our Materials",
   listTitle: "Shop by category",
   listIntro:
-    "Choose from our range of building materials. Prices are set by Yusfaith, and bulk orders are welcome.",
+    "Choose from our range of building materials. Send a request and our team will call you with the price. Bulk orders are welcome.",
   items,
   imageFit: "cover",
 };

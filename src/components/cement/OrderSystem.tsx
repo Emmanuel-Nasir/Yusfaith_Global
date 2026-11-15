@@ -35,13 +35,13 @@ const config: ShopConfig = {
   headline: "Strong foundations.",
   highlight: "Reliable supply.",
   intro:
-    "Order Dangote, HBM, BUA, Mangal and Purechem cement, wholesale or retail, for delivery by our own trucks or pickup from our depots.",
+    "Dangote, HBM, BUA, Mangal and Purechem cement, wholesale or retail. Send a request and our team will call you with today's price, for delivery by our own trucks or pickup from our depots.",
   heroImage: "/images/corporate/yusfaith-depot-truck.jpeg",
   heroAlt: "Yusfaith Global Enterprises office and depot with a delivery truck",
   menuEyebrow: "Our Cement",
   menuTitle: "Choose your cement",
   priceNote:
-    "Demo prices per bag: sample estimates, not confirmed Yusfaith prices.",
+    "Prices change with the market, so we quote every order. Add what you need and send a request: we call you with the price, including delivery.",
   products,
   filters: BRANDS,
   zones: DEFAULT_DELIVERY_FEES["Cement Depot"], // live fees are edited in Admin → Prices

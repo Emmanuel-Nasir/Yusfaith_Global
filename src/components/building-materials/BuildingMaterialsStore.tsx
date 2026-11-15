@@ -31,13 +31,13 @@ const config: ShopConfig = {
   headline: "Everything you need",
   highlight: "to build better.",
   intro:
-    "Roofing, steel, blocks, plumbing, electrical, paints, finishing and timber. Order for delivery by our own trucks or pickup from our depots.",
+    "Roofing, steel, blocks, plumbing, electrical, paints, finishing and timber. Send a request and our team will call you with the price, for delivery by our own trucks or pickup from our depots.",
   heroImage: "/images/building-materials/materials-warehouse.jpg",
   heroAlt: "Building materials stacked in a warehouse",
   menuEyebrow: "Our Materials",
   menuTitle: "Choose your materials",
   priceNote:
-    "Demo prices: sample estimates, not confirmed Yusfaith prices.",
+    "Prices change with the market, so we quote every order. Add what you need and send a request: we call you with the price, including delivery.",
   products,
   filters: FILTERS,
   zones: DEFAULT_DELIVERY_FEES["Building Materials"], // live fees are edited in Admin → Prices
@@ -45,7 +45,7 @@ const config: ShopConfig = {
   imageFit: "cover",
   highlights: [
     { title: "Eight product groups", text: "From roofing and paints to doors and timber." },
-    { title: "Bulk quantities", text: "Type any quantity for large orders." },
+    { title: "Bulk quantities", text: "Type any quantity and we quote it." },
     { title: "Our own trucks", text: "Delivered by the Yusfaith logistics team." },
   ],
   notesPlaceholder: "e.g. Deliver to the back gate of the site",

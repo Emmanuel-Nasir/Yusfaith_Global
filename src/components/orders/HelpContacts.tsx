@@ -6,12 +6,13 @@ type Props = {
   subsidiary: Subsidiary;
   productIds: string[];
   orderId?: string;
+  location?: string; // delivery state or pickup branch
   compact?: boolean; // smaller layout for checkout and confirmation pop-ups
 };
 
 /** "Need help?" box with the right people to call about an order. */
-export default function HelpContacts({ subsidiary, productIds, orderId, compact = false }: Props) {
-  const contacts = contactsFor(subsidiary, productIds);
+export default function HelpContacts({ subsidiary, productIds, orderId, location = "", compact = false }: Props) {
+  const contacts = contactsFor(subsidiary, productIds, location);
   if (contacts.length === 0) return null;
 
   return (

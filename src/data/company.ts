@@ -76,6 +76,16 @@ export const LOCATIONS = [
   },
 ];
 
+// Person in charge of each state's branch. New requests for that state are
+// sent to them, as well as the Head of Sales, the General Manager and the CEO.
+// TODO: names and phone numbers to be supplied by Yusfaith.
+export const BRANCH_MANAGERS: Record<string, { name: string; phone: string }> = {
+  "Ogun State": { name: "", phone: "" },
+  "Lagos State": { name: "", phone: "" },
+  "Oyo State": { name: "", phone: "" },
+  "Osun State": { name: "", phone: "" },
+};
+
 // Our partners (named in the company profile brochure)
 // Logos taken from the company profile brochure
 export const PARTNERS = [

@@ -260,7 +260,9 @@ function OrderCard({
             {order.items.map((i) => `${i.quantity} × ${i.name}`).join(", ")}
           </span>
           <span className="block" style={{ color: "var(--muted)" }}>
-            Total {formatNaira(order.total)} (delivery {formatNaira(order.deliveryFee)} separate)
+            {order.paymentStatus === "Awaiting quote"
+              ? "Awaiting price from sales"
+              : `Total ${formatNaira(order.total)} (delivery ${formatNaira(order.deliveryFee)} separate)`}
           </span>
         </span>
       </div>
@@ -315,7 +317,7 @@ function OrderCard({
       {/* Controls */}
       {!done && (
         <div className="mt-4 space-y-3 border-t border-[var(--border)] pt-4">
-          {mode === "staff" && !paid && (
+          {mode === "staff" && order.paymentStatus === "Awaiting payment" && (
             <button
               type="button"
               onClick={confirmPayment}

@@ -22,7 +22,11 @@ export type PaymentTerms =
 /* HOW the customer pays */
 export type PaymentChannel = "Bank transfer" | "POS" | "Cash" | "Online";
 
-export type PaymentStatus = "Awaiting payment" | "Payment confirmed";
+// "Awaiting quote": a price request; staff have not sent the price yet
+export type PaymentStatus = "Awaiting quote" | "Awaiting payment" | "Payment confirmed";
+
+/* Someone told about a new request (branch manager, Head of Sales, GM, CEO) */
+export type Recipient = { name: string; role: string; phone?: string };
 
 export type Fulfillment = "Delivery" | "Pickup";
 
@@ -73,6 +77,10 @@ export type Order = {
   total: number;
   history: { status: string; at: string }[];
   receipt?: Receipt; // payment receipt uploaded by the customer
+  /* Price requests (Cement, Building Materials, Spare Parts have no fixed prices) */
+  pricing?: "fixed" | "quote";
+  notified?: Recipient[]; // who was told about the request
+  quote?: { at: string; by: string; note?: string }; // when and by whom the price was sent
   demo: true;
 };
 
@@ -152,8 +160,14 @@ export function nextStep(order: Order): {
 
   const paid = order.paymentStatus === "Payment confirmed";
 
+  if (order.paymentStatus === "Awaiting quote") {
+    return { blockedReason: "Send the customer a price quote first." };
+  }
   if (next === "Out for delivery" && order.paymentTerms === "Pay before dispatch" && !paid) {
     return { blockedReason: "Payment must be confirmed before dispatch." };
+  }
+  if (next === "Ready for pickup" && order.paymentTerms === "Pay before pickup" && !paid) {
+    return { blockedReason: "Payment must be confirmed before the order is ready for pickup." };
   }
   if ((next === "Delivered" || next === "Collected") && !paid) {
     return { blockedReason: "Payment must be confirmed before handover." };

@@ -107,15 +107,13 @@ export default function DeliveryFeesPanel({
   }
 
   return (
-    <section className="mt-12 border-t border-[var(--border)] pt-10" id="delivery-fees">
-      <h3 className="flex items-center gap-2 font-heading text-2xl font-semibold" style={{ color: "var(--foreground)" }}>
-        <Truck size={22} style={{ color: "var(--gold-text)" }} />
-        Delivery fees
-      </h3>
-      <p className="mt-2 text-sm leading-6" style={{ color: "var(--muted)" }}>
-        The delivery fee customers pay for each state. It is always shown
-        separately from the product total. A saved fee is used at checkout for
-        new orders; orders already placed keep the fee they were placed with.
+    <section id="delivery-fees">
+      <p className="flex items-start gap-2 text-sm leading-6" style={{ color: "var(--muted)" }}>
+        <Truck size={18} className="mt-0.5 shrink-0" style={{ color: "var(--gold-text)" }} />
+        Delivery fee for each state, always shown separately from the products.
+        Bakery checkout uses these fees directly. For Cement, Building Materials
+        and Spare Parts they are the suggested fee when staff send a price, and
+        can be changed for each order.
       </p>
 
       <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
