@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/500.css";
@@ -12,10 +12,19 @@ import "@fontsource/cormorant-garamond/700.css";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import AlertToaster from "@/components/alerts/AlertToaster";
+import HelpChat from "@/components/help/HelpChat";
 export const metadata: Metadata = {
   title: "Yusfaith Global Enterprises",
   description:
     "Discover Yusfaith Global Enterprises and our businesses across cement distribution, building materials, logistics, real estate, and bakery services.",
+  applicationName: "Yusfaith",
+  appleWebApp: { capable: true, title: "Yusfaith", statusBarStyle: "default" },
+  icons: { icon: "/icons/icon-192.png", apple: "/icons/apple-touch-icon.png" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0f1a3d",
 };
 
 export default function RootLayout({
@@ -29,6 +38,8 @@ export default function RootLayout({
   <Navbar />
   {children}
   <Footer />
+  <AlertToaster />
+  <HelpChat />
 </body>
     </html>
   );

@@ -16,12 +16,15 @@ import { DEMO_MODE } from "@/lib/demo";
 import { logActivity } from "@/lib/activity-log";
 import ReceiptUpload from "@/components/orders/ReceiptUpload";
 import HelpContacts from "@/components/orders/HelpContacts";
+import RequestChat from "@/components/orders/RequestChat";
+import AlertsToggle from "@/components/alerts/AlertsToggle";
 import BankDetails from "@/components/orders/BankDetails";
 import {
   findOrder,
   formatNaira,
   loadOrders,
   nextStep,
+  ORDERS_EVENT,
   statusSteps,
   updateOrder,
   type Order,
@@ -81,6 +84,23 @@ export default function OrderTracker({
     if (updated) setOrder(updated);
     setRecent(loadOrders().filter((o) => o.subsidiary === subsidiary));
   }
+
+  // live updates: a price, reply or payment confirmation from staff in another tab
+  const orderId = order?.id;
+  useEffect(() => {
+    if (!orderId) return;
+    const sync = () => {
+      const latest = findOrder(orderId);
+      if (latest) setOrder(latest);
+      setRecent(loadOrders().filter((o) => o.subsidiary === subsidiary));
+    };
+    window.addEventListener(ORDERS_EVENT, sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener(ORDERS_EVENT, sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, [orderId, subsidiary]);
 
   function confirmPayment() {
     if (!order) return;
@@ -295,6 +315,15 @@ export default function OrderTracker({
                   allowReplace={false}
                 />
               </div>
+            )}
+
+            {order.pricing === "quote" && (
+              <>
+                <RequestChat order={order} as="customer" onUpdated={(updated) => refresh(updated)} />
+                <div className="mt-4">
+                  <AlertsToggle audience="customer" />
+                </div>
+              </>
             )}
 
             <HelpContacts

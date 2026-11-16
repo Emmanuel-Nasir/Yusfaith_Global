@@ -23,6 +23,7 @@ import ActivityPanel from "@/components/admin/ActivityPanel";
 import DeliveryFeesPanel from "@/components/admin/DeliveryFeesPanel";
 import RequestsPanel from "@/components/admin/RequestsPanel";
 import { recipientsFor } from "@/lib/order-contacts";
+import { sendAlert } from "@/lib/alerts";
 import { useDeliveryFees } from "@/lib/delivery-fees";
 import StaffGate, { AccessPanel, type StaffSession } from "@/components/admin/StaffGate";
 import { PRODUCTS as CEMENT_PRODUCTS } from "@/lib/cement/catalog";
@@ -30,8 +31,10 @@ import { PRODUCTS as MATERIAL_PRODUCTS } from "@/lib/building-materials/catalog"
 import { BAKERY_PRODUCTS } from "@/lib/bakery/catalog";
 import { CATEGORY_IMAGES, SPARE_PARTS } from "@/lib/logistics/spare-parts";
 import {
+  addMessage,
   addOrder,
   createOrderId,
+  ORDERS_EVENT,
   formatNaira,
   loadOrders,
   updateOrder,
@@ -686,6 +689,13 @@ function PaymentsPanel({
       paymentStatus: "Payment confirmed",
       history: [...order.history, { status: "Payment confirmed", at: now }],
     });
+    addMessage(order.id, { from: "system", name: "Yusfaith", text: "Payment confirmed" });
+    sendAlert({
+      audience: "customer",
+      title: `Payment confirmed: ${order.id}`,
+      body: `Thank you. Your order will be ${order.fulfillment === "Delivery" ? "dispatched" : "made ready for pickup"} soon.`,
+      url: `${TRACK_PATH[order.subsidiary] ?? "/"}?id=${order.id}`,
+    });
     onChange(order);
   }
 
@@ -814,9 +824,11 @@ function DemoAdmin({ session }: { session: StaffSession }) {
     setState(loadState());
     window.addEventListener("focus", reload);
     window.addEventListener("storage", reload);
+    window.addEventListener(ORDERS_EVENT, reload);
     return () => {
       window.removeEventListener("focus", reload);
       window.removeEventListener("storage", reload);
+      window.removeEventListener(ORDERS_EVENT, reload);
     };
   }, [reload]);
 
@@ -938,9 +950,10 @@ function DemoAdmin({ session }: { session: StaffSession }) {
                 orders={orders}
                 canQuote={CAN_QUOTE.includes(role)}
                 staffName={session.me.name}
+                staffRole={role}
                 onQuoted={(_order, text) => {
                   reload();
-                  session.log(text);
+                  if (text) session.log(text);
                 }}
               />
             )}

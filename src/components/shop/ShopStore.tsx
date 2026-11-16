@@ -6,6 +6,7 @@ import Link from "next/link";
 import HelpContacts from "@/components/orders/HelpContacts";
 import RequestSent from "@/components/orders/RequestSent";
 import { logActivity } from "@/lib/activity-log";
+import { sendAlert } from "@/lib/alerts";
 import { recipientsFor } from "@/lib/order-contacts";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
@@ -28,6 +29,8 @@ import {
   type Order,
   type PaymentTerms,
   type Subsidiary,
+  CONTACT_METHODS,
+  type ContactMethod,
 } from "@/lib/orders";
 
 /* ---------- configuration ---------- */
@@ -138,6 +141,8 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
   // checkout form
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [contactBy, setContactBy] = useState<ContactMethod>("WhatsApp");
   const [fulfillment, setFulfillment] = useState<Fulfillment>("Delivery");
   const [zone, setZone] = useState(config.zones[0].name);
   const [branch, setBranch] = useState(PICKUP_BRANCHES[0]);
@@ -155,6 +160,7 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
         window.localStorage.getItem("yusfaith-demo-session") ?? "null"
       ) as string | null;
       if (!email) return;
+      setEmail((current) => current || email);
       const accounts = JSON.parse(
         window.localStorage.getItem("yusfaith-demo-accounts") ?? "[]"
       ) as { name: string; email: string; phone: string }[];
@@ -203,6 +209,11 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
     const cleanPhone = phone.replace(/[\s-]/g, "");
 
     if (name.trim().length < 2) return setError("Please enter your name.");
+    const cleanEmail = email.trim();
+    if (contactBy === "Email" && !cleanEmail)
+      return setError("Enter your email address, or choose another way to reach you.");
+    if (cleanEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail))
+      return setError("Enter a valid email address, e.g. you@example.com.");
     if (!/^(\+?234|0)[789][01]\d{8}$/.test(cleanPhone))
       return setError("Enter a valid Nigerian phone number, e.g. 08012345678.");
     if (fulfillment === "Delivery" && address.trim().length < 5)
@@ -220,6 +231,8 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
         phone: phone.trim(),
         address: fulfillment === "Delivery" ? address.trim() : "",
         notes: notes.trim(),
+        email: email.trim() || undefined,
+        contactBy,
       },
       location,
       fulfillment,
@@ -240,6 +253,12 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
       total: 0,
       history: [{ status: "Price request received", at: now }],
       pricing: "quote",
+      messages: [
+        { id: `M-${Date.now()}-0`, at: now, from: "system", name: "Yusfaith", text: "Request received" },
+        ...(notes.trim()
+          ? [{ id: `M-${Date.now()}-1`, at: now, from: "customer" as const, name: name.trim(), text: notes.trim() }]
+          : []),
+      ],
       notified: recipientsFor(
         config.subsidiary,
         lines.map((l) => l.product.id),
@@ -255,6 +274,12 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
       category: "Order",
       action: `Sent price request ${order.id}`,
       detail: `${order.subsidiary} · ${itemCount.toLocaleString()} item(s) · ${order.fulfillment} · ${order.location}`,
+    });
+    sendAlert({
+      audience: "staff",
+      title: `New price request ${order.id}`,
+      body: `${order.customer.name} · ${order.items.length} product(s) · ${order.subsidiary} · ${order.location}`,
+      url: "/admin",
     });
     setPlacedOrder(order);
     setCheckoutOpen(false);
@@ -674,6 +699,39 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                     Phone number *
                   </span>
                   <input className={inputClass} type="tel" placeholder="08012345678" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" />
+                </label>
+              </div>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <label className="block">
+                  <span className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
+                    Email {contactBy === "Email" ? "*" : "(recommended)"}
+                  </span>
+                  <input
+                    className={inputClass}
+                    type="email"
+                    placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="email"
+                  />
+                  <span className="mt-1 block text-xs" style={{ color: "var(--muted)" }}>
+                    We email you every update on your order.
+                  </span>
+                </label>
+                <label className="block">
+                  <span className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
+                    How should we reach you?
+                  </span>
+                  <select
+                    className={inputClass}
+                    value={contactBy}
+                    onChange={(e) => setContactBy(e.target.value as ContactMethod)}
+                    aria-label="How should we reach you?"
+                  >
+                    {CONTACT_METHODS.map((m) => (
+                      <option key={m}>{m}</option>
+                    ))}
+                  </select>
                 </label>
               </div>
 

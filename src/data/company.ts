@@ -211,7 +211,7 @@ export const LEADERSHIP: Person[] = [
     name: "Mrs Bello Morenikeji",
     role: "Assistant Human Resources",
     image: "/images/leadership/Bello Morenikeji.jpeg",
-    summary: "Supports the HR team in looking after staff across the company.",
+    summary: "Supports the Human Resources team in looking after staff across the company.",
   },
   {
     name: "Miss Timilehin Tobiloba Obadimu",

@@ -34,6 +34,8 @@ import {
   type Fulfillment,
   type Order,
   type PaymentTerms,
+  CONTACT_METHODS,
+  type ContactMethod,
 } from "@/lib/orders";
 
 /* ---------- helpers ---------- */
@@ -90,6 +92,8 @@ export default function BakeryStore() {
   // checkout form
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [contactBy, setContactBy] = useState<ContactMethod>("WhatsApp");
   const [fulfillment, setFulfillment] = useState<Fulfillment>("Delivery");
   const [zone, setZone] = useState(BAKERY_ZONES[0].name);
   const zones = useDeliveryZones("Bakery", BAKERY_ZONES); // staff can change fees in Admin
@@ -108,6 +112,7 @@ export default function BakeryStore() {
         window.localStorage.getItem("yusfaith-demo-session") ?? "null"
       ) as string | null;
       if (!email) return;
+      setEmail((current) => current || email);
       const accounts = JSON.parse(
         window.localStorage.getItem("yusfaith-demo-accounts") ?? "[]"
       ) as { name: string; email: string; phone: string }[];
@@ -159,6 +164,11 @@ export default function BakeryStore() {
     const cleanPhone = phone.replace(/[\s-]/g, "");
 
     if (name.trim().length < 2) return setError("Please enter your name.");
+    const cleanEmail = email.trim();
+    if (contactBy === "Email" && !cleanEmail)
+      return setError("Enter your email address, or choose another way to reach you.");
+    if (cleanEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail))
+      return setError("Enter a valid email address, e.g. you@example.com.");
     if (!/^(\+?234|0)[789][01]\d{8}$/.test(cleanPhone))
       return setError("Enter a valid Nigerian phone number, e.g. 08012345678.");
     if (fulfillment === "Delivery" && address.trim().length < 5)
@@ -175,6 +185,8 @@ export default function BakeryStore() {
         phone: phone.trim(),
         address: fulfillment === "Delivery" ? address.trim() : "",
         notes: notes.trim(),
+        email: email.trim() || undefined,
+        contactBy,
       },
       location: fulfillment === "Delivery" ? zone : branch,
       fulfillment,
@@ -574,6 +586,39 @@ export default function BakeryStore() {
                     Phone number *
                   </span>
                   <input className={inputClass} type="tel" placeholder="08012345678" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" />
+                </label>
+              </div>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <label className="block">
+                  <span className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
+                    Email {contactBy === "Email" ? "*" : "(recommended)"}
+                  </span>
+                  <input
+                    className={inputClass}
+                    type="email"
+                    placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="email"
+                  />
+                  <span className="mt-1 block text-xs" style={{ color: "var(--muted)" }}>
+                    We email you every update on your order.
+                  </span>
+                </label>
+                <label className="block">
+                  <span className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
+                    How should we reach you?
+                  </span>
+                  <select
+                    className={inputClass}
+                    value={contactBy}
+                    onChange={(e) => setContactBy(e.target.value as ContactMethod)}
+                    aria-label="How should we reach you?"
+                  >
+                    {CONTACT_METHODS.map((m) => (
+                      <option key={m}>{m}</option>
+                    ))}
+                  </select>
                 </label>
               </div>
 

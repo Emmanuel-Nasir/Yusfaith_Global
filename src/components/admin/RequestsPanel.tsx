@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { BellRing, Eye, MapPin, MessageCircle, Phone, Send } from "lucide-react";
+import { BellRing, Clock3, Eye, Hand, Mail, MapPin, MessageCircle, Phone, Send, Siren } from "lucide-react";
+import AlertsToggle from "@/components/alerts/AlertsToggle";
+import InstallAppGuide from "@/components/alerts/InstallAppGuide";
+import RequestChat from "@/components/orders/RequestChat";
+import { sendAlert } from "@/lib/alerts";
 import { loadDeliveryFees, type DeliveryBusiness } from "@/lib/delivery-fees";
 import { stateOf, telLink } from "@/lib/order-contacts";
-import { formatNaira, updateOrder, type Order } from "@/lib/orders";
+import { logActivity } from "@/lib/activity-log";
+import { addMessage, ESCALATE_AFTER_MINUTES, formatNaira, updateOrder, type Order } from "@/lib/orders";
 
 /*
   PRICE REQUESTS
@@ -51,6 +56,39 @@ function whatsappLink(order: Order) {
   return `https://wa.me/${phone}?text=${encodeURIComponent(lines.join("\n"))}`;
 }
 
+/** Who gets the SMS/WhatsApp when nobody picks a request up in time. */
+export function escalationTargets(order: Order) {
+  return (order.notified ?? []).filter((r) => /Branch Manager|Head of Sales|Logistics Manager/.test(r.role));
+}
+
+/** Send the 5-minute escalation (demo: recorded, not really sent). */
+export function escalate(order: Order) {
+  if (order.escalatedAt || order.handledBy || order.paymentStatus !== "Awaiting quote") return undefined;
+  const targets = escalationTargets(order);
+  const names = targets.map((t) => t.name).join(", ") || "the branch manager and Head of Sales";
+  const updated = updateOrder(order.id, { escalatedAt: new Date().toISOString() });
+  addMessage(order.id, {
+    from: "system",
+    name: "Yusfaith",
+    text: `Nobody picked this up within ${ESCALATE_AFTER_MINUTES} minutes: SMS and WhatsApp sent to ${names}`,
+  });
+  logActivity({
+    actor: "System",
+    actorType: "Staff",
+    role: "Automatic alert",
+    category: "Order",
+    action: `Escalated ${order.id} by SMS/WhatsApp after ${ESCALATE_AFTER_MINUTES} minutes`,
+    detail: names,
+  });
+  sendAlert({
+    audience: "staff",
+    title: `Request ${order.id} still waiting`,
+    body: `No one has picked it up in ${ESCALATE_AFTER_MINUTES} minutes. SMS/WhatsApp sent to ${names}.`,
+    url: "/admin",
+  });
+  return updated;
+}
+
 function QuoteForm({
   order,
   staffName,
@@ -89,9 +127,23 @@ function QuoteForm({
       total: order.fulfillment === "Delivery" ? total : subtotal,
       paymentStatus: "Awaiting payment",
       quote: { at: now, by: staffName, note: note.trim() || undefined },
+      handledBy: order.handledBy ?? { name: staffName, at: now },
       history: [...order.history, { status: "Price sent", at: now }],
     });
-    if (updated) onQuoted(updated, `Sent price for ${order.id}: ${formatNaira(updated.total)} to ${order.customer.name}`);
+    if (updated) {
+      addMessage(order.id, {
+        from: "system",
+        name: "Yusfaith",
+        text: `Price sent by ${staffName}: ${formatNaira(updated.total)}${note.trim() ? ` (${note.trim()})` : ""}`,
+      });
+      sendAlert({
+        audience: "customer",
+        title: `Your price is ready: ${order.id}`,
+        body: `Total to pay ${formatNaira(updated.total)}. Pay by bank transfer and upload your receipt.`,
+        url: `${TRACK_PATH[order.subsidiary] ?? "/"}?id=${order.id}`,
+      });
+      onQuoted(updated, `Sent price for ${order.id}: ${formatNaira(updated.total)} to ${order.customer.name}`);
+    }
   }
 
   return (
@@ -180,14 +232,37 @@ function RequestCard({
   order,
   canQuote,
   staffName,
+  staffRole,
   onQuoted,
 }: {
   order: Order;
   canQuote: boolean;
   staffName: string;
+  staffRole: string;
   onQuoted: (order: Order, text: string) => void;
 }) {
   const waiting = order.paymentStatus === "Awaiting quote";
+  const paid = order.paymentStatus === "Payment confirmed";
+  const [chatOpen, setChatOpen] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!waiting || order.handledBy || order.escalatedAt) return;
+    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(timer);
+  }, [waiting, order.handledBy, order.escalatedAt]);
+  const deadline = new Date(order.createdAt).getTime() + ESCALATE_AFTER_MINUTES * 60_000;
+  const left = Math.max(0, deadline - now);
+  const countdown = `${Math.floor(left / 60_000)}:${String(Math.floor((left % 60_000) / 1000)).padStart(2, "0")}`;
+
+  function pickUp() {
+    const updated = updateOrder(order.id, { handledBy: { name: staffName, role: staffRole, at: new Date().toISOString() } });
+    if (updated) {
+      addMessage(order.id, { from: "system", name: "Yusfaith", text: `${staffName} (${staffRole}) is handling this request` });
+      onQuoted(updated, `Picked up request ${order.id}`);
+    }
+  }
+  const last = order.messages?.filter((m) => m.from !== "system").at(-1);
+  const newMessage = last?.from === "customer";
   return (
     <li className="rounded-2xl border border-[var(--border)] bg-[var(--background)] p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -197,8 +272,17 @@ function RequestCard({
             {order.subsidiary} · received {formatDate(order.createdAt)}
           </p>
         </div>
-        <span className={`rounded-full px-3 py-1 text-xs font-bold ${waiting ? "bg-amber-100 text-amber-800" : "bg-blue-100 text-blue-800"}`}>
-          {waiting ? "Waiting for price" : `Price sent · ${formatNaira(order.total)}`}
+        <span className="flex flex-wrap items-center gap-2">
+          {newMessage && (
+            <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-bold text-red-700">New message</span>
+          )}
+          <span
+            className={`rounded-full px-3 py-1 text-xs font-bold ${
+              waiting ? "bg-amber-100 text-amber-800" : paid ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"
+            }`}
+          >
+            {waiting ? "Waiting for price" : paid ? `Paid · ${formatNaira(order.total)}` : `Price sent · ${formatNaira(order.total)}`}
+          </span>
         </span>
       </div>
 
@@ -214,6 +298,18 @@ function RequestCard({
             <MapPin size={14} className="mt-0.5 shrink-0" />
             {order.fulfillment === "Delivery" ? `Delivery to ${order.customer.address} (${order.location})` : `Pickup at ${order.location}`}
           </p>
+          {order.customer.email && (
+            <p className="mt-1">
+              <a href={`mailto:${order.customer.email}`} className="inline-flex items-center gap-1.5 text-xs font-semibold" style={{ color: "var(--gold-text)" }}>
+                <Mail size={13} /> {order.customer.email}
+              </a>
+            </p>
+          )}
+          {order.customer.contactBy && (
+            <p className="mt-1 text-xs font-semibold" style={{ color: "var(--foreground)" }}>
+              Prefers: {order.customer.contactBy}
+            </p>
+          )}
           {order.customer.notes && (
             <p className="mt-2 text-xs italic" style={{ color: "var(--muted)" }}>“{order.customer.notes}”</p>
           )}
@@ -245,6 +341,60 @@ function RequestCard({
         </p>
       )}
 
+      {waiting && (
+        <div className="mt-4 rounded-xl px-4 py-3 text-sm" style={{ background: order.handledBy ? "rgba(22,163,74,0.08)" : order.escalatedAt ? "rgba(220,38,38,0.08)" : "rgba(239,133,15,0.08)" }}>
+          {order.handledBy ? (
+            <p className="flex items-center gap-2 font-semibold text-green-800">
+              <Hand size={16} />
+              Handled by {order.handledBy.name}
+              {order.handledBy.role ? ` (${order.handledBy.role})` : ""} since {formatDate(order.handledBy.at)}
+            </p>
+          ) : order.escalatedAt ? (
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="flex items-center gap-2 font-semibold text-red-700">
+                <Siren size={16} />
+                Escalated at {formatDate(order.escalatedAt)}: SMS and WhatsApp sent to{" "}
+                {escalationTargets(order).map((t) => t.name).join(", ") || "branch manager and Head of Sales"}
+              </p>
+              {canQuote && (
+                <button type="button" onClick={pickUp} className="rounded-full bg-[#0f1a3d] px-4 py-2 text-xs font-bold text-white">
+                  I&apos;m handling this
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="flex items-center gap-2" style={{ color: "var(--foreground)" }}>
+                <Clock3 size={16} style={{ color: "var(--gold-text)" }} />
+                <span>
+                  <strong>Nobody has picked this up.</strong> If no one does in {countdown}, SMS and WhatsApp go to the
+                  branch manager and Head of Sales.
+                </span>
+              </p>
+              <span className="flex flex-wrap gap-2">
+                {canQuote && (
+                  <button type="button" onClick={pickUp} className="rounded-full bg-[#0f1a3d] px-4 py-2 text-xs font-bold text-white">
+                    I&apos;m handling this
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    const updated = escalate(order);
+                    if (updated) onQuoted(updated, "");
+                  }}
+                  className="rounded-full border border-[var(--border)] px-3 py-2 text-xs font-semibold"
+                  style={{ color: "var(--muted)" }}
+                  title="For the demo: skip the 5-minute wait"
+                >
+                  Demo: escalate now
+                </button>
+              </span>
+            </div>
+          )}
+        </div>
+      )}
+
       {waiting ? (
         canQuote ? (
           <QuoteForm order={order} staffName={staffName} onQuoted={onQuoted} />
@@ -270,6 +420,16 @@ function RequestCard({
           </a>
         </div>
       )}
+
+      <button
+        type="button"
+        onClick={() => setChatOpen((v) => !v)}
+        className="mt-4 text-sm font-bold underline-offset-4 hover:underline"
+        style={{ color: "var(--gold-text)" }}
+      >
+        {chatOpen ? "Hide chat" : `Open chat (${order.messages?.filter((m) => m.from !== "system").length ?? 0} messages)`}
+      </button>
+      {chatOpen && <RequestChat order={order} as="staff" staffName={staffName} staffRole={staffRole} compact />}
     </li>
   );
 }
@@ -278,14 +438,32 @@ export default function RequestsPanel({
   orders,
   canQuote,
   staffName,
+  staffRole,
   onQuoted,
 }: {
   orders: Order[];
   canQuote: boolean;
   staffName: string;
+  staffRole: string;
   onQuoted: (order: Order, text: string) => void;
 }) {
-  const [tab, setTab] = useState<"waiting" | "sent">("waiting");
+  const [tab, setTab] = useState<"waiting" | "sent" | "paid">("waiting");
+
+  // the 5-minute rule (in the main app this runs on the server, even with nobody signed in)
+  useEffect(() => {
+    const check = () => {
+      for (const o of orders) {
+        if (o.pricing !== "quote" || o.paymentStatus !== "Awaiting quote" || o.handledBy || o.escalatedAt) continue;
+        if (Date.now() - new Date(o.createdAt).getTime() >= ESCALATE_AFTER_MINUTES * 60_000) {
+          const updated = escalate(o);
+          if (updated) onQuoted(updated, "");
+        }
+      }
+    };
+    check();
+    const timer = window.setInterval(check, 15_000);
+    return () => window.clearInterval(timer);
+  }, [orders, onQuoted]);
   const [state, setState] = useState("All");
 
   const requests = orders.filter(
@@ -293,7 +471,8 @@ export default function RequestsPanel({
   );
   const waiting = requests.filter((o) => o.paymentStatus === "Awaiting quote");
   const sent = requests.filter((o) => o.paymentStatus === "Awaiting payment" && o.quote);
-  const shown = tab === "waiting" ? waiting : sent;
+  const paid = requests.filter((o) => o.paymentStatus === "Payment confirmed");
+  const shown = tab === "waiting" ? waiting : tab === "sent" ? sent : paid;
 
   return (
     <div>
@@ -302,15 +481,24 @@ export default function RequestsPanel({
         request is sent to the branch manager for the customer&apos;s state, the
         Head of Sales, the General Manager and the CEO. Call the customer, then
         enter the agreed price here: they see it on their tracking page with our
-        bank details. In the main app the people listed are alerted by SMS,
-        WhatsApp or email, and each branch manager sees only their state.
+        bank details. Click <strong>I&apos;m handling this</strong> so others know.
+        If nobody picks a request up within {ESCALATE_AFTER_MINUTES} minutes, an
+        SMS and WhatsApp go to the branch manager and Head of Sales. In the main
+        app everyone listed also gets a push alert and an email at once, and each
+        branch manager sees only their state.
       </p>
+
+      <div className="mb-6 space-y-3">
+        <AlertsToggle audience="staff" />
+        <InstallAppGuide />
+      </div>
 
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap gap-2">
           {([
             ["waiting", `Waiting for price (${waiting.length})`],
             ["sent", `Price sent, awaiting payment (${sent.length})`],
+            ["paid", `Paid (${paid.length})`],
           ] as const).map(([id, label]) => (
             <button
               key={id}
@@ -341,12 +529,12 @@ export default function RequestsPanel({
 
       {shown.length === 0 ? (
         <p className="rounded-2xl border border-dashed border-[var(--border)] p-8 text-center text-sm" style={{ color: "var(--muted)" }}>
-          {tab === "waiting" ? "No requests waiting for a price." : "No prices waiting for payment."}
+          {tab === "waiting" ? "No requests waiting for a price." : tab === "sent" ? "No prices waiting for payment." : "No paid requests yet."}
         </p>
       ) : (
         <ul className="space-y-4">
           {shown.map((o) => (
-            <RequestCard key={o.id} order={o} canQuote={canQuote} staffName={staffName} onQuoted={onQuoted} />
+            <RequestCard key={o.id} order={o} canQuote={canQuote} staffName={staffName} staffRole={staffRole} onQuoted={onQuoted} />
           ))}
         </ul>
       )}

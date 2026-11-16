@@ -28,6 +28,25 @@ export type PaymentStatus = "Awaiting quote" | "Awaiting payment" | "Payment con
 /* Someone told about a new request (branch manager, Head of Sales, GM, CEO) */
 export type Recipient = { name: string; role: string; phone?: string };
 
+/* One message in the chat on a request ("system" = automatic note) */
+export type OrderMessage = {
+  id: string;
+  at: string;
+  from: "customer" | "staff" | "system";
+  name: string;
+  role?: string;
+  text: string;
+};
+
+export const ORDERS_EVENT = "yusfaith-orders-changed";
+
+export type ContactMethod = "WhatsApp" | "SMS" | "Email" | "Phone call";
+export const CONTACT_METHODS: ContactMethod[] = ["WhatsApp", "SMS", "Email", "Phone call"];
+
+/* After this long with nobody handling a new request, it is escalated by
+   SMS/WhatsApp to the branch manager and Head of Sales. */
+export const ESCALATE_AFTER_MINUTES = 5;
+
 export type Fulfillment = "Delivery" | "Pickup";
 
 export type OrderStatus =
@@ -64,6 +83,8 @@ export type Order = {
     phone: string;
     address: string;
     notes: string;
+    email?: string;
+    contactBy?: ContactMethod; // how they want to hear from us
   };
   location: string; // delivery zone or pickup branch
   fulfillment: Fulfillment;
@@ -81,6 +102,9 @@ export type Order = {
   pricing?: "fixed" | "quote";
   notified?: Recipient[]; // who was told about the request
   quote?: { at: string; by: string; note?: string }; // when and by whom the price was sent
+  messages?: OrderMessage[]; // chat between the customer and Yusfaith staff
+  handledBy?: { name: string; role?: string; at: string }; // staff member who picked it up
+  escalatedAt?: string; // when the 5-minute escalation went out
   demo: true;
 };
 
@@ -103,6 +127,7 @@ export function loadOrders(): Order[] {
 function saveOrders(orders: Order[]) {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
+    window.dispatchEvent(new Event(ORDERS_EVENT));
   } catch {
     // storage full or blocked — demo only, ignore
   }
@@ -174,4 +199,16 @@ export function nextStep(order: Order): {
   }
 
   return { status: next };
+}
+
+/** Add a chat message to an order. Returns the updated order. */
+export function addMessage(id: string, message: Omit<OrderMessage, "id" | "at">) {
+  const order = findOrder(id);
+  if (!order) return undefined;
+  const full: OrderMessage = {
+    ...message,
+    id: `M-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    at: new Date().toISOString(),
+  };
+  return updateOrder(order.id, { messages: [...(order.messages ?? []), full] });
 }

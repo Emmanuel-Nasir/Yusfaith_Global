@@ -2,8 +2,9 @@
 
 import { useRef, useState } from "react";
 import { CheckCircle2, FileText, Info, Upload, X } from "lucide-react";
-import { updateOrder, type Order, type Receipt } from "@/lib/orders";
+import { addMessage, updateOrder, type Order, type Receipt } from "@/lib/orders";
 import { logActivity } from "@/lib/activity-log";
+import { sendAlert } from "@/lib/alerts";
 
 /*
   RECEIPT UPLOAD (placeholder)
@@ -123,7 +124,16 @@ export default function ReceiptUpload({
       action: `${receipt ? "Replaced" : "Uploaded"} payment receipt for ${order.id}`,
       detail: `${saved.name} · ${order.subsidiary}`,
     });
-    if (updated) onUpdated(updated);
+    const withNote = updated
+      ? addMessage(order.id, { from: "system", name: "Yusfaith", text: `Receipt ${receipt ? "replaced" : "uploaded"}: ${saved.name}` }) ?? updated
+      : undefined;
+    sendAlert({
+      audience: "staff",
+      title: `Receipt uploaded for ${order.id}`,
+      body: `${order.customer.name} uploaded a payment receipt. Check it in Payments.`,
+      url: "/admin",
+    });
+    if (withNote) onUpdated(withNote);
   }
 
   /* Payment already confirmed */

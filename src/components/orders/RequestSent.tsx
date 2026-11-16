@@ -20,7 +20,7 @@ type Props = {
 };
 
 const NEXT_STEPS = [
-  { Icon: PhoneCall, title: "We call you with the price", text: "One of the people below will call or WhatsApp you with the price, including delivery." },
+  { Icon: PhoneCall, title: "We send you the price", text: "One of the people above replies with the price, including delivery. You can also chat with them on your tracking page, and turn on alerts there." },
   { Icon: Wallet, title: "Pay by bank transfer", text: "The price and our account details also appear on your tracking page." },
   { Icon: Upload, title: "Upload your receipt", text: "Upload the transfer receipt on the tracking page. We process your order once payment is confirmed." },
 ];
@@ -131,6 +131,8 @@ export default function RequestSent({ order, trackHref, onClose }: Props) {
             ))}
           </ol>
           <p className="mt-4 text-xs" style={{ color: "var(--muted)" }}>
+            {order.customer.email ? `We'll email every update to ${order.customer.email}. ` : ""}
+            {order.customer.contactBy ? `We'll reach you by ${order.customer.contactBy}. ` : ""}
             Payment is by bank transfer only, before{" "}
             {order.fulfillment === "Delivery" ? "dispatch" : "pickup"}. No payment on delivery.
           </p>
