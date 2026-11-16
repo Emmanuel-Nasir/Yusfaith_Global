@@ -22,6 +22,7 @@ import { DEMO_MODE } from "@/lib/demo";
 import ActivityPanel from "@/components/admin/ActivityPanel";
 import DeliveryFeesPanel from "@/components/admin/DeliveryFeesPanel";
 import RequestsPanel from "@/components/admin/RequestsPanel";
+import DispatchCentre from "@/components/logistics/DispatchCentre";
 import { recipientsFor } from "@/lib/order-contacts";
 import { sendAlert } from "@/lib/alerts";
 import { useDeliveryFees } from "@/lib/delivery-fees";
@@ -770,45 +771,6 @@ function PaymentsPanel({
   );
 }
 
-function LogisticsPanel({ orders, role }: { orders: Order[]; role: Role }) {
-  const delivery = orders.filter((o) => o.fulfillment === "Delivery");
-  const awaiting = delivery.filter((o) => o.status === "Received" || o.status === "Preparing").length;
-  const onRoad = delivery.filter((o) => o.status === "Out for delivery").length;
-  const delivered = delivery.filter((o) => o.status === "Delivered").length;
-
-  const stats = [
-    { label: "Awaiting dispatch", value: awaiting },
-    { label: "On the road", value: onRoad },
-    { label: "Delivered", value: delivered },
-  ];
-
-  return (
-    <div>
-      <div className="grid grid-cols-3 gap-4">
-        {stats.map((s) => (
-          <div key={s.label} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
-            <p className="font-heading text-3xl font-semibold" style={{ color: "var(--gold-text)" }}>{s.value}</p>
-            <p className="mt-1 text-sm font-medium" style={{ color: "var(--muted)" }}>{s.label}</p>
-          </div>
-        ))}
-      </div>
-
-      <p className="mt-8 leading-7" style={{ color: "var(--muted)" }}>
-        {role === "Driver"
-          ? "Drivers use the Driver view on the Logistics page, where they see only the deliveries assigned to them."
-          : "Trucks, drivers and dispatch are managed on the Logistics page (Dispatch board, Fleet and drivers, Driver view)."}
-      </p>
-      <Link
-        href="/logistics#dispatch"
-        className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#ef850f] px-7 py-3.5 font-bold text-[#0f1a3d] transition hover:bg-[#ff9a26]"
-      >
-        Open the Dispatch Centre
-        <Truck size={18} />
-      </Link>
-    </div>
-  );
-}
-
 /* ---------- the staff area ---------- */
 
 function DemoAdmin({ session }: { session: StaffSession }) {
@@ -971,7 +933,7 @@ function DemoAdmin({ session }: { session: StaffSession }) {
             {active === "delivery" && (
               <DeliveryFeesPanel canEdit={CAN_EDIT_DELIVERY.includes(role)} onChanged={session.log} />
             )}
-            {active === "logistics" && <LogisticsPanel orders={orders} role={role} />}
+            {active === "logistics" && <DispatchCentre role={role} staffName={session.me.name} />}
             {active === "access" && <AccessPanel session={session} />}
             {active === "activity" && role === "Super Admin" && <ActivityPanel />}
           </section>
