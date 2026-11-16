@@ -71,6 +71,7 @@ export function escalate(order: Order) {
     from: "system",
     name: "Yusfaith",
     text: `Nobody picked this up within ${ESCALATE_AFTER_MINUTES} minutes: SMS and WhatsApp sent to ${names}`,
+    staffOnly: true,
   });
   logActivity({
     actor: "System",
@@ -257,7 +258,7 @@ function RequestCard({
   function pickUp() {
     const updated = updateOrder(order.id, { handledBy: { name: staffName, role: staffRole, at: new Date().toISOString() } });
     if (updated) {
-      addMessage(order.id, { from: "system", name: "Yusfaith", text: `${staffName} (${staffRole}) is handling this request` });
+      addMessage(order.id, { from: "system", name: "Yusfaith", text: `${staffName} (${staffRole}) is handling this request`, staffOnly: true });
       onQuoted(updated, `Picked up request ${order.id}`);
     }
   }

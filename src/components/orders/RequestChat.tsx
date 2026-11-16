@@ -59,7 +59,8 @@ export default function RequestChat({ order, as, staffName = "Yusfaith staff", s
     };
   }, [order.id]);
 
-  const messages = current.messages ?? [];
+  // internal notes (who is handling it, escalations) are for staff only
+  const messages = (current.messages ?? []).filter((m) => as === "staff" || !m.staffOnly);
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight });

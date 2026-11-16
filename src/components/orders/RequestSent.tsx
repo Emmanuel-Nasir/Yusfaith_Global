@@ -20,7 +20,7 @@ type Props = {
 };
 
 const NEXT_STEPS = [
-  { Icon: PhoneCall, title: "We send you the price", text: "One of the people above replies with the price, including delivery. You can also chat with them on your tracking page, and turn on alerts there." },
+  { Icon: PhoneCall, title: "We send you the price", text: "Our sales team replies with the price, including delivery. You can also chat with us on your tracking page, and turn on alerts there." },
   { Icon: Wallet, title: "Pay by bank transfer", text: "The price and our account details also appear on your tracking page." },
   { Icon: Upload, title: "Upload your receipt", text: "Upload the transfer receipt on the tracking page. We process your order once payment is confirmed." },
 ];
@@ -88,27 +88,12 @@ export default function RequestSent({ order, trackHref, onClose }: Props) {
           </p>
         </aside>
 
-        {/* ---------- Who was told + next steps ---------- */}
+        {/* ---------- Next steps (who was alerted is staff-only) ---------- */}
         <section className="p-6 sm:p-8">
-          <h3 className="flex items-center gap-2 text-lg font-bold" style={{ color: "var(--foreground)" }}>
-            <BellRing size={20} style={{ color: "var(--gold-text)" }} />
-            Your request has gone to
-          </h3>
-          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-            {(order.notified ?? []).map((person) => (
-              <li
-                key={person.name}
-                className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm"
-              >
-                <span className="block font-bold" style={{ color: "var(--foreground)" }}>
-                  {person.name}
-                </span>
-                <span className="block text-xs" style={{ color: "var(--muted)" }}>
-                  {person.role}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <p className="flex items-start gap-2 rounded-xl bg-[var(--surface)] px-4 py-3 text-sm leading-6" style={{ color: "var(--foreground)" }}>
+            <BellRing size={18} className="mt-0.5 shrink-0" style={{ color: "var(--gold-text)" }} />
+            Our sales team has your request and will get back to you shortly.
+          </p>
 
           <h3 className="mt-8 text-lg font-bold" style={{ color: "var(--foreground)" }}>
             What happens next

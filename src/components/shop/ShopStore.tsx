@@ -792,8 +792,8 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
 
                 <div className="rounded-xl border border-[#ef850f]/40 bg-[#ef850f]/5 px-4 py-3 text-sm leading-6 sm:col-span-2" style={{ color: "var(--muted)" }}>
                   <span className="font-bold" style={{ color: "var(--foreground)" }}>How it works:</span>{" "}
-                  your request goes to our branch manager, Head of Sales, General Manager and CEO.
-                  One of them will call you with the price, including delivery. You then pay by
+                  our sales team gets your request straight away and sends you the price,
+                  including delivery. You then pay by
                   bank transfer before {fulfillment === "Delivery" ? "dispatch" : "pickup"} and upload
                   your receipt on the tracking page. No payment on delivery.
                 </div>

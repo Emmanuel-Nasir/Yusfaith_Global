@@ -59,7 +59,7 @@ const STEPS = [
 const PAYMENT_TERMS = [
   {
     title: "1. Request a price",
-    text: "Add what you need and send a request. Our branch manager, Head of Sales, GM and CEO are told straight away.",
+    text: "Add what you need and send a request. Our sales team gets it straight away.",
   },
   {
     title: "2. Pay by transfer",

@@ -268,9 +268,7 @@ export default function OrderTracker({
                   We&apos;re preparing your price
                 </p>
                 <p className="mt-1">
-                  Your request has gone to{" "}
-                  {(order.notified ?? []).map((r) => r.name).join(", ") || "our sales team"}.
-                  One of them will call you with the price, including delivery. The price
+                  Our sales team has your request and will send you the price, including delivery. The price
                   and our account details will also appear here.
                 </p>
               </div>

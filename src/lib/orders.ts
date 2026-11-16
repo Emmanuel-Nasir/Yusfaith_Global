@@ -36,6 +36,7 @@ export type OrderMessage = {
   name: string;
   role?: string;
   text: string;
+  staffOnly?: boolean; // internal note: not shown to the customer
 };
 
 export const ORDERS_EVENT = "yusfaith-orders-changed";
