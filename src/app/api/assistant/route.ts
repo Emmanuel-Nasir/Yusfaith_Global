@@ -8,8 +8,6 @@ import { ASSISTANT_SYSTEM_PROMPT, splitHandoff } from "@/lib/assistant";
   Optional: ANTHROPIC_MODEL to choose the model.
 */
 
-export const runtime = "nodejs";
-
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
 const MAX_MESSAGES = 12;
