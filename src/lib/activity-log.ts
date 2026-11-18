@@ -9,6 +9,8 @@
   or deleted by staff.
 */
 
+import { clearCollection, pushItem } from "./sync";
+
 export type ActorType = "Staff" | "Customer";
 
 export type ActivityCategory =
@@ -93,9 +95,11 @@ export function logActivity(entry: Omit<ActivityEntry, "id" | "at" | "page" | "d
   } catch {
     // demo only, ignore
   }
+  pushItem("activity", full.id, full);
 }
 
 export function clearActivity() {
+  clearCollection("activity");
   try {
     window.localStorage.removeItem(KEY);
     window.dispatchEvent(new Event(ACTIVITY_EVENT));

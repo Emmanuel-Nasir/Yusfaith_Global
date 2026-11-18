@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { deleteItem, pushItem } from "./sync";
 
 /*
   DELIVERY FEES
@@ -78,6 +79,7 @@ export function saveDeliveryFee(business: DeliveryBusiness, zone: string, fee: n
   try {
     window.localStorage.setItem(KEY, JSON.stringify(overrides));
     window.dispatchEvent(new Event(EVENT));
+    pushItem("settings", "delivery-fees", overrides);
   } catch {
     // demo only, ignore
   }
@@ -87,6 +89,7 @@ export function resetDeliveryFees() {
   try {
     window.localStorage.removeItem(KEY);
     window.dispatchEvent(new Event(EVENT));
+    deleteItem("settings", "delivery-fees");
   } catch {
     // demo only, ignore
   }

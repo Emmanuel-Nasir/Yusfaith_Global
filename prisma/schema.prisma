@@ -1,0 +1,24 @@
+// Yusfaith database (Prisma)
+// Shared storage for orders, chats, receipts, delivery fees, alerts and the
+// activity log, so every phone and computer sees the same data.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model SharedItem {
+  collection String
+  id         String
+  data       Json
+  deleted    Boolean  @default(false)
+  updatedAt  DateTime @default(now()) @map("updated_at") @db.Timestamptz(3)
+
+  @@id([collection, id])
+  @@index([updatedAt])
+  @@map("shared_items")
+}

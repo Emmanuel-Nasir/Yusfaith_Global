@@ -45,3 +45,6 @@ public/images.zip
 *.zip
 
 *.zip
+
+# prisma client (generated)
+/src/generated

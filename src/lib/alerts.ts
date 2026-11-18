@@ -8,6 +8,8 @@
   WhatsApp backup), so the phone is alerted even when the website is closed.
 */
 
+import { pushItem } from "./sync";
+
 export type AlertAudience = "staff" | "customer";
 
 export type SiteAlert = {
@@ -97,6 +99,7 @@ export function sendAlert(alert: Omit<SiteAlert, "id" | "at">) {
     // ignore
   }
   window.dispatchEvent(new CustomEvent<SiteAlert>(ALERT_EVENT, { detail: full }));
+  pushItem("alerts", full.id, full); // other devices show it within a few seconds
 }
 
 export function parseStoredAlert(key: string | null, value: string | null): SiteAlert | null {

@@ -14,6 +14,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import AlertToaster from "@/components/alerts/AlertToaster";
 import HelpChat from "@/components/help/HelpChat";
+import SyncStarter from "@/components/sync/SyncStarter";
 export const metadata: Metadata = {
   title: "Yusfaith Global Enterprises",
   description:
@@ -40,6 +41,7 @@ export default function RootLayout({
   <Footer />
   <AlertToaster />
   <HelpChat />
+  <SyncStarter />
 </body>
     </html>
   );

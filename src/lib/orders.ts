@@ -1,9 +1,12 @@
 /*
   YUSFAITH — SHARED DEMO ORDERS
-  One order list for every subsidiary, saved in the browser (localStorage).
+  One order list for every subsidiary, saved in the browser (localStorage)
+  and shared with every device through /api/sync (see sync.ts).
   Logistics and the admin preview read from here. In the main app this
   becomes the central orders table in the database.
 */
+
+import { deleteItem, pushItem } from "./sync";
 
 export type Subsidiary =
   | "Cement Depot"
@@ -126,6 +129,13 @@ export function loadOrders(): Order[] {
 }
 
 function saveOrders(orders: Order[]) {
+  // send only what changed to the server, so other devices see it
+  const before = new Map(loadOrders().map((order) => [order.id, JSON.stringify(order)]));
+  for (const order of orders) {
+    if (before.get(order.id) !== JSON.stringify(order)) pushItem("orders", order.id, order);
+    before.delete(order.id);
+  }
+  for (const id of before.keys()) deleteItem("orders", id);
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
     window.dispatchEvent(new Event(ORDERS_EVENT));

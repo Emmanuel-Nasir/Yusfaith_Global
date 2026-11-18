@@ -6,10 +6,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowLeft,
   Check,
-  ShieldCheck,
   Truck,
-  Wallet,
-  Warehouse,
 } from "lucide-react";
 
 import SpareParts from "@/components/logistics/SpareParts";
@@ -108,32 +105,6 @@ export default function LogisticsContent() {
               </Link>
             </div>
           </FadeUp>
-        </div>
-      </section>
-
-      {/* ================= HOW DELIVERY WORKS ================= */}
-      <section style={{ backgroundColor: "var(--surface)" }}>
-        <div className="container-main grid gap-6 py-10 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            { Icon: Wallet, title: "Payment confirmed", text: "Accounts confirms your bank transfer and receipt." },
-            { Icon: Warehouse, title: "Loaded at the depot", text: "Your order is prepared and loaded." },
-            { Icon: Truck, title: "Our truck and driver", text: "A Yusfaith truck and driver are assigned to you." },
-            { Icon: ShieldCheck, title: "Proof of delivery", text: "The receiver's name is recorded on arrival." },
-          ].map(({ Icon, title, text }) => (
-            <div key={title} className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#ef850f] text-[#0f1a3d]">
-                <Icon size={22} />
-              </span>
-              <span>
-                <span className="block font-bold" style={{ color: "var(--foreground)" }}>
-                  {title}
-                </span>
-                <span className="block text-sm" style={{ color: "var(--muted)" }}>
-                  {text}
-                </span>
-              </span>
-            </div>
-          ))}
         </div>
       </section>
 
