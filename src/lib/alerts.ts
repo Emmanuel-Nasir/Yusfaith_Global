@@ -83,6 +83,25 @@ export async function subscribePush(audience: AlertAudience, orderId?: string) {
   }
 }
 
+/** Send a test alert to this device. Returns a plain-language result. */
+export async function testPush(audience: AlertAudience, orderId?: string): Promise<{ ok: boolean; message: string }> {
+  if (!pushSupported()) return { ok: false, message: "This browser cannot receive alerts when closed. On iPhone, open the site from the Home Screen icon." };
+  if (Notification.permission !== "granted") return { ok: false, message: "Notifications are not allowed for this site. Allow them in the browser settings, then turn alerts on again." };
+  await subscribePush(audience, orderId); // make sure this device is signed up
+  try {
+    const reg = await navigator.serviceWorker.getRegistration("/sw.js");
+    const sub = await reg?.pushManager.getSubscription();
+    const res = await fetch("/api/push/test", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ endpoint: sub?.endpoint }),
+    });
+    return (await res.json()) as { ok: boolean; message: string };
+  } catch {
+    return { ok: false, message: "Could not reach the website. Check your internet connection." };
+  }
+}
+
 async function unsubscribePush(audience: AlertAudience) {
   if (!pushSupported()) return;
   try {

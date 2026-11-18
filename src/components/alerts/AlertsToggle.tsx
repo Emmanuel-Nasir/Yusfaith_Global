@@ -9,6 +9,7 @@ import {
   enableAlerts,
   notificationsSupported,
   subscribePush,
+  testPush,
   type AlertAudience,
 } from "@/lib/alerts";
 
@@ -27,6 +28,15 @@ const COPY: Record<AlertAudience, { off: string; on: string }> = {
 export default function AlertsToggle({ audience, orderId }: { audience: AlertAudience; orderId?: string }) {
   const [on, setOn] = useState(false);
   const [blocked, setBlocked] = useState(false);
+  const [testing, setTesting] = useState(false);
+  const [result, setResult] = useState<{ ok: boolean; message: string } | null>(null);
+
+  async function runTest() {
+    setTesting(true);
+    setResult(null);
+    setResult(await testPush(audience, orderId));
+    setTesting(false);
+  }
 
   useEffect(() => {
     const refresh = () => {
@@ -71,6 +81,22 @@ export default function AlertsToggle({ audience, orderId }: { audience: AlertAud
           <span className="block text-xs">
             Alerts reach this device even when the site is closed. On iPhone, add the site to your Home Screen first.
           </span>
+          {on && (
+            <button
+              type="button"
+              onClick={runTest}
+              disabled={testing}
+              className="mt-2 text-xs font-bold underline underline-offset-4"
+              style={{ color: "var(--gold-text)" }}
+            >
+              {testing ? "Sending test alert…" : "Send a test alert to this device"}
+            </button>
+          )}
+          {result && (
+            <span className={`mt-1 block text-xs font-semibold ${result.ok ? "text-green-700" : "text-red-700"}`}>
+              {result.message}
+            </span>
+          )}
         </span>
       </p>
       <button

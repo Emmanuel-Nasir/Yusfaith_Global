@@ -69,11 +69,13 @@ export async function sendPush(alert: PushAlert) {
           } catch (error) {
             const status = (error as { statusCode?: number }).statusCode;
             if (status === 404 || status === 410) gone.push(s.endpoint); // phone unsubscribed or app removed
+            else console.error("Push failed", status, (error as { body?: string }).body ?? error);
           }
         })
     );
     if (gone.length) await prisma.pushSubscription.deleteMany({ where: { endpoint: { in: gone } } });
-  } catch {
+  } catch (error) {
     // a failed notification must never break saving the order
+    console.error("Push error", error);
   }
 }
