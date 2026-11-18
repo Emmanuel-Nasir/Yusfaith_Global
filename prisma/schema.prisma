@@ -22,3 +22,19 @@ model SharedItem {
   @@index([updatedAt])
   @@map("shared_items")
 }
+
+/// A phone or computer that asked for alerts (Web Push).
+/// Staff: audience "staff". Customers: audience "customer" + their order id.
+model PushSubscription {
+  id        String   @id @default(cuid())
+  endpoint  String
+  p256dh    String
+  auth      String
+  audience  String
+  orderId   String   @default("")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@unique([endpoint, audience, orderId])
+  @@index([audience, orderId])
+  @@map("push_subscriptions")
+}

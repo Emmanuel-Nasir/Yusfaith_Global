@@ -8,6 +8,7 @@ import {
   disableAlerts,
   enableAlerts,
   notificationsSupported,
+  subscribePush,
   type AlertAudience,
 } from "@/lib/alerts";
 
@@ -23,7 +24,7 @@ const COPY: Record<AlertAudience, { off: string; on: string }> = {
 };
 
 /** "Turn on alerts" switch for staff (Admin) or customers (tracking page). */
-export default function AlertsToggle({ audience }: { audience: AlertAudience }) {
+export default function AlertsToggle({ audience, orderId }: { audience: AlertAudience; orderId?: string }) {
   const [on, setOn] = useState(false);
   const [blocked, setBlocked] = useState(false);
 
@@ -33,15 +34,17 @@ export default function AlertsToggle({ audience }: { audience: AlertAudience }) 
       setBlocked(notificationsSupported() && Notification.permission === "denied");
     };
     refresh();
+    // alerts already on in this browser: make sure this device is signed up for push
+    if (alertsEnabled(audience)) void subscribePush(audience, orderId);
     window.addEventListener(ALERT_SETTINGS_EVENT, refresh);
     return () => window.removeEventListener(ALERT_SETTINGS_EVENT, refresh);
-  }, [audience]);
+  }, [audience, orderId]);
 
   async function toggle() {
     if (on) {
       disableAlerts(audience);
     } else {
-      const permission = await enableAlerts(audience);
+      const permission = await enableAlerts(audience, orderId);
       setBlocked(permission === "denied");
     }
   }
@@ -66,7 +69,7 @@ export default function AlertsToggle({ audience }: { audience: AlertAudience }) 
             </span>
           )}
           <span className="block text-xs">
-            Demo: alerts show while the site is open. The live app also alerts phones when it is closed.
+            Alerts reach this device even when the site is closed. On iPhone, add the site to your Home Screen first.
           </span>
         </span>
       </p>

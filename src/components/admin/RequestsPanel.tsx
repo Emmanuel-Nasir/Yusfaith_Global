@@ -56,12 +56,12 @@ function whatsappLink(order: Order) {
   return `https://wa.me/${phone}?text=${encodeURIComponent(lines.join("\n"))}`;
 }
 
-/** Who gets the SMS/WhatsApp when nobody picks a request up in time. */
+/** Who gets the escalation alert when nobody picks a request up in time. */
 export function escalationTargets(order: Order) {
   return (order.notified ?? []).filter((r) => /Branch Manager|Head of Sales|Logistics Manager/.test(r.role));
 }
 
-/** Send the 5-minute escalation (demo: recorded, not really sent). */
+/** Send the 5-minute escalation (the server also does this every minute). */
 export function escalate(order: Order) {
   if (order.escalatedAt || order.handledBy || order.paymentStatus !== "Awaiting quote") return undefined;
   const targets = escalationTargets(order);
@@ -70,7 +70,7 @@ export function escalate(order: Order) {
   addMessage(order.id, {
     from: "system",
     name: "Yusfaith",
-    text: `Nobody picked this up within ${ESCALATE_AFTER_MINUTES} minutes: SMS and WhatsApp sent to ${names}`,
+    text: `Nobody picked this up within ${ESCALATE_AFTER_MINUTES} minutes: alert sent to ${names}`,
     staffOnly: true,
   });
   logActivity({
@@ -78,13 +78,13 @@ export function escalate(order: Order) {
     actorType: "Staff",
     role: "Automatic alert",
     category: "Order",
-    action: `Escalated ${order.id} by SMS/WhatsApp after ${ESCALATE_AFTER_MINUTES} minutes`,
+    action: `Escalated ${order.id} after ${ESCALATE_AFTER_MINUTES} minutes`,
     detail: names,
   });
   sendAlert({
     audience: "staff",
     title: `Request ${order.id} still waiting`,
-    body: `No one has picked it up in ${ESCALATE_AFTER_MINUTES} minutes. SMS/WhatsApp sent to ${names}.`,
+    body: `No one has picked it up in ${ESCALATE_AFTER_MINUTES} minutes. Alert sent to ${names}.`,
     url: "/admin",
   });
   return updated;
@@ -354,7 +354,7 @@ function RequestCard({
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="flex items-center gap-2 font-semibold text-red-700">
                 <Siren size={16} />
-                Escalated at {formatDate(order.escalatedAt)}: SMS and WhatsApp sent to{" "}
+                Escalated at {formatDate(order.escalatedAt)}: alert sent to{" "}
                 {escalationTargets(order).map((t) => t.name).join(", ") || "branch manager and Head of Sales"}
               </p>
               {canQuote && (
@@ -368,7 +368,7 @@ function RequestCard({
               <p className="flex items-center gap-2" style={{ color: "var(--foreground)" }}>
                 <Clock3 size={16} style={{ color: "var(--gold-text)" }} />
                 <span>
-                  <strong>Nobody has picked this up.</strong> If no one does in {countdown}, SMS and WhatsApp go to the
+                  <strong>Nobody has picked this up.</strong> If no one does in {countdown}, an alert goes to the
                   branch manager and Head of Sales.
                 </span>
               </p>
@@ -483,10 +483,9 @@ export default function RequestsPanel({
         Head of Sales, the General Manager and the CEO. Call the customer, then
         enter the agreed price here: they see it on their tracking page with our
         bank details. Click <strong>I&apos;m handling this</strong> so others know.
-        If nobody picks a request up within {ESCALATE_AFTER_MINUTES} minutes, an
-        SMS and WhatsApp go to the branch manager and Head of Sales. In the main
-        app everyone listed also gets a push alert and an email at once, and each
-        branch manager sees only their state.
+        If nobody picks a request up within {ESCALATE_AFTER_MINUTES} minutes, the
+        branch manager and Head of Sales get an extra alert. Turn on alerts below
+        and install the app, and alerts reach your phone even when the site is closed.
       </p>
 
       <div className="mb-6 space-y-3">

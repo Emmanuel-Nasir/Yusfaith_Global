@@ -9,6 +9,7 @@
 */
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { sendPush, type PushAlert } from "@/lib/push";
 import type { Prisma } from "@/generated/prisma/client";
 
 const COLLECTIONS = new Set(["orders", "activity", "settings", "alerts"]);
@@ -98,12 +99,19 @@ export async function POST(request: NextRequest) {
       if (existing && !existing.deleted) data = mergeOrder(existing.data as Order, data as Order);
     }
 
+    // a brand-new alert also goes out as a phone notification
+    const isNewAlert =
+      collection === "alerts" &&
+      !body.deleted &&
+      !(await prisma.sharedItem.findUnique({ where: { collection_id: { collection, id } }, select: { id: true } }));
+
     const json = data as Prisma.InputJsonValue;
     await prisma.sharedItem.upsert({
       where: { collection_id: { collection, id } },
       create: { collection, id, data: json, deleted: Boolean(body.deleted), updatedAt: now },
       update: { data: json, deleted: Boolean(body.deleted), updatedAt: now },
     });
+    if (isNewAlert) await sendPush(data as PushAlert);
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: "Save failed" }, { status: 502 });

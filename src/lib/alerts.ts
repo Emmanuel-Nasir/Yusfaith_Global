@@ -4,8 +4,9 @@
   website and, if the browser allows it, as a phone/computer notification
   while the site is open in a tab (any tab on the same device).
 
-  In the main app the server sends a real push notification (and an SMS or
-  WhatsApp backup), so the phone is alerted even when the website is closed.
+  Turning alerts on also signs this device up for push notifications
+  (see push.ts and public/sw.js), so the phone is alerted even when the
+  website is closed. Customers are signed up for their own order only.
 */
 
 import { pushItem } from "./sync";
@@ -44,8 +45,62 @@ export function notificationsSupported() {
   return typeof window !== "undefined" && "Notification" in window;
 }
 
+/* ---------- push notifications (alerts when the site is closed) ---------- */
+
+export function pushSupported() {
+  return typeof window !== "undefined" && "serviceWorker" in navigator && "PushManager" in window && notificationsSupported();
+}
+
+function keyToBytes(base64: string) {
+  const padded = (base64 + "=".repeat((4 - (base64.length % 4)) % 4)).replace(/-/g, "+").replace(/_/g, "/");
+  const raw = window.atob(padded);
+  return Uint8Array.from(raw, (c) => c.charCodeAt(0));
+}
+
+async function serviceWorker() {
+  return navigator.serviceWorker.register("/sw.js").then(() => navigator.serviceWorker.ready);
+}
+
+/** Sign this device up for push alerts (needs permission already granted). */
+export async function subscribePush(audience: AlertAudience, orderId?: string) {
+  if (!pushSupported() || Notification.permission !== "granted") return false;
+  try {
+    const info = await fetch("/api/push", { cache: "no-store" });
+    if (!info.ok) return false; // push not set up on the server
+    const { publicKey } = (await info.json()) as { publicKey: string };
+    const reg = await serviceWorker();
+    const sub =
+      (await reg.pushManager.getSubscription()) ??
+      (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyToBytes(publicKey) }));
+    const res = await fetch("/api/push", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ subscription: sub.toJSON(), audience, orderId }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function unsubscribePush(audience: AlertAudience) {
+  if (!pushSupported()) return;
+  try {
+    const reg = await navigator.serviceWorker.getRegistration("/sw.js");
+    const sub = await reg?.pushManager.getSubscription();
+    if (!sub) return;
+    await fetch("/api/push", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ endpoint: sub.endpoint, audience }),
+    });
+  } catch {
+    // ignore
+  }
+}
+
 /** Turn alerts on (asks the browser for notification permission). */
-export async function enableAlerts(audience: AlertAudience) {
+export async function enableAlerts(audience: AlertAudience, orderId?: string) {
   const next = { ...readEnabled(), [audience]: true };
   try {
     window.localStorage.setItem(ENABLED_KEY, JSON.stringify(next));
@@ -56,11 +111,13 @@ export async function enableAlerts(audience: AlertAudience) {
   if (notificationsSupported()) {
     permission = Notification.permission === "default" ? await Notification.requestPermission() : Notification.permission;
   }
+  if (permission === "granted") await subscribePush(audience, orderId);
   window.dispatchEvent(new Event(ALERT_SETTINGS_EVENT));
   return permission;
 }
 
 export function disableAlerts(audience: AlertAudience) {
+  void unsubscribePush(audience);
   const next = { ...readEnabled(), [audience]: false };
   try {
     window.localStorage.setItem(ENABLED_KEY, JSON.stringify(next));
@@ -73,8 +130,26 @@ export function disableAlerts(audience: AlertAudience) {
 /** Show the system notification (only in the tab that receives the alert). */
 export function showSystemNotification(alert: SiteAlert) {
   if (!notificationsSupported() || Notification.permission !== "granted") return;
+  const options = { body: alert.body, tag: alert.id, icon: "/icons/icon-192.png", data: { url: alert.url } };
+  // phones only allow notifications through the service worker
+  if (pushSupported()) {
+    navigator.serviceWorker
+      .getRegistration("/sw.js")
+      .then((reg) => {
+        if (reg) return reg.showNotification(alert.title, options);
+        throw new Error("no service worker");
+      })
+      .catch(() => {
+        try {
+          new Notification(alert.title, options);
+        } catch {
+          // ignore
+        }
+      });
+    return;
+  }
   try {
-    const n = new Notification(alert.title, { body: alert.body, tag: alert.id, icon: "/favicon.ico" });
+    const n = new Notification(alert.title, options);
     n.onclick = () => {
       window.focus();
       window.location.href = alert.url;

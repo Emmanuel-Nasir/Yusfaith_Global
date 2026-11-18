@@ -319,7 +319,7 @@ export default function OrderTracker({
               <>
                 <RequestChat order={order} as="customer" onUpdated={(updated) => refresh(updated)} />
                 <div className="mt-4">
-                  <AlertsToggle audience="customer" />
+                  <AlertsToggle audience="customer" orderId={order.id} />
                 </div>
               </>
             )}
