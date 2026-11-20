@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, BellRing, CheckCircle2, MapPin, PhoneCall, Upload, Wallet } from "lucide-react";
 import HelpContacts from "@/components/orders/HelpContacts";
-import type { Order } from "@/lib/orders";
+import { deliveryPlace, type Order } from "@/lib/orders";
 
 /*
   REQUEST SENT
@@ -83,7 +83,7 @@ export default function RequestSent({ order, trackHref, onClose }: Props) {
           <p className="mt-4 flex items-start gap-2 text-sm" style={{ color: "var(--muted)" }}>
             <MapPin size={16} className="mt-0.5 shrink-0" />
             {order.fulfillment === "Delivery"
-              ? `Delivery to ${order.customer.address} (${order.location})`
+              ? `Delivery to ${deliveryPlace(order)}`
               : `Pickup at ${order.location}`}
           </p>
         </aside>

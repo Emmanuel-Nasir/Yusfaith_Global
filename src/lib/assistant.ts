@@ -49,7 +49,7 @@ export const HANDOFF_KEYS = Object.keys(HANDOFF) as HandoffKey[];
 export const ASSISTANT_FACTS = `
 Company: ${COMPANY.name} (Dangote customers also know us as ${COMPANY.tradingAs}). ${COMPANY.tagline}.
 Businesses: Cement Depot (Dangote, HBM/Lafarge, BUA, Mangal, Purechem cement, wholesale and retail), Building Materials (roofing, steel, blocks, plumbing, electrical, paints, finishing, timber), Logistics (own trucks and drivers) and Truck Spare Parts, Real Estate, and Bakery (bread, pastries, doughnuts, cakes).
-We serve Ogun, Lagos, Oyo and Osun States. Delivery is by our own trucks and drivers. The delivery fee is always shown separately.
+We serve Ogun, Lagos, Oyo and Osun States. Delivery is by our own trucks and drivers. The delivery fee is worked out from the customer's address and nearest landmark, and is always shown separately.
 Locations: ${LOCATIONS.map((l) => `${l.label}: ${l.address}`).join("; ")}.
 Prices: cement, building materials and spare parts have no fixed prices; prices follow the market. The customer adds products and quantities on the website and taps "Request a price". Our sales team is alerted straight away. Staff send the price (including delivery) on the customer's tracking page, and can chat with the customer there. Bakery items have fixed prices shown on the Bakery page.
 Payment: bank transfer only, before dispatch or pickup, using the order reference as the narration. There is no payment on delivery. After paying, the customer uploads the transfer receipt on the tracking page. The accounts team confirms the payment, then the order is dispatched or made ready for pickup.
@@ -124,7 +124,7 @@ export function builtInAnswer(question: string): { reply: string; handoff?: Hand
   if (/(deliver|delivery|state|lagos|ogun|oyo|osun|ibadan|abeokuta|epe|pickup|pick up)/.test(q)) {
     return {
       reply:
-        "We deliver across Ogun, Lagos, Oyo and Osun States with our own trucks, and the delivery fee is always shown separately. You can also pick up from our depots in Abeokuta, Epe, Ibadan and Osun.",
+        "We deliver across Ogun, Lagos, Oyo and Osun States with our own trucks. The delivery fee is based on your address and nearest landmark, and is always shown separately. You can also pick up from our depots in Abeokuta, Epe, Ibadan and Osun.",
     };
   }
   if (/(open|hours|address|location|office|depot|where are you)/.test(q)) {

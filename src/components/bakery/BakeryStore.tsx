@@ -99,6 +99,7 @@ export default function BakeryStore() {
   const zones = useDeliveryZones("Bakery", BAKERY_ZONES); // staff can change fees in Admin
   const [branch, setBranch] = useState(PICKUP_BRANCHES[0]);
   const [address, setAddress] = useState("");
+  const [landmark, setLandmark] = useState("");
   const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
   const [savedAddresses, setSavedAddresses] = useState<
@@ -173,6 +174,8 @@ export default function BakeryStore() {
       return setError("Enter a valid Nigerian phone number, e.g. 08012345678.");
     if (fulfillment === "Delivery" && address.trim().length < 5)
       return setError("Please enter your delivery address.");
+    if (fulfillment === "Delivery" && landmark.trim().length < 3)
+      return setError("Please enter the nearest landmark to your address, e.g. a bus stop, church or filling station.");
     if (lines.length === 0) return setError("Your basket is empty.");
 
     const now = new Date().toISOString();
@@ -184,6 +187,7 @@ export default function BakeryStore() {
         name: name.trim(),
         phone: phone.trim(),
         address: fulfillment === "Delivery" ? address.trim() : "",
+        landmark: fulfillment === "Delivery" ? landmark.trim() : undefined,
         notes: notes.trim(),
         email: email.trim() || undefined,
         contactBy,
@@ -662,6 +666,20 @@ export default function BakeryStore() {
                       </span>
                       <input className={inputClass} value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" list="saved-addresses" />
 <datalist id="saved-addresses">{savedAddresses.map((a) => (<option key={a.id} value={a.address}>{a.label}</option>))}</datalist>
+                    </label>
+                    <label className="block sm:col-span-2">
+                      <span className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
+                        Nearest landmark *
+                      </span>
+                      <input
+                        className={inputClass}
+                        value={landmark}
+                        onChange={(e) => setLandmark(e.target.value)}
+                        placeholder="e.g. opposite Total filling station, Kuto bus stop"
+                      />
+                      <span className="mt-1 block text-xs" style={{ color: "var(--muted)" }}>
+                        Helps our rider find you quickly.
+                      </span>
                     </label>
                   </>
                 ) : (

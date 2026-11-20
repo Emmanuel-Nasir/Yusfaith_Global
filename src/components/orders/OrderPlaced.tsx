@@ -8,7 +8,7 @@ import { ArrowRight, CheckCircle2, Clock3, MapPin, ShieldCheck } from "lucide-re
 import BankDetails from "@/components/orders/BankDetails";
 import HelpContacts from "@/components/orders/HelpContacts";
 import ReceiptUpload from "@/components/orders/ReceiptUpload";
-import { formatNaira, removeOrder, type Order } from "@/lib/orders";
+import { deliveryPlace, formatNaira, removeOrder, type Order } from "@/lib/orders";
 import { logActivity } from "@/lib/activity-log";
 
 /*
@@ -144,7 +144,7 @@ export default function OrderPlaced({ order, trackHref, onChange, onClose, dark 
           <p className="mt-4 flex items-start gap-2 text-sm" style={{ color: "var(--muted)" }}>
             <MapPin size={16} className="mt-0.5 shrink-0" />
             {order.fulfillment === "Delivery"
-              ? `Delivery to ${order.customer.address} (${order.location})`
+              ? `Delivery to ${deliveryPlace(order)}`
               : `Pickup at ${order.location}`}
           </p>
         </aside>

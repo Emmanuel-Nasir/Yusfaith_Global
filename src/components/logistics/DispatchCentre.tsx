@@ -92,7 +92,7 @@ function OrderCard({
     ? DRIVERS.find((d) => d.id === assignment.driverId)
     : undefined;
   const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    `${order.customer.address}, ${order.location}`
+    `${order.customer.address}${order.customer.landmark ? `, ${order.customer.landmark}` : ""}, ${order.location}`
   )}`;
 
   // Drivers can only start a delivery once the order is ready, and finish it
@@ -250,7 +250,12 @@ function OrderCard({
       <div className="mt-4 space-y-1.5 text-sm" style={{ color: "var(--muted)" }}>
         <p className="flex items-start gap-2">
           <MapPin size={16} className="mt-0.5 shrink-0" style={{ color: "var(--gold-text)" }} />
-          {order.customer.address}, {order.location}
+          <span>
+            {order.customer.address}, {order.location}
+            {order.customer.landmark && (
+              <span className="block text-xs">Nearest landmark: {order.customer.landmark}</span>
+            )}
+          </span>
         </p>
         <p className="flex items-center gap-2">
           <Phone size={16} className="shrink-0" style={{ color: "var(--gold-text)" }} />

@@ -147,6 +147,7 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
   const [zone, setZone] = useState(config.zones[0].name);
   const [branch, setBranch] = useState(PICKUP_BRANCHES[0]);
   const [address, setAddress] = useState("");
+  const [landmark, setLandmark] = useState("");
   const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
   const [savedAddresses, setSavedAddresses] = useState<
@@ -218,6 +219,8 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
       return setError("Enter a valid Nigerian phone number, e.g. 08012345678.");
     if (fulfillment === "Delivery" && address.trim().length < 5)
       return setError("Please enter your delivery address.");
+    if (fulfillment === "Delivery" && landmark.trim().length < 3)
+      return setError("Please enter the nearest landmark to your address, e.g. a bus stop, church or filling station.");
     if (lines.length === 0) return setError("Your list is empty.");
 
     const now = new Date().toISOString();
@@ -230,6 +233,7 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
         name: name.trim(),
         phone: phone.trim(),
         address: fulfillment === "Delivery" ? address.trim() : "",
+        landmark: fulfillment === "Delivery" ? landmark.trim() : undefined,
         notes: notes.trim(),
         email: email.trim() || undefined,
         contactBy,
@@ -607,8 +611,8 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                     </ul>
 
                     <p className="mt-5 border-t border-[var(--border)] pt-4 text-xs leading-5" style={{ color: "var(--muted)" }}>
-                      No payment now. Our team will call you with the price,
-                      including delivery.
+                      No payment now. Our team will send you the price, with
+                      delivery worked out from your address and nearest landmark.
                     </p>
 
                     <button
@@ -776,6 +780,20 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
                       <input className={inputClass} value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" list="saved-addresses" />
 <datalist id="saved-addresses">{savedAddresses.map((a) => (<option key={a.id} value={a.address}>{a.label}</option>))}</datalist>
                     </label>
+                    <label className="block sm:col-span-2">
+                      <span className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
+                        Nearest landmark *
+                      </span>
+                      <input
+                        className={inputClass}
+                        value={landmark}
+                        onChange={(e) => setLandmark(e.target.value)}
+                        placeholder="e.g. opposite Total filling station, Kuto bus stop"
+                      />
+                      <span className="mt-1 block text-xs" style={{ color: "var(--muted)" }}>
+                        Your delivery cost is worked out from your address and nearest landmark.
+                      </span>
+                    </label>
                   </>
                 ) : (
                   <label className="block sm:col-span-2">
@@ -792,8 +810,9 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
 
                 <div className="rounded-xl border border-[#ef850f]/40 bg-[#ef850f]/5 px-4 py-3 text-sm leading-6 sm:col-span-2" style={{ color: "var(--muted)" }}>
                   <span className="font-bold" style={{ color: "var(--foreground)" }}>How it works:</span>{" "}
-                  our sales team gets your request straight away and sends you the price,
-                  including delivery. You then pay by
+                  our sales team gets your request straight away and sends you the price.
+                  Delivery is priced from your address and nearest landmark, so it is
+                  fair for short and long trips. You then pay by
                   bank transfer before {fulfillment === "Delivery" ? "dispatch" : "pickup"} and upload
                   your receipt on the tracking page. No payment on delivery.
                 </div>

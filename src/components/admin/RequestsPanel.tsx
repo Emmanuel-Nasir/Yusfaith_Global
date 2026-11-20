@@ -10,7 +10,7 @@ import { sendAlert } from "@/lib/alerts";
 import { loadDeliveryFees, type DeliveryBusiness } from "@/lib/delivery-fees";
 import { stateOf, telLink } from "@/lib/order-contacts";
 import { logActivity } from "@/lib/activity-log";
-import { addMessage, ESCALATE_AFTER_MINUTES, formatNaira, updateOrder, type Order } from "@/lib/orders";
+import { addMessage, deliveryPlace, ESCALATE_AFTER_MINUTES, formatNaira, updateOrder, type Order } from "@/lib/orders";
 
 /*
   PRICE REQUESTS
@@ -48,7 +48,7 @@ function whatsappLink(order: Order) {
     `Hello ${order.customer.name}, thank you for your request ${order.id} with Yusfaith Global Enterprises.`,
     "",
     ...order.items.map((i) => `${i.quantity} ${i.unit}${i.quantity === 1 ? "" : "s"} ${i.name}: ${formatNaira(i.quantity * i.unitPrice)}`),
-    order.fulfillment === "Delivery" ? `Delivery to ${order.location}: ${formatNaira(order.deliveryFee)}` : "Pickup: free",
+    order.fulfillment === "Delivery" ? `Delivery to ${deliveryPlace(order)}: ${formatNaira(order.deliveryFee)}` : "Pickup: free",
     `Total to pay: ${formatNaira(order.total)}`,
     "",
     `Please pay by bank transfer using ${order.id} as the narration, then upload your receipt here: ${origin}${track}?id=${order.id}`,
@@ -181,9 +181,11 @@ function QuoteForm({
         {order.fulfillment === "Delivery" && (
           <li className="grid items-center gap-2 sm:grid-cols-[1fr_170px_120px]">
             <span className="text-sm" style={{ color: "var(--foreground)" }}>
-              Delivery to {order.location}
+              Delivery fee
               <span className="block text-xs" style={{ color: "var(--muted)" }}>
-                Suggested from Delivery fees: {formatNaira(suggestedFee)}
+                To {order.customer.address}
+                {order.customer.landmark ? `, near ${order.customer.landmark}` : ""} ({order.location}).
+                Starting fee for {order.location}: {formatNaira(suggestedFee)}. Set the fee for this address and landmark.
               </span>
             </span>
             <label className="relative">
@@ -297,7 +299,7 @@ function RequestCard({
           </p>
           <p className="mt-2 flex items-start gap-1.5 text-xs" style={{ color: "var(--muted)" }}>
             <MapPin size={14} className="mt-0.5 shrink-0" />
-            {order.fulfillment === "Delivery" ? `Delivery to ${order.customer.address} (${order.location})` : `Pickup at ${order.location}`}
+            {order.fulfillment === "Delivery" ? `Delivery to ${deliveryPlace(order)}` : `Pickup at ${order.location}`}
           </p>
           {order.customer.email && (
             <p className="mt-1">

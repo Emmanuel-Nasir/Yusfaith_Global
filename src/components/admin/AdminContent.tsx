@@ -378,6 +378,7 @@ function NewOrderForm({
   const fees = useDeliveryFees();
   const [zone, setZone] = useState(fees["Cement Depot"][0].name);
   const [address, setAddress] = useState("");
+  const [landmark, setLandmark] = useState("");
   const [terms, setTerms] = useState<PaymentTerms>("Pay before dispatch");
   const [channel, setChannel] = useState<PaymentChannel>("Bank transfer");
   const [notes, setNotes] = useState("");
@@ -429,6 +430,7 @@ function NewOrderForm({
         name: name.trim(),
         phone: phone.trim(),
         address: fulfillment === "Delivery" ? address.trim() : "",
+        landmark: fulfillment === "Delivery" && landmark.trim() ? landmark.trim() : undefined,
         notes: `Taken by Sales (phone/WhatsApp). ${notes.trim()}`.trim(),
       },
       location: fulfillment === "Delivery" ? zone : "Head office, Ogun State",
@@ -554,6 +556,10 @@ function NewOrderForm({
             <label className="block">
               <span className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--foreground)" }}>Delivery address</span>
               <input className={inputClass} value={address} onChange={(e) => { setAddress(e.target.value); setError(""); }} />
+            </label>
+            <label className="block">
+              <span className="mb-1.5 block text-sm font-semibold" style={{ color: "var(--foreground)" }}>Nearest landmark</span>
+              <input className={inputClass} value={landmark} onChange={(e) => setLandmark(e.target.value)} placeholder="e.g. Kuto bus stop" />
             </label>
           </>
         )}

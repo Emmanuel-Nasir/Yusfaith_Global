@@ -110,10 +110,10 @@ export default function DeliveryFeesPanel({
     <section id="delivery-fees">
       <p className="flex items-start gap-2 text-sm leading-6" style={{ color: "var(--muted)" }}>
         <Truck size={18} className="mt-0.5 shrink-0" style={{ color: "var(--gold-text)" }} />
-        Delivery fee for each state, always shown separately from the products.
+        Starting delivery fee for each state, always shown separately from the products.
         Bakery checkout uses these fees directly. For Cement, Building Materials
-        and Spare Parts they are the suggested fee when staff send a price, and
-        can be changed for each order.
+        and Spare Parts, customers give their address and nearest landmark, and staff
+        set the final delivery fee for that trip when they send the price.
       </p>
 
       <div className="mt-5 flex flex-wrap items-center justify-between gap-3">

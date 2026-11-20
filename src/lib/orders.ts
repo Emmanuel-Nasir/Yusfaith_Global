@@ -86,6 +86,7 @@ export type Order = {
     name: string;
     phone: string;
     address: string;
+    landmark?: string; // nearest landmark, used with the address to price delivery
     notes: string;
     email?: string;
     contactBy?: ContactMethod; // how they want to hear from us
@@ -113,6 +114,12 @@ export type Order = {
 };
 
 const STORAGE_KEY = "yusfaith-demo-orders";
+
+/** Address, nearest landmark and state in one line, e.g. "12 Ojo Road, near Total filling station (Ogun State)" */
+export function deliveryPlace(order: Pick<Order, "customer" | "location">) {
+  const landmark = order.customer.landmark?.trim();
+  return `${order.customer.address}${landmark ? `, near ${landmark}` : ""} (${order.location})`;
+}
 
 export function formatNaira(amount: number) {
   return `₦${amount.toLocaleString("en-NG")}`;
