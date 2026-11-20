@@ -768,4 +768,4 @@ export default function BakeryStore() {
       </AnimatePresence>
     </main>
   );
-}
+}

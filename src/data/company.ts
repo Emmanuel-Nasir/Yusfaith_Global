@@ -119,7 +119,7 @@ export const LEADERSHIP: Person[] = [
     // Name and title as in the company profile brochure
     name: "Yusuf Fatai Olasunkanmi",
     role: "Chairman / CEO",
-    image: "/images/leadership/portraits/fatai-yusuf-olatunji.jpg",
+    image: "/images/leadership/Alhaji Fatai Yusuf Olatunji.jpeg",
     credentials: "B.Sc., M.Sc. Business Studies",
     summary:
       "Provides overall strategic direction and leads the company's growth across cement distribution, building materials, logistics, real estate and bakery.",
@@ -134,7 +134,7 @@ export const LEADERSHIP: Person[] = [
   {
     name: "Mr Abdulrahman Adebayo Obawunmi",
     role: "General Manager",
-    image: "/images/leadership/portraits/abdulrahman-adebayo-obawunmi.jpg",
+    image: "/images/leadership/Abdulrahman Adebayo Obawunmi 2026.jpeg",
     credentials: "MCIB, FCIHRM",
     summary:
       "An experienced finance and operations professional with a background in banking, risk management, operations and marketing.",
@@ -154,7 +154,7 @@ export const LEADERSHIP: Person[] = [
   {
     name: "Mr Nurudeen Olatunji Lawal",
     role: "Logistics Manager",
-    image: "/images/leadership/portraits/nurudeen-olatunji-lawal.jpg",
+    image: "/images/leadership/Nurudeen Olatunji Lawal 2026.jpeg",
     credentials: "B.Sc. Computer Science",
     summary:
       "Oversees logistics coordination, fleet management and delivery operations for every Yusfaith business.",
@@ -173,7 +173,7 @@ export const LEADERSHIP: Person[] = [
   {
     name: "Akindele Akeem Oluwaseun",
     role: "Head of Sales, Dangote Cement",
-    image: "/images/leadership/portraits/akindele-akeem-oluwaseun.jpg",
+    image: "/images/leadership/Akindele Akeem Oluwaseun.jpeg",
     credentials: "B.Sc. Economics",
     summary:
       "Leads sales strategy and distribution for the Dangote Cement portfolio, with over nine years of sales experience.",
@@ -188,7 +188,7 @@ export const LEADERSHIP: Person[] = [
   {
     name: "Okuewu Adewale",
     role: "Head of Sales, Lafarge Cement",
-    image: "/images/leadership/portraits/okuewu-adewale.jpg",
+    image: "/images/leadership/okuewu-adewale-2026.jpg",
     credentials: "HND Marketing",
     summary:
       "Leads sales strategy and distribution for the Lafarge Cement portfolio, with over eleven years of sales experience.",
@@ -203,20 +203,20 @@ export const LEADERSHIP: Person[] = [
   {
     name: "Oduwole Yusuf Olayemi",
     role: "Human Resources",
-    image: "/images/leadership/portraits/oduwole-yusuf-olayemi.jpg",
+    image: "/images/leadership/Oduwole Yusuf Olayemi.jpeg",
     summary: "Leads human resources across the company's businesses and locations.",
     // Meeting notes: show HR's email, not a phone number
   },
   {
     name: "Mrs Bello Morenikeji",
     role: "Assistant Human Resources",
-    image: "/images/leadership/portraits/bello-morenikeji.jpg",
+    image: "/images/leadership/Bello Morenikeji.jpeg",
     summary: "Supports the Human Resources team in looking after staff across the company.",
   },
   {
     name: "Miss Timilehin Tobiloba Obadimu",
     role: "Secretary",
-    image: "/images/leadership/portraits/timilehin-tobiloba-obadimu.jpg",
+    image: "/images/leadership/Timilehin Tobiloba Obadimu.jpeg",
     summary: "Manages the office and is the first point of contact on the office line.",
     phone: "07055540994",
   },

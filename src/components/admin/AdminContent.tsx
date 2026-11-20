@@ -980,4 +980,4 @@ export default function AdminContent() {
 
 function DemoAccessGate() {
   return <StaffGate>{(session) => <DemoAdmin session={session} />}</StaffGate>;
-}
+}

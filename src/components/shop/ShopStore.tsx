@@ -883,4 +883,4 @@ export default function ShopStore({ config }: { config: ShopConfig }) {
       </AnimatePresence>
     </main>
   );
-}
+}
